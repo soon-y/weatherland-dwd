@@ -8,14 +8,12 @@ import * as THREE from 'three'
 import { useFrame, useLoader } from '@react-three/fiber'
 import { tempColorIndex, tempColorList } from '@/lib/param'
 
-export default function Thermometer({ temp, snowDepth, weather }) {
+export default function Thermometer({ temp, weather }) {
   const { nodes, materials } = useGLTF('/models/thermometer.glb')
   const tempValue = temp ?? weather.current.temperature
   const liquidRef = useRef()
   const liquidMaterialRef = useRef()
   const screenRef = useRef([])
-  const snowRef = useRef([])
-  const snowScreenRef = useRef()
 
   const normalFace = useLoader(THREE.TextureLoader, '/textures/face/normal.png')
   const blazingFace = useLoader(THREE.TextureLoader, '/textures/face/blazing.png')
@@ -66,31 +64,7 @@ export default function Thermometer({ temp, snowDepth, weather }) {
 
   useFrame((_, delta) => {
     delta = Math.min(delta, 0.05)
-    if (!liquidRef.current || !snowRef.current || !snowScreenRef.current) return
-
-    const targetBtomScaleY = THREE.MathUtils.clamp(
-      THREE.MathUtils.mapLinear(snowDepth, 0, 0.5, 0.001, 0.007), 0.001, 0.007
-    )
-
-    snowRef.current.forEach(el => {
-      if (!el) return
-
-      el.scale.y = THREE.MathUtils.lerp(
-        el.scale.y,
-        targetBtomScaleY,
-        0.05
-      )
-    })
-
-    const targetPos = THREE.MathUtils.clamp(
-      THREE.MathUtils.mapLinear(snowDepth, 0, 0.5, 0.792, 0.7955), 0.792, 0.7955
-    )
-
-    snowScreenRef.current.position.y = THREE.MathUtils.lerp(
-      snowScreenRef.current.position.y,
-      targetPos,
-      0.05
-    )
+    if (!liquidRef.current ) return
 
     const targetScale = THREE.MathUtils.mapLinear(
       tempValue ?? 0, -50, 50, -0.04, 0.04
@@ -105,38 +79,6 @@ export default function Thermometer({ temp, snowDepth, weather }) {
 
   return (
     <group dispose={null} scale={17} position={[4.88, -9, -3.08]} rotation-y={-Math.PI * 0.2}>
-      <mesh
-        ref={el => (snowRef.current[0] = el)}
-        castShadow
-        receiveShadow
-        geometry={nodes.snow001.geometry}
-        material={materials.snow}
-        position={[0.036, 0.756, -0.001]}
-        scale={0.007}
-        visible={snowDepth >= 0.1}
-      />
-      <mesh
-        ref={el => (snowRef.current[1] = el)}
-        castShadow
-        receiveShadow
-        geometry={nodes.snow002.geometry}
-        material={materials.snow}
-        position={[0.036, 0.581, -0.001]}
-        scale={0.007}
-        visible={snowDepth >= 0.1}
-      />
-      <mesh
-        ref={snowScreenRef}
-        castShadow
-        receiveShadow
-        geometry={nodes.screen001.geometry}
-        material={materials.snow}
-        position={[0.0612, 0.7955, -0.001]}
-        rotation={[0, 0, -Math.PI / 2]}
-        scale={[0.026, 0.111, 0.0256]}
-        visible={snowDepth >= 0.1}
-      />
-
       <mesh
         castShadow
         receiveShadow

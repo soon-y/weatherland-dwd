@@ -7,91 +7,15 @@ import { useGLTF } from '@react-three/drei'
 import { param, useIsDebug } from '@/lib/param'
 import { useHelper } from "@react-three/drei"
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
 
-export function Streetlight({ progress, snowDepth }) {
+export function Streetlight({ progress }) {
   const { nodes, materials } = useGLTF('models/streetlight.glb')
   const spotLightRef = useRef()
   const target = useRef()
   const isDebug = useIsDebug()
   const isDay = progress >= 0.25 && progress <= 0.75
 
-  const snowHex = useRef()
-  const snowHeadBar = useRef()
-  const snowHead = useRef()
-  const snowHead1 = useRef()
-  const snowHead2 = useRef()
-  const snowHead3 = useRef()
-  const snowPillar = useRef()
-  const snowPillarTop = useRef()
-
-  useFrame(() => {
-    if (!snowHex.current ||
-      !snowHeadBar.current ||
-      !snowHead.current ||
-      !snowHead1.current ||
-      !snowHead2.current ||
-      !snowHead3.current ||
-      !snowPillar.current ||
-      !snowPillarTop.current) return
-
-    const targetScaleHex = THREE.MathUtils.mapLinear(snowDepth, 0, 20, 0, 1)
-
-    snowHex.current.scale.y = THREE.MathUtils.lerp(
-      snowHex.current.scale.y,
-      targetScaleHex,
-      0.05
-    )
-
-    const targetScale = THREE.MathUtils.mapLinear(snowDepth, 0, 15, 0, 1)
-
-    snowHeadBar.current.scale.y = THREE.MathUtils.lerp(
-      snowHeadBar.current.scale.y,
-      -targetScale,
-      0.05
-    )
-
-    snowHead.current.scale.y = THREE.MathUtils.lerp(
-      snowHead.current.scale.y,
-      -targetScale,
-      0.05
-    )
-
-    snowHead1.current.scale.y = THREE.MathUtils.lerp(
-      snowHead1.current.scale.y,
-      -targetScale,
-      0.05
-    )
-
-    snowHead2.current.scale.y = THREE.MathUtils.lerp(
-      snowHead2.current.scale.y,
-      -targetScale,
-      0.05
-    )
-
-    snowHead3.current.scale.y = THREE.MathUtils.lerp(
-      snowHead3.current.scale.y,
-      -targetScale,
-      0.05
-    )
-
-    const targetScalePillar = THREE.MathUtils.mapLinear(snowDepth, 0, 12, 0, 1)
-
-    snowPillar.current.scale.y = THREE.MathUtils.lerp(
-      snowPillar.current.scale.y,
-      targetScalePillar,
-      0.05
-    )
-
-    snowPillarTop.current.scale.y = THREE.MathUtils.lerp(
-      snowPillarTop.current.scale.y,
-      targetScalePillar,
-      0.05
-    )
-
-  })
-
-  useHelper(isDebug ? spotLightRef : null, THREE.SpotLightHelper, '#fff')
+    useHelper(isDebug ? spotLightRef : null, THREE.SpotLightHelper, '#fff')
 
   useEffect(() => {
     spotLightRef.current.target = target.current
@@ -100,87 +24,6 @@ export function Streetlight({ progress, snowDepth }) {
   return (
     <group scale={param.groundRadius * 2} position={param.groundPos}>
       <group dispose={null} scale={1} position={[0.5, 0.01, -0.3]} rotation-y={-Math.PI * 0.2}>
-        <mesh
-          ref={snowHex}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHex.geometry}
-          material={materials.snow}
-          position={[0, 0.057, 0]}
-          scale={[0.097, 0.033, 0.097]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowHeadBar}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHeadBar.geometry}
-          material={materials.snow}
-          position={[0, 0.881, 0.099]}
-          scale={[-0.05, -0.039, -0.05]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowHead}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHead.geometry}
-          material={materials.snow}
-          position={[0.052, 0.848, 0.188]}
-          scale={[-0.05, -0.039, -0.05]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowHead1}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHead1.geometry}
-          material={materials.snow}
-          position={[0, 0.884, 0.188]}
-          scale={[-0.047, -0.037, -0.047]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowHead2}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHead2.geometry}
-          material={materials.snow}
-          position={[0, 0.895, 0.188]}
-          scale={[-0.05, -0.039, -0.05]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowHead3}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowHead3.geometry}
-          material={materials.snow}
-          position={[0, 0.919, 0.188]}
-          scale={[-0.05, -0.039, -0.05]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowPillar}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowPillar.geometry}
-          material={materials.snow}
-          position={[0, 0.893, -0.001]}
-          scale={[0.078, 0.022, 0.078]}
-          visible={snowDepth >= 0.1}
-        />
-        <mesh
-          ref={snowPillarTop}
-          castShadow
-          receiveShadow
-          geometry={nodes.snowPillarTop.geometry}
-          material={materials.snow}
-          position={[0, 0.902, 0]}
-          scale={[0.068, 0.022, 0.068]}
-          visible={snowDepth >= 0.1}
-        />
-
         <mesh
           castShadow
           receiveShadow

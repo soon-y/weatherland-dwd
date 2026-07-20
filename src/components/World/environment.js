@@ -21,7 +21,6 @@ export default function Environment({ store, forecast, index, indexD }) {
   const [windDirH, setWindDirH] = useState(0)
   const [windSpdH, setWindSpdH] = useState(0)
   const [gustsSpdH, setGustsSpdH] = useState(0)
-  const [snowDepth, setSnowDepth] = useState(0)
   const isDebug = useIsDebug()
   const timeRef = useRef(0)
   const windSpeedRef = useRef(0)
@@ -50,7 +49,7 @@ export default function Environment({ store, forecast, index, indexD }) {
   const { progress, visibility, temperature } = useControls('Day', {
     progress: { value: 0.5, min: 0, max: 1, step: 0.01 },
     visibility: { value: 5000, min: 100, max: 5000, step: 100 },
-    temperature: { value: 10, min: -50, max: 50, step: 1 },
+    temperature: { value: 20, min: -50, max: 50, step: 1 },
   }, { store })
 
   const { rain, snow, precipitation } = useControls('Precipitation', {
@@ -68,10 +67,6 @@ export default function Environment({ store, forecast, index, indexD }) {
     strength: { value: 5, min: 0, max: 100, step: 1 },
     period: { value: 20, min: 5, max: 60, step: 1 },
     duration: { value: 3, min: 1, max: 10, step: 1 },
-  }, { store })
-
-  const { depth } = useControls('Snow', {
-    depth: { value: 0, min: 0, max: 0.5, step: 0.01 },
   }, { store })
 
   useEffect(() => {
@@ -98,7 +93,6 @@ export default function Environment({ store, forecast, index, indexD }) {
     setWindDirH(forecast.metrics.wind_direction_10m.forecast[index])
     setWindSpdH(forecast.metrics.wind_speed_10m.forecast[index])
     setGustsSpdH(forecast.metrics.wind_gust_max_1h.forecast[index])
-    setSnowDepth(forecast.metrics.precip_snow_amount_1h.forecast[index])
 
     targetWeather.current = {
       rain: forecast.metrics.precip_liquid_amount_1h.forecast[index],
@@ -193,13 +187,6 @@ export default function Environment({ store, forecast, index, indexD }) {
       delta
     )
 
-    weather.current.snow = THREE.MathUtils.damp(
-      weather.current.snow,
-      targetWeather.current.snow,
-      5,
-      delta
-    )
-
     weather.current.visibility = THREE.MathUtils.damp(
       weather.current.visibility,
       targetWeather.current.visibility,
@@ -228,17 +215,17 @@ export default function Environment({ store, forecast, index, indexD }) {
 
   return (
     <>
-      <WorldSky progress={isDebug ? progress : animatedProgress} snowDepth={isDebug ? depth : snowDepth} />
-      <Windvane windDir={finalWindDir} windSpd={finalWindSpd} snowDepth={isDebug ? depth : snowDepth} />
-      <Grass progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} snowDepth={isDebug ? depth : snowDepth} />
+      <WorldSky progress={isDebug ? progress : animatedProgress} />
+      <Windvane windDir={finalWindDir} windSpd={finalWindSpd} />
+      <Grass progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
       <Pond progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} rain={isDebug ? rain : undefined} temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
-      <Tree progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} snowDepth={isDebug ? depth : snowDepth} />
+      <Tree progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
       <Rain windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} precipitation={isDebug ? rain : undefined} weather={isDebug ? undefined : weather} />
       <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
       <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
       <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
       <Umbrella precipitation={isDebug ? precipitation : undefined} weather={isDebug ? undefined : weather} />
-      <Thermometer temp={isDebug ? temperature : undefined} snowDepth={isDebug ? depth : snowDepth} weather={isDebug ? undefined : weather} />
+      <Thermometer temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
     </>
   )
 }
