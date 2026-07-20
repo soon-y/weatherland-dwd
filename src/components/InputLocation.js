@@ -1,5 +1,5 @@
-import { useGeolocation } from '@/app/api/weather/useGeolocation'
-import { reverseGeo, forwardGeo } from '@/app/api/weather/geoaplify'
+import { useGeolocation } from '@/lib/useGeolocation'
+import { reverseGeo, forwardGeo } from '@/lib/geoaplify'
 import { useEffect, useState } from 'react'
 import Input from './Input'
 

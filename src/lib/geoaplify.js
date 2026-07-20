@@ -39,7 +39,7 @@ export async function forwardGeo(place, zip, country) {
     suburb: props?.suburb || props?.district || props?.city || props?.country || "Unknown",
     postcode: props?.postcode || 'Zip code',
     country: props?.country || 'Unknown',
-    lat: props?.lat || 0,
-    lon: props?.lon || 0,
+    lat: props?.lat.toFixed(3) || 0,
+    lon: props?.lon.toFixed(3) || 0,
   }
 }
