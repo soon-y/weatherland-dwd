@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Post } from './post'
 
-export default function WorldGround({ store, hourly, index }) {
+export default function WorldGround({ store, forecast, index }) {
   const { nodes, materials } = useGLTF('models/land.glb')
 
   const isDebug = useIsDebug()
@@ -54,10 +54,10 @@ export default function WorldGround({ store, hourly, index }) {
       return
     }
 
-    if (!hourly || index == null) return
+    if (!forecast || index == null) return
 
-    setSnowDepth(hourly.metrics.precip_snow_amount_1h.forecast[index])
-  }, [isDebug, depth, hourly, index])
+    setSnowDepth(forecast.metrics.precip_snow_amount_1h.forecast[index])
+  }, [isDebug, depth, forecast, index])
 
   useFrame(() => {
     if (!snowRef.current) return

@@ -10,14 +10,14 @@ import Loading from "@/components/loading"
 import { Perf } from "r3f-perf"
 import * as THREE from 'three'
 
-function World({ hourly, daily, index }) {
+function World({ forecast, index }) {
   const [indexD, setIndexD] = useState(0)
   const isDebug = useIsDebug()
 
   useEffect(() => {
-    if (!hourly || index == null) return
+    if (!forecast || index == null) return
     setIndexD(Math.floor(index / 24))
-  }, [hourly, index])
+  }, [forecast, index])
 
   return <>
     <DebugUI store={levaStore} />
@@ -49,8 +49,8 @@ function World({ hourly, daily, index }) {
         <CameraController />
 
         <group position={param.worldPos}>
-          <Environment store={levaStore} hourly={hourly} daily={daily} index={index} indexD={indexD} />
-          <WorldGround store={levaStore} hourly={hourly} index={index} />
+          <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} />
+          <WorldGround store={levaStore} forecast={forecast} index={index} />
         </group>
       </Suspense>
     </Canvas>

@@ -1,5 +1,6 @@
-export function processForecast(data, offset, daily) {
-  const result = structuredClone(data)
+export function processForecast(data, offset) {
+  const result = structuredClone(data.forecast.data)
+  const daily = data.daily.daily
 
   const offsetMs = parseOffset(offset)
   const temperature = result.find(item => item.metricKey === 'temperature_2m')
@@ -115,7 +116,8 @@ export function processForecast(data, offset, daily) {
   )
   return {
     timestamps,
-    metrics
+    metrics,
+    daily
   }
 }
 
