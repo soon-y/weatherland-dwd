@@ -3,7 +3,6 @@ import Box from "./box"
 import BoxTitle from "./boxTitle"
 
 export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setBoxClicked }) {
-  const irradiance_1h = hourly.metrics.irradiance_1h
   const sunrise = daily.sunrise[indexD]
   const sunset = daily.sunset[indexD]
   const sunriseNext = daily.sunrise[indexD + 1] ? daily.sunrise[indexD + 1] : daily.sunrise[indexD]

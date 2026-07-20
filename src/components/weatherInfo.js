@@ -7,10 +7,11 @@ import WeatherIcon from './weatherIcon'
 import InfoBox from './weatherInfoBox'
 import { motion } from 'framer-motion'
 
-export default function WeatherInfo({ forecast, daily, index, clicked }) {
+export default function WeatherInfo({ forecast, index, clicked }) {
   const [open, setOpen] = useState(false)
   const [indexD, setIndexD] = useState(0)
   const [index12, setIndex12] = useState(0)
+  const daily = forecast.daily
   const temperature = forecast.metrics.temperature_2m
   const windSpeed = forecast.metrics.wind_speed_10m.forecast[index]
   const windDirection = forecast.metrics.wind_direction_10m.forecast[index]

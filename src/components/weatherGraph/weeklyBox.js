@@ -11,7 +11,7 @@ import WeeklyPrecipitation from "./precipitation"
 import DailySun from "./dailySun"
 import BoxTitle from "../weatherBox/boxTitle"
 
-export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDisplay, daily, hourly, air, index, indexD }) {
+export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDisplay, daily, hourly, indexD }) {
   const [weekly, setWeekly] = useState([])
   const [indexW, setIndexW] = useState(indexD)
   const today = new Date()
