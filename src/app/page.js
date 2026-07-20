@@ -3,14 +3,11 @@
 import { useState, useEffect } from 'react'
 import World from '@/components/World/World'
 import Slider from '@/components/Slider'
-import { fetchForecast } from '@/app/api/weather/fetchWeatherForecast'
 import InputArea from '@/components/InputLocation'
 import WeatherInfo from '@/components/weatherInfo'
 import { param } from '@/lib/param'
-import { processForecast } from '@/lib/dataProcess'
 
 export default function Home() {
-  const [dailyData, setDailyData] = useState(null)
   const [forecastData, setForecastData] = useState(null)
   const [{ lat, lon, timezone, offset }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null, offset: null })
   const [index, setIndex] = useState(null)
@@ -19,17 +16,23 @@ export default function Home() {
   useEffect(() => {
     if (!(lat && lon && timezone)) return
 
+    const date = new Intl.DateTimeFormat('sv-SE', {
+      timeZone: timezone,
+    }).format(new Date())
+
+    console.log(date)
+
     const fetchInfo = async () => {
       try {
-        const data = await fetchForecast(lat, lon, timezone)
-        if (data) {
-          if (data.daily !== null) {
-            setDailyData(data.daily.daily)
-            if (data.forecast !== null) {
-              setForecastData(processForecast(data.forecast.data, offset, data.daily.daily))
-            }
-          }
-        }
+        const res = await fetch(
+          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${timezone}&offset=${offset}`
+        )
+
+        const data = await res.json()
+        setForecastData(data)
+
+        console.log(data)
+
       } catch (err) {
         console.log(err)
       }
@@ -39,11 +42,11 @@ export default function Home() {
 
   return (
     <div className='w-screen h-dvh overflow-hidden'>
-      <World hourly={forecastData} daily={dailyData} index={index} />
+      <World forecast={forecastData} index={index} />
 
       <div className='fixed bottom-0 w-full p-2'>
-        {forecastData && dailyData ?
-          <Slider forecast={forecastData} daily={dailyData} setIndex={setIndex} index={index} timezone={timezone} />
+        {forecastData ?
+          <Slider forecast={forecastData} setIndex={setIndex} index={index} timezone={timezone} />
           :
           <div className={`${param.sliderStyles} bg-white/10 animate-pulse opacity-40`} style={{ height: param.sliderHeight + 'px' }}>
           </div>
@@ -51,8 +54,8 @@ export default function Home() {
       </div>
 
       <div className='fixed top-0'>
-        {(index != null && isFinite(index) && forecastData && dailyData) ?
-          <WeatherInfo forecast={forecastData} daily={dailyData} index={index} clicked={setInfoClicked} />
+        {(index != null && isFinite(index) && forecastData) ?
+          <WeatherInfo forecast={forecastData} index={index} clicked={setInfoClicked} />
           :
           <div className={`m-2 animate-pulse w-36 h-36 rounded-xl bg-white/10`}></div>
         }
