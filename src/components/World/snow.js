@@ -3,7 +3,7 @@ import { useFrame, useLoader } from '@react-three/fiber'
 import * as THREE from 'three'
 import { param } from '@/lib/param'
 
-const MAX_COUNT = 3000
+const MAX_COUNT = 5000
 const AREA = 100
 const HEIGHT = 40
 const groundY = param.groundPos[1]
@@ -47,7 +47,7 @@ export default function Snow({ windDir, windSpd, precipitation, isDay, weather }
 
     const visibleCount = Math.min(
       MAX_COUNT,
-      Math.floor(Math.pow(snowValue, 0.8) * 600)
+      Math.floor(Math.pow(snowValue, 0.8) * 1000)
     )
 
     const windEffect = Math.min(wind, 15)
