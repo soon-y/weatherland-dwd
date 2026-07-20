@@ -5,8 +5,8 @@ import WeeklyLineGraphBox from "./graphBox/weeklyLineGraphBox"
 
 export default function WeeklyPrecipitation({ display, indexW, index, hourProbability, hourPrecipitation, code }) {
   const [hoverIndex, setHover] = useState(index)
-  const [dailyTotal, setDailyTotal] = useState()
-  const [dailyMean, setDailyMean] = useState()
+  const [dailyTotal, setDailyTotal] = useState([])
+  const [dailyMean, setDailyMean] = useState([])
   const [type, setType] = useState('')
   const probability = hourProbability[hoverIndex]
   const precipitation = hourPrecipitation[hoverIndex]
