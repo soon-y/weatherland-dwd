@@ -79,7 +79,7 @@ export default function Environment({ store, forecast, index, indexD }) {
     const sunset = forecast.daily.sunset[indexD].split('T')[1]
     const sunriseInSec = timeToSec(Number(sunrise.split(':')[0]), sunrise.split(':')[1])
     const sunsetInSec = timeToSec(Number(sunset.split(':')[0]), sunset.split(':')[1])
-    const nowInSec = timeToSec(index % 24)
+    const nowInSec = timeToSec(forecast.timestamps[index].slice(11, 13))
 
     if (nowInSec < sunriseInSec) {
       progressInDay = (nowInSec / sunriseInSec) * 0.25
