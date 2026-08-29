@@ -34,7 +34,7 @@ export default function Environment({ store, forecast, index, indexD }) {
     rain: 0,
     snow: 0,
     visibility: 5000,
-    precipitation: 0,
+    probability: 0,
     temperature: null
   })
 
@@ -42,7 +42,7 @@ export default function Environment({ store, forecast, index, indexD }) {
     rain: 0,
     snow: 0,
     visibility: 5000,
-    precipitation: 0,
+    probability: 0,
     temperature: null
   })
 
@@ -52,10 +52,10 @@ export default function Environment({ store, forecast, index, indexD }) {
     temperature: { value: 20, min: -50, max: 50, step: 1 },
   }, { store })
 
-  const { rain, snow, precipitation } = useControls('Precipitation', {
+  const { rain, snow, probability } = useControls('Precipitation', {
     rain: { value: 0, min: 0, max: 10, step: 0.1 },
     snow: { value: 0, min: 0, max: 10, step: 0.1 },
-    precipitation: { value: 0, min: 0, max: 10, step: 0.1 },
+    probability: { value: 0, min: 0, max: 100, step: 5 },
   }, { store })
 
   const { direction, speed } = useControls('Wind', {
@@ -98,7 +98,7 @@ export default function Environment({ store, forecast, index, indexD }) {
       rain: forecast.metrics.precip_liquid_amount_1h.forecast[index],
       snow: forecast.metrics.precip_snow_amount_1h.forecast[index],
       visibility: forecast.metrics.visibility.forecast[index],
-      precipitation: forecast.metrics.precip_amount_1h.forecast[index],
+      probability: forecast.metrics.ww_prob_precip_1h.forecast[index],
       temperature: forecast.metrics.temperature_2m.forecast[index]
     }
   }, [index, indexD])
@@ -194,9 +194,9 @@ export default function Environment({ store, forecast, index, indexD }) {
       delta
     )
 
-    weather.current.precipitation = THREE.MathUtils.damp(
-      weather.current.precipitation,
-      targetWeather.current.precipitation,
+    weather.current.probability = THREE.MathUtils.damp(
+      weather.current.probability,
+      targetWeather.current.probability,
       5,
       delta
     )
@@ -224,7 +224,7 @@ export default function Environment({ store, forecast, index, indexD }) {
       <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
       <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
       <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
-      <Umbrella precipitation={isDebug ? precipitation : undefined} weather={isDebug ? undefined : weather} />
+      <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} />
       <Thermometer temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
     </>
   )
