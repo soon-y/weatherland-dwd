@@ -28,7 +28,6 @@ const metricKeys = [
   "visibility",
   "visibility_prob_below_1000m",
 
-  "irradiance_1h",
   "global_irradiance_1h",
   "sunshine_duration_1h",
 ]
