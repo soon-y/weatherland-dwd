@@ -16,28 +16,39 @@ export default function Home() {
   useEffect(() => {
     if (!(lat && lon && timezone)) return
 
-    const date = new Intl.DateTimeFormat('sv-SE', {
-      timeZone: timezone,
-    }).format(new Date())
+    const date = new Intl.DateTimeFormat('sv-SE', { timeZone: timezone }).format(new Date())
+    let cancelled = false
+    let retryTimer
 
-    console.log(date)
+    const RETRY_INTERVAL = 10000
+    const MAX_ELAPSED = 150000
+    const startTime = Date.now()
 
     const fetchInfo = async () => {
       try {
         const res = await fetch(
           `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${timezone}&offset=${offset}`
         )
-
         const data = await res.json()
-        setForecastData(data)
+        if (cancelled) return
 
+        setForecastData(data)
         console.log(data)
 
+        if (data.stale && Date.now() - startTime < MAX_ELAPSED) {
+          retryTimer = setTimeout(fetchInfo, RETRY_INTERVAL)
+        }
       } catch (err) {
         console.log(err)
       }
     }
+
     fetchInfo()
+
+    return () => {
+      cancelled = true
+      clearTimeout(retryTimer)
+    }
   }, [lat, lon, timezone, offset])
 
   return (
