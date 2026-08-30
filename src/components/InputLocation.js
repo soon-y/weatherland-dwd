@@ -1,5 +1,5 @@
 import { useGeolocation } from '@/lib/useGeolocation'
-import { reverseGeo, forwardGeo } from '@/lib/geoaplify'
+import { reverseGeo, forwardGeo } from '@/lib/geoapify'
 import { useEffect, useState } from 'react'
 import Input from './Input'
 

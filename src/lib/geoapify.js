@@ -1,4 +1,4 @@
-const API = process.env.NEXT_PUBLIC_GEOAPLIFY_API
+const API = process.env.NEXT_PUBLIC_GEOAPIFY_API
 
 export async function reverseGeo(lat, lon) {
   if (lat == null || lon == null) return null
