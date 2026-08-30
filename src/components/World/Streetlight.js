@@ -9,7 +9,7 @@ import { useHelper } from "@react-three/drei"
 import * as THREE from 'three'
 import { useControls } from "leva"
 
-export function Streetlight({ store, progress }) {
+export function Streetlight({ progress, store }) {
   const { nodes, materials } = useGLTF('models/streetlight.glb')
   const spotLightRef = useRef()
   const target = useRef()

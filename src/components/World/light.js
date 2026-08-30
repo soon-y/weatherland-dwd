@@ -48,7 +48,7 @@ export default function Light({ progress, sun, store }) {
 
       <ambientLight intensity={isDay ? 2 : 0.1} />
 
-      <Streetlight progress={progress} />
+      <Streetlight progress={progress} store={store}/>
     </>
   )
 }
