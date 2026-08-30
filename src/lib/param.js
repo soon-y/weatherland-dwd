@@ -21,7 +21,7 @@ export const param = {
   days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
   daysShort: ["S", "M", "T", "W", "T", "F", "S"],
   sliderHeight: 140,
-  sliderStyles: 'bg-black/50 backdrop-blur-xl rounded-b-lg rounded-tr-lg',
+  sliderStyles: 'bg-black/50 backdrop-blur-xl rounded-lg',
   weatherBarContainer: 'relative h-[28px]',
   weatherBar: 'absolute inset-y-2.5 h-2 w-full overflow-hidden bg-black/30',
   weatherBarDisc: 'absolute inset-y-2.5 rounded-full h-2 outline-2 outline-white/80 aspect-square bg-white/10',

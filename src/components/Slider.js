@@ -143,7 +143,7 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
   return (
     <>
       <div ref={ref} onScrollEnd={handleScroll}
-        className={`${param.sliderStyles} flex overflow-y-hidden overflow-x-auto snap-x snap-mandatory scroll-smooth select-none  scrollbar-hide`}>
+        className={`${param.sliderStyles} flex overflow-y-hidden overflow-x-auto snap-x snap-mandatory scroll-smooth select-none scrollbar-hide`}>
         {hourlyData.map((el, i) => (
           <div key={i} onClick={() => setIndex(i)}
             className={`flex-shrink-0 snap-start flex flex-col relative cursor-pointer duration-500 hover:bg-white/10 text-white
@@ -203,7 +203,7 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
         </div>
       </div>
 
-      <div className="fixed left-2 bottom-2 select-none">
+      <div className="fixed left-2 bottom-2 select-none pointer-events-none">
         <div className={`shadow-l2g outline rounded-lg duration-500 ${isDay ? 'outline-black/50' : 'outline-white/30'}`}
           style={{ width: boxWidth, height: sliderHeight + 'px' }}
         />
