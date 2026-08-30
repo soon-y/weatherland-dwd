@@ -4,14 +4,19 @@ import { useRef } from "react"
 import { param, useIsDebug } from "@/lib/param"
 import { useFrame } from "@react-three/fiber"
 import { Streetlight } from "./Streetlight"
+import { useControls } from "leva"
 
-export default function Light({ progress, sun }) {
+export default function Light({ progress, sun, store }) {
   const directionalLight = useRef()
   const isDebug = useIsDebug()
   const isDay = progress >= 0.25 && progress <= 0.75
   const intensity = useRef(0)
 
-  useHelper(isDebug ? directionalLight : null, THREE.DirectionalLightHelper, 1)
+  const { showHelper } = useControls('Light Helper', {
+    showHelper: { value: false, label: 'Sun' }
+  }, { store })
+
+  useHelper(isDebug && showHelper ? directionalLight : null, THREE.DirectionalLightHelper, 1)
 
   useFrame(() => {
     const light = directionalLight.current
@@ -43,7 +48,7 @@ export default function Light({ progress, sun }) {
 
       <ambientLight intensity={isDay ? 2 : 0.1} />
 
-      <Streetlight progress={progress}/>
+      <Streetlight progress={progress} />
     </>
   )
 }

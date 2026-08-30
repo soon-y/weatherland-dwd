@@ -222,7 +222,7 @@ export default function Environment({ store, forecast, index, indexD }) {
 
   return (
     <>
-      <WorldSky progress={isDebug ? progress : animatedProgress} />
+      <WorldSky progress={isDebug ? progress : animatedProgress} store={store}/>
       <Windvane windDir={finalWindDir} windSpd={finalWindSpd} />
       <Grass progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
       <Pond progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} rain={isDebug ? rain : undefined} temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />

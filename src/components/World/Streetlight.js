@@ -7,15 +7,20 @@ import { useGLTF } from '@react-three/drei'
 import { param, useIsDebug } from '@/lib/param'
 import { useHelper } from "@react-three/drei"
 import * as THREE from 'three'
+import { useControls } from "leva"
 
-export function Streetlight({ progress }) {
+export function Streetlight({ store, progress }) {
   const { nodes, materials } = useGLTF('models/streetlight.glb')
   const spotLightRef = useRef()
   const target = useRef()
   const isDebug = useIsDebug()
   const isDay = progress >= 0.25 && progress <= 0.75
 
-    useHelper(isDebug ? spotLightRef : null, THREE.SpotLightHelper, '#fff')
+  const { streetlightHelper } = useControls('Light Helper', {
+    streetlightHelper: { value: false, label: 'Streetlight' }
+  }, { store })
+
+  useHelper(isDebug && streetlightHelper ? spotLightRef : null, THREE.SpotLightHelper, '#fff')
 
   useEffect(() => {
     spotLightRef.current.target = target.current
