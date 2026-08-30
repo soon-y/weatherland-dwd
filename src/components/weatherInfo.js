@@ -16,7 +16,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const windSpeed = forecast.metrics.wind_speed_10m.forecast[index]
   const windDirection = forecast.metrics.wind_direction_10m.forecast[index]
   const prob = forecast.metrics.ww_prob_precip_1h
-  const rain = forecast.metrics.precip_amount_1h
+  const precip = forecast.metrics.precip_amount_1h
   const visibility = forecast.metrics.visibility.forecast[index] / 1000
   const isDay = forecast.metrics.is_day.forecast[index]
   const sunriseToday = indexD < 0 ? daily.sunrise[0] : daily.sunrise[indexD]
@@ -87,8 +87,8 @@ export default function WeatherInfo({ forecast, index, clicked }) {
 
           <InfoBox title={'precipitation'} isDay={isDay}
             info1={prob.forecast[index]} unit1={prob.unit}
-            info2={rain.forecast[index]} unit2={rain.unit}
-            condition={rain[index] > 0}
+            info2={precip.forecast[index]} unit2={'mm'}
+            condition={prob.forecast[index] > 0 && precip.forecast[index] > 0}
           />
 
           <InfoBox title={'wind'} isDay={isDay}
