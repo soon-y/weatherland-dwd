@@ -9,9 +9,8 @@ float sampleWave(vec2 position, vec2 uv) {
     vec2 dir = normalize(uWindDir);
 
     float wind = clamp(uWindSpeed / 15.0, 0.0, 1.0);
-    float travelSpeed = mix(0.4, 0.9, wind);
 
-    vec2 flow = position - dir * uWaveOffset * travelSpeed;
+    vec2 flow = position - dir * uWaveOffset;
     vec2 perp = vec2(-dir.y, dir.x);
 
     flow += perp * fbm(flow * 0.15) * 0.15;
