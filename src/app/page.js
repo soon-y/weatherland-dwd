@@ -20,9 +20,12 @@ export default function Home() {
     let cancelled = false
     let retryTimer
 
-    const RETRY_INTERVAL = 10000
-    const MAX_ELAPSED = 150000
+    const INITIAL_WAIT = 100000
+    const RETRY_INTERVAL = 5000
+    const MAX_ELAPSED = 5 * 60000
     const startTime = Date.now()
+    let attemptCount = 0
+    let hasShownData = false
 
     const fetchInfo = async () => {
       try {
@@ -32,11 +35,18 @@ export default function Home() {
         const data = await res.json()
         if (cancelled) return
 
-        setForecastData(data)
-        console.log(data)
+        if (!hasShownData || !data.stale) {
+          setForecastData(data)
+          hasShownData = true
+        }
 
-        if (data.stale && Date.now() - startTime < MAX_ELAPSED) {
-          retryTimer = setTimeout(fetchInfo, RETRY_INTERVAL)
+        const elapsed = Date.now() - startTime
+        console.log(`[${Math.round(elapsed / 1000)}s]`, data.stale ? 'stale' : 'fresh')
+
+        if (data.stale && elapsed < MAX_ELAPSED) {
+          const nextDelay = attemptCount === 0 ? INITIAL_WAIT : RETRY_INTERVAL
+          attemptCount += 1
+          retryTimer = setTimeout(fetchInfo, nextDelay)
         }
       } catch (err) {
         console.log(err)
