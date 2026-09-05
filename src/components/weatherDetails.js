@@ -22,7 +22,10 @@ export default function WeatherDetails({ open, forecast, daily, index, indexD, s
     <div className='relative w-dvw h-dvh'>
       <div className={`scrollbar-hide ${param.weatherBoxheight} ${param.weatherBoxStyles} ${open ? 'opacity-100' : 'opacity-0'}
         flex flex-wrap content-start items-start overflow-scroll gap-3 p-2 pt-[1px] sm:p-4 pb-12 duration-500
-        `}>
+        `} onClick={() => {
+          setOpen(false)
+          clicked(false)
+        }}>
         <Forecast hourly={forecast} />
         <Tmperature hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Precipitation hourly={forecast} index={index} indexD={indexD} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
