@@ -76,7 +76,7 @@ export default function Pond({ progress, windDir, windSpd, rain, temp, weather }
 
     mat.uniforms.uWaveOffset.value = waveOffset.current
     mat.uniforms.uProgress.value = progress
-    mat.uniforms.uWindDir.value = new THREE.Vector2(Math.cos(windDir.current), Math.sin(windDir.current))
+    mat.uniforms.uWindDir.value.set(Math.cos(windDir.current), Math.sin(windDir.current))
     mat.uniforms.uWindSpeed.value = windSpd.current
     mat.uniforms.uRippleCount.value = ripplesRef.current.length
     mat.uniforms.uTemp.value = tempValue ?? 10
