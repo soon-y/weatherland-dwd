@@ -3,8 +3,8 @@ import { param } from "@/lib/param"
 import BoxTitle from "./boxTitle"
 
 export default function Humidity({ hourly, index, setDisplay, setBoxClicked }) {
-  const dewpoint = hourly.metrics.dewpoint_2m
-  const relativeHumidity = hourly.metrics.relative_humidity
+  const dewpoint = hourly.metrics.dewpoint_2m ?? 0
+  const relativeHumidity = hourly.metrics.relative_humidity ?? 0
   const title = 'humidity'
 
   const humidityBar = (val) => {
@@ -42,17 +42,22 @@ export default function Humidity({ hourly, index, setDisplay, setBoxClicked }) {
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked}>
+    <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={hourly.metrics.dewpoint_2m  === undefined ? false : true}>
       <div>
         <BoxTitle title={title} />
-        <p className={param.weatherDescMain}>{relativeHumidity.forecast[index]} {relativeHumidity.unit}</p>
-        <p className={param.weatherDescSub}>Dew point: <span className="font-semibold">{dewpoint.forecast[index]} {dewpoint.unit}</span></p>
+        {dewpoint !== null ?
+          <>
+            <p className={param.weatherDescMain}>{relativeHumidity.forecast[index]} {relativeHumidity.unit}</p>
+            <p className={param.weatherDescSub}>Dew point: <span className="font-semibold">{dewpoint.forecast[index]} {dewpoint.unit}</span></p>
+          </>
+          :
+          <p>N/A</p>}
       </div>
 
-      <div className={`${param.weatherBarContainer}`}>
+      {dewpoint !== null && <div className={`${param.weatherBarContainer}`}>
         <div className={`${param.weatherBar} rounded-full bg-black/20`} />
         {humidityBar(dewpoint.forecast[index])}
-      </div>
+      </div>}
     </Box>
   )
 }

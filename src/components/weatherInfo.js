@@ -13,14 +13,14 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const [index12, setIndex12] = useState(0)
   const daily = forecast.daily
   const temperature = forecast.metrics.temperature_2m
-  const windSpeed = forecast.metrics.wind_speed_10m.forecast[index]
-  const windDirection = forecast.metrics.wind_direction_10m.forecast[index]
+  const windSpeed = forecast.metrics.wind_speed_10m?.forecast[index] ?? 0
+  const windDirection = forecast.metrics.wind_direction_10m?.forecast[index] ?? 0
   const prob = forecast.metrics.ww_prob_precip_1h
   const precip = forecast.metrics.precip_amount_1h
-  const visibility = forecast.metrics.visibility.forecast[index] / 1000
-  const isDay = forecast.metrics.is_day.forecast[index]
-  const sunriseToday = indexD < 0 ? daily.sunrise[0] : daily.sunrise[indexD]
-  const sunriseNext = indexD === 6 ? daily.sunrise[indexD] : daily.sunrise[indexD + 1]
+  const visibility = (forecast.metrics.visibility?.forecast[index] ?? 100000) / 1000
+  const isDay = forecast.metrics.is_day.forecast[index] ?? 0
+  const sunriseToday = daily.sunrise?.[indexD < 0 ? 0 : indexD] ?? null
+  const sunriseNext = daily.sunrise?.[indexD === 6 ? indexD : indexD + 1] ?? sunriseToday
   const sunsetToday = daily.sunset[indexD]
   const sunriseTimeToday = new Date(sunriseToday)
   const sunsetTimeToday = new Date(sunsetToday)

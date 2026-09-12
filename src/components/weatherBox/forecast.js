@@ -7,12 +7,14 @@ import BoxTitle from "./boxTitle"
 export default function Forecast({ hourly }) {
   const today = new Date()
   const [weekly, setWeedkly] = useState([])
-  const tempMin = hourly.metrics.daily_min_temperature.forecast
-  const tempMax = hourly.metrics.daily_max_temperature.forecast
+  const tempMin = hourly.metrics.daily_min_temperature?.forecast
+  const tempMax = hourly.metrics.daily_max_temperature?.forecast
   const weatherCode = hourly.metrics.weather_code_priority_24h
   const probability = hourly.metrics.ww_prob_precip_24h.forecast
 
   useEffect(() => {
+    if (tempMin === undefined || tempMax === undefined) return
+
     const weeklyArr = []
     for (let i = 0; i < 7; i++) {
       weeklyArr.push({
@@ -48,26 +50,29 @@ export default function Forecast({ hourly }) {
   }
 
   return (
-    <Box style={'forecast'}>
-      <BoxTitle title={'7-day forecast'} />
-      <div className='grid gap-2 mb-1'>
-        {weekly.map((el, i) => (
-          <div key={i} className='grid grid-cols-7 sm:grid-cols-8 items-center justify-center h-9'>
-            <p className={`col-span-1 text-sm sm:text-base`}>{el.day}</p>
-            <div className='flex justify-center items-center'>
-              <WeatherIcon code={el.code} probability={el.probability} />
+    <>
+      {tempMin != null && tempMax != null &&
+      <Box style={'forecast'} clickable={false}>
+        <BoxTitle title={'7-day forecast'} />
+        <div className='grid gap-2 mb-1'>
+          {weekly.map((el, i) => (
+            <div key={i} className='grid grid-cols-7 sm:grid-cols-8 items-center justify-center h-9'>
+              <p className={`col-span-1 text-sm sm:text-base`}>{el.day}</p>
+              <div className='flex justify-center items-center'>
+                <WeatherIcon code={el.code} probability={el.probability} />
+              </div>
+              <p className={`col-span-1 text-sm sm:text-base text-center`}>{el.min}°</p>
+              <div className={`col-span-3 sm:col-span-4 relative h-2 rounded-full overflow-hidden bg-black/40`}>
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={barRange(el.min, el.max)}
+                />
+              </div>
+              <p className={`col-span-1 text-sm sm:text-base text-center`}>{el.max}°</p>
             </div>
-            <p className={`col-span-1 text-sm sm:text-base text-center`}>{el.min}°</p>
-            <div className={`col-span-3 sm:col-span-4 relative h-2 rounded-full overflow-hidden bg-black/40`}>
-              <div
-                className="absolute inset-0 rounded-full"
-                style={barRange(el.min, el.max)}
-              />
-            </div>
-            <p className={`col-span-1 text-sm sm:text-base text-center`}>{el.max}°</p>
-          </div>
-        ))}
-      </div>
-    </Box>
+          ))}
+        </div>
+      </Box>}
+    </>
   )
 }

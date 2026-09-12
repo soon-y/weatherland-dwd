@@ -3,10 +3,10 @@ import Box from "./box"
 import BoxTitle from "./boxTitle"
 
 export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setBoxClicked }) {
-  const sunrise = daily.sunrise[indexD]
-  const sunset = daily.sunset[indexD]
-  const sunriseNext = daily.sunrise[indexD + 1] ? daily.sunrise[indexD + 1] : daily.sunrise[indexD]
-  const sunsetNext = daily.sunset[indexD + 1] ? daily.sunrise[indexD + 1] : daily.sunset[indexD]
+  const sunrise = daily.sunrise?.[indexD] ?? null
+  const sunset = daily.sunset?.[indexD] ?? null
+  const sunriseNext = daily.sunrise?.[indexD + 1] ?? sunrise
+  const sunsetNext = daily.sunset?.[indexD + 1] ?? sunset
   const now = hourly.timestamps[index]
   const nowDate = new Date(now)
   const sunriseDate = new Date(sunrise)
@@ -92,83 +92,89 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setB
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setBoxClicked={setBoxClicked}>
-      {title()}
+    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setBoxClicked={setBoxClicked} clickable={hourly === undefined ? false : true}>
+      {sunrise !== null ?
+        title() :
+        <div>
+          <BoxTitle title={'sunrise'} />
+          <p>N/A</p></div>
+      }
 
-      <div className="relative">
-        <svg style={{ overflow: "visible" }}
-          viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
-        >
-          <defs>
-            <linearGradient id="horizonFade" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="50%" stopColor="white" />
-              <stop offset="100%" stopColor="black" />
-            </linearGradient>
+      {sunrise !== null &&
+        <div className="relative">
+          <svg style={{ overflow: "visible" }}
+            viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
+          >
+            <defs>
+              <linearGradient id="horizonFade" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="50%" stopColor="white" />
+                <stop offset="100%" stopColor="black" />
+              </linearGradient>
 
-            <mask id="horizonFadeMask">
-              <rect width="100%" height="50%" fill="url(#horizonFade)" x='-10' y={`${pathSize.h / 2}`} />
-            </mask>
+              <mask id="horizonFadeMask">
+                <rect width="100%" height="50%" fill="url(#horizonFade)" x='-10' y={`${pathSize.h / 2}`} />
+              </mask>
 
-            <mask id="cropMask">
-              <rect width="100%" height="50%" fill="white" y={`-10`} />
-              <rect width="100%" height="50%" fill="black" y={`${pathSize.h / 2}`} />
-            </mask>
+              <mask id="cropMask">
+                <rect width="100%" height="50%" fill="white" y={`-10`} />
+                <rect width="100%" height="50%" fill="black" y={`${pathSize.h / 2}`} />
+              </mask>
 
-            <filter
-              id="glow"
-              x="-100%"
-              y="-100%"
-              width="300%"
-              height="300%"
-            >
-              <feGaussianBlur
-                in="SourceGraphic"
-                stdDeviation="6"
-                result="blur"
+              <filter
+                id="glow"
+                x="-100%"
+                y="-100%"
+                width="300%"
+                height="300%"
+              >
+                <feGaussianBlur
+                  in="SourceGraphic"
+                  stdDeviation="6"
+                  result="blur"
+                />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+
+              <clipPath id="clip">
+                <rect
+                  x="10"
+                  y="-20"
+                  width={pathSize.w}
+                  height={pathSize.h / 2 + 20}
+                />
+              </clipPath>
+            </defs>
+
+            <path className="opacity-50" d={pathStart} stroke="rgba(0,0,0,0.4)" fill="none" strokeWidth="8" mask="url(#horizonFadeMask)" />
+            <path className="opacity-50" d={pathEnd} stroke="rgba(0,0,0,0.4)" fill="none" strokeWidth="8" mask="url(#horizonFadeMask)" />
+            <path className="opacity-50" d={pathMiddle} stroke="white" fill="none" strokeWidth="8" mask="url(#cropMask)" />
+
+            <g clipPath="url(#clip)">
+              <circle
+                cx={getSunProgress().x}
+                cy={getSunProgress().y}
+                r="9"
+                fill="white"
+                stroke="white"
+                strokeWidth="2"
+                filter="url(#glow)"
               />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
+            </g>
 
-            <clipPath id="clip">
-              <rect
-                x="10"
-                y="-20"
-                width={pathSize.w}
-                height={pathSize.h / 2 + 20}
-              />
-            </clipPath>
-          </defs>
-
-          <path className="opacity-50" d={pathStart} stroke="rgba(0,0,0,0.4)" fill="none" strokeWidth="8" mask="url(#horizonFadeMask)" />
-          <path className="opacity-50" d={pathEnd} stroke="rgba(0,0,0,0.4)" fill="none" strokeWidth="8" mask="url(#horizonFadeMask)" />
-          <path className="opacity-50" d={pathMiddle} stroke="white" fill="none" strokeWidth="8" mask="url(#cropMask)" />
-
-          <g clipPath="url(#clip)">
             <circle
               cx={getSunProgress().x}
               cy={getSunProgress().y}
               r="9"
-              fill="white"
+              fill="none"
               stroke="white"
               strokeWidth="2"
-              filter="url(#glow)"
             />
-          </g>
-
-          <circle
-            cx={getSunProgress().x}
-            cy={getSunProgress().y}
-            r="9"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-          />
-        </svg>
-        <div className="absolute bottom-0 w-full h-[50%] border-t-1 opacity-50 "></div>
-      </div>
+          </svg>
+          <div className="absolute bottom-0 w-full h-[50%] border-t-1 opacity-50 "></div>
+        </div>}
     </Box>
   )
 }

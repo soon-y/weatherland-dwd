@@ -90,16 +90,16 @@ export default function Environment({ store, forecast, index, indexD }) {
     }
     setSunProgress(Number(progressInDay.toFixed(2)))
 
-    setWindDirH(forecast.metrics.wind_direction_10m.forecast[index])
-    setWindSpdH(forecast.metrics.wind_speed_10m.forecast[index])
-    setGustsSpdH(forecast.metrics.wind_gust_max_1h.forecast[index])
+    setWindDirH(forecast.metrics.wind_direction_10m?.forecast[index] ?? 0)
+    setWindSpdH(forecast.metrics.wind_speed_10m?.forecast[index] ?? 0)
+    setGustsSpdH(forecast.metrics.wind_gust_max_1h?.forecast[index] ?? 0)
 
     targetWeather.current = {
-      rain: forecast.metrics.precip_liquid_amount_1h.forecast[index],
-      snow: forecast.metrics.precip_snow_amount_1h.forecast[index],
-      visibility: forecast.metrics.visibility.forecast[index],
-      probability: forecast.metrics.ww_prob_precip_1h.forecast[index],
-      temperature: forecast.metrics.temperature_2m.forecast[index]
+      rain: forecast.metrics.precip_liquid_amount_1h?.forecast[index] ?? 0,
+      snow: forecast.metrics.precip_snow_amount_1h?.forecast[index] ?? 0,
+      visibility: forecast.metrics.visibility?.forecast[index] ?? 0,
+      probability: forecast.metrics.ww_prob_precip_1h?.forecast[index] ?? 0,
+      temperature: forecast.metrics.temperature_2m?.forecast[index] ?? 0
     }
   }, [index, indexD])
 
@@ -227,10 +227,10 @@ export default function Environment({ store, forecast, index, indexD }) {
       <Grass progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
       <Pond progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} rain={isDebug ? rain : undefined} temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
       <Tree progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
-      <Rain windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} precipitation={isDebug ? rain : undefined} weather={isDebug ? undefined : weather} />
-      <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
-      <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
-      <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index]} weather={isDebug ? undefined : weather} />
+      <Rain windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index] ?? 0} precipitation={isDebug ? rain : undefined} weather={isDebug ? undefined : weather} />
+      <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index] ?? 0} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
+      <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index] ?? 0} weather={isDebug ? undefined : weather} />
+      <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day.forecast[index] ?? 0} weather={isDebug ? undefined : weather} />
       <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} />
       <Thermometer temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
     </>
