@@ -30,7 +30,7 @@ export default function Home() {
     const fetchInfo = async () => {
       try {
         const res = await fetch(
-          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${timezone}&offset=${offset}`
+          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}&offset=${offset}`
         )
         const data = await res.json()
         if (cancelled) return

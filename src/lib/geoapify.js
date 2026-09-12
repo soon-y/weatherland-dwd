@@ -33,7 +33,7 @@ export async function forwardGeo(place, zip, country) {
 
   return {
     timezone: props?.timezone?.name
-      ? encodeURIComponent(props.timezone.name)
+      ? props.timezone.name
       : "",
     offset: props?.timezone?.offset_STD || "+00:00",
     suburb: props?.suburb || props?.district || props?.city || props?.country || "Unknown",
