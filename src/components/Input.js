@@ -24,6 +24,23 @@ export default function Input({
     setTempCo(country)
   }, [lat, long, suburb, postcode, country])
 
+  const handleSaveCood = e => {
+    e.preventDefault()
+    setOpen(!open)
+    updateLat(tempLat)
+    updateLon(tempLong)
+    flag(label)
+  }
+
+  const handleSave = e => {
+    e.preventDefault()
+    setOpen(!open)
+    updateSuburb(tempSub)
+    updatePostcode(tempPost)
+    updateCountry(tempCo)
+    flag(label)
+  }
+
   return (
     <div>
       <div
@@ -40,106 +57,94 @@ export default function Input({
       `}>
         {
           (label == 'Latitude' || label == 'Longitude') ?
-            <div className={`${styles} grid grid-flow-rows grid-cols-2 gap-x-2 sm:gap-x-3 gap-y-1 items-center`}>
-              <label className="text-white font-bold">Latitude</label>
-              <label className="text-white font-bold">Longitude</label>
-              <input
-                type='number'
-                value={tempLat}
-                onChange={(e) => setTempLat(e.target.value)}
-                placeholder={'Latitude'}
-                className={`${inputStyles}`}
-              />
-              <input
-                type='number'
-                value={tempLong}
-                onChange={(e) => setTempLong(e.target.value)}
-                placeholder={'Longitude'}
-                className={`${inputStyles}`}
-              />
+            <form onSubmit={handleSaveCood}>
+              <div className={`${styles} grid grid-flow-rows grid-cols-2 gap-x-2 sm:gap-x-3 gap-y-1 items-center`}>
+                <label className="text-white font-bold">Latitude</label>
+                <label className="text-white font-bold">Longitude</label>
+                <input
+                  type='number'
+                  value={tempLat}
+                  onChange={(e) => setTempLat(e.target.value)}
+                  placeholder={'Latitude'}
+                  className={`${inputStyles}`}
+                />
+                <input
+                  type='number'
+                  value={tempLong}
+                  onChange={(e) => setTempLong(e.target.value)}
+                  placeholder={'Longitude'}
+                  className={`${inputStyles}`}
+                />
 
-              <div className="mt-2 sm:mt-4 grid gap-0 sm:gap-2">
-                <button
-                  onClick={() => {
-                    setOpen(!open)
-                    updateLat(tempLat)
-                    updateLon(tempLong)
-                    flag(label)
-                  }}
-                  className={`${styles} ${btnStyles} my-2`}
-                >
-                  save
-                </button>
-                <button
-                  onClick={() => {
-                    setOpen(!open)
-                    setTempLat(lat)
-                    setTempLong(long)
-                  }}
-                  className={`${styles} ${btnStyles}`}
-                >
-                  close
-                </button>
+                <div className="mt-2 sm:mt-4 grid gap-0 sm:gap-2">
+                  <button type="submit" className={`${styles} ${btnStyles} my-2`}>
+                    save
+                  </button>
+                  <button type="button"
+                    onClick={() => {
+                      setOpen(!open)
+                      setTempLat(lat)
+                      setTempLong(long)
+                    }}
+                    className={`${styles} ${btnStyles}`}
+                  >
+                    close
+                  </button>
+                </div>
               </div>
-            </div> :
-            <div className={`${styles} grid gap-2 sm:gap-x-3 sm:gap-y-4 items-center`}>
-              <div className="flex flex-col gap-1">
-                <label className="text-white font-bold">Area</label>
-                <input
-                  type='text'
-                  value={tempSub}
-                  onChange={(e) => setTempSub(e.target.value)}
-                  placeholder={'Place'}
-                  className={`${inputStyles}`}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-white font-bold">Postcode</label>
-                <input
-                  type='text'
-                  value={tempPost}
-                  onChange={(e) => setTempPost(e.target.value)}
-                  placeholder={'Postcode'}
-                  className={`${inputStyles}`}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-white font-bold">Country</label>
-                <input
-                  type='text'
-                  value={tempCo}
-                  onChange={(e) => setTempCo(e.target.value)}
-                  placeholder={'Country'}
-                  className={`${inputStyles}`}
-                />
-              </div>
+            </form>
+            :
+            <form onSubmit={handleSave}>
+              <div className={`${styles} grid gap-2 sm:gap-x-3 sm:gap-y-4 items-center`}>
+                <div className="flex flex-col gap-1">
+                  <label className="text-white font-bold">Area</label>
+                  <input
+                    type='text'
+                    value={tempSub === 'Unknown' ? '' : tempSub}
+                    onChange={(e) => setTempSub(e.target.value)}
+                    placeholder={'Place'}
+                    className={`${inputStyles}`}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-white font-bold mt-2">Postcode</label>
+                  <input
+                    type='text'
+                    value={tempPost === 'Zip code' ? '' : tempPost}
+                    onChange={(e) => setTempPost(e.target.value)}
+                    placeholder={'Postcode'}
+                    className={`${inputStyles}`}
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-white font-bold mt-2">Country</label>
+                  <input
+                    type='text'
+                    value={tempCo === 'Country' ? '' : tempCo}
+                    onChange={(e) => setTempCo(e.target.value)}
+                    placeholder={'Country'}
+                    className={`${inputStyles}`}
+                  />
+                </div>
 
-              <div className="mt-2 sm:mt-4 grid gap-0 sm:gap-2">
-                <button
-                  onClick={() => {
-                    setOpen(!open)
-                    updateSuburb(tempSub)
-                    updatePostcode(tempPost)
-                    updateCountry(tempCo)
-                    flag(label)
-                  }}
-                  className={`${styles} ${btnStyles} my-2`}
-                >
-                  save
-                </button>
-                <button
-                  onClick={() => {
-                    setOpen(!open)
-                    setTempSub(suburb)
-                    setTempPost(postcode)
-                    setTempCo(country)
-                  }}
-                  className={`${styles} ${btnStyles}`}
-                >
-                  close
-                </button>
+                <div className="mt-2 sm:mt-4 grid gap-0 sm:gap-2">
+                  <button type="submit" className={`${styles} ${btnStyles} my-2`}>
+                    save
+                  </button>
+                  <button type="button"
+                    onClick={() => {
+                      setOpen(!open)
+                      setTempSub(suburb)
+                      setTempPost(postcode)
+                      setTempCo(country)
+                    }}
+                    className={`${styles} ${btnStyles}`}
+                  >
+                    close
+                  </button>
+                </div>
               </div>
-            </div>
+            </form>
         }
       </div>
     </div>
