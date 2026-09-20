@@ -45,3 +45,69 @@ The application transforms weather data into a living 3D world featuring dynamic
 ## Project Goal
 
 Weather Land explores how weather information can be presented through immersive 3D environments rather than conventional charts and icons. By combining real-time weather data with interactive graphics, users can experience weather conditions in a more intuitive and engaging way.
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd <repository-folder>
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file in the project root.
+
+```env
+NEXT_PUBLIC_GEOAPIFY_API=your_GEOAPIFY_API
+NEXT_PUBLIC_IPGEOLOCATION_API=your_IPGEOLOCATION_API
+NEXT_PUBLIC_FORECAST_API=your_FORECAST_API
+```
+
+The application uses Neon for database caching.
+
+If deploying with Vercel, connect a Neon database to the project through the Vercel dashboard. Vercel automatically provides the `DATABASE_URL` environment variable.
+
+After connecting the database, create a table using the following SQL:
+
+```sql
+CREATE TABLE YOUR_TABLE (
+  id SERIAL PRIMARY KEY,
+  lat DOUBLE PRECISION NOT NULL,
+  lon DOUBLE PRECISION NOT NULL,
+  timezone TEXT NOT NULL,
+  data JSONB NOT NULL,
+  updated_at TIMESTAMP DEFAULT NOW(),
+  UNIQUE (lat, lon)
+);
+```
+
+The `lat` and `lon` columns are unique because the application stores one cached forecast per location. This constraint is also required for the `UNIQUE (lat, lon)` operation used when updating the cache.
+
+`DATABASE_URL` is optional. If it is not provided, the application runs without database caching and fetches weather data directly from the weather API.
+
+
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+Open http://localhost:3000 in your browser.
+
+### 5. Create a production build
+
+To create and test a production build:
+
+```bash
+npm run build
+npm start
+```
