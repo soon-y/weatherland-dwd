@@ -12,6 +12,8 @@ function withTimeout(promise, ms) {
 }
 
 async function getCached(lat, lon, date) {
+  if (!sql) return null
+
   const result = await sql`
     SELECT data FROM forecast_cache
     WHERE lat = ${lat} AND lon = ${lon} AND date = ${date}
@@ -47,12 +49,14 @@ export async function GET(req) {
 
     const processed = processForecast(raw, offset)
 
-    await sql`
-      INSERT INTO forecast_cache (lat, lon, date, data)
-      VALUES (${lat}, ${lon}, ${date}, ${JSON.stringify(processed)})
-      ON CONFLICT (lat, lon)
-      DO UPDATE SET date = EXCLUDED.date, data = EXCLUDED.data
-    `
+    if (sql) {
+      await sql`
+        INSERT INTO forecast_cache (lat, lon, date, data)
+        VALUES (${lat}, ${lon}, ${date}, ${JSON.stringify(processed)})
+        ON CONFLICT (lat, lon)
+        DO UPDATE SET date = EXCLUDED.date, data = EXCLUDED.data
+      `
+    }
 
     return Response.json({ ...processed, stale: false })
   } catch (err) {
