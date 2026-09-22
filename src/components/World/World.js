@@ -7,7 +7,7 @@ import { useEffect, useState, Suspense } from "react"
 import WorldGround from "./Ground"
 import Environment from "./environment"
 import Loading from "@/components/loading"
-import { Perf } from "r3f-perf"
+import { Perf, usePerf } from "r3f-perf"
 import * as THREE from 'three'
 
 function World({ forecast, index }) {
@@ -19,42 +19,44 @@ function World({ forecast, index }) {
     setIndexD(Math.floor(index / 24))
   }, [forecast, index])
 
-  return <>
-    <DebugUI store={levaStore} />
-    <Canvas shadows camera={{
-      fov: 50,
-      near: 0.01,
-      far: 100,
-      position: param.camPos,
-    }}
-      onCreated={({ gl }) => {
-        gl.outputColorSpace = THREE.SRGBColorSpace
-        gl.toneMapping = THREE.ACESFilmicToneMapping
-        gl.shadowMap.enabled = true
-        gl.shadowMap.type = THREE.PCFSoftShadowMap
+  return (
+    <>
+      <DebugUI store={levaStore} />
+      <Canvas shadows camera={{
+        fov: 50,
+        near: 0.01,
+        far: 100,
+        position: param.camPos,
       }}
-    >
-      {isDebug && <Perf position="top-left" />}
-      <Suspense fallback={<Loading />}>
-        <OrbitControls
-          target={param.worldPos}
-          maxDistance={50}
-          minDistance={isDebug ? 0 : 20}
-          maxPolarAngle={isDebug ? Math.PI * 0.5 : Math.PI * 0.5}
-          minPolarAngle={isDebug ? 0 : Math.PI * 0.3}
-          enableDamping
-          dampingFactor={0.03}
-        />
+        onCreated={({ gl }) => {
+          gl.outputColorSpace = THREE.SRGBColorSpace
+          gl.toneMapping = THREE.ACESFilmicToneMapping
+          gl.shadowMap.enabled = true
+          gl.shadowMap.type = THREE.PCFSoftShadowMap
+        }}
+      >
+        {isDebug && <Perf position="top-left" />}
+        <Suspense fallback={<Loading />}>
+          <OrbitControls
+            target={param.worldPos}
+            maxDistance={50}
+            minDistance={isDebug ? 0 : 20}
+            maxPolarAngle={isDebug ? Math.PI * 0.5 : Math.PI * 0.5}
+            minPolarAngle={isDebug ? 0 : Math.PI * 0.3}
+            enableDamping
+            dampingFactor={0.03}
+          />
 
-        <CameraController />
+          <CameraController />
 
-        <group position={param.worldPos}>
-          <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} />
-          <WorldGround store={levaStore} forecast={forecast} index={index} />
-        </group>
-      </Suspense>
-    </Canvas>
-  </>
+          <group position={param.worldPos}>
+            <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} />
+            <WorldGround store={levaStore} forecast={forecast} index={index} />
+          </group>
+        </Suspense>
+      </Canvas>
+      {isDebug && <PerformanceButton />}
+    </>)
 }
 
 function CameraController() {
@@ -89,6 +91,22 @@ function CameraController() {
   }, [camera])
 
   return null
+}
+
+function PerformanceButton() {
+  const getReport = usePerf((state) => state.getReport)
+
+  const handleClick = () => {
+    console.log(getReport())
+  }
+
+  return (
+    <button
+      className="absolute top-30 left-4 z-50 px-3 py-2 bg-black text-white rounded"
+      onClick={handleClick}>
+      Log performance report
+    </button>
+  )
 }
 
 export default World
