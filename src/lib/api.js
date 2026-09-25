@@ -10,7 +10,6 @@ const metricKeys = [
 
   "precip_amount_1h",
   "precip_amount_24h",
-  "precip_duration_1h",
   "precip_snow_amount_1h",
   "precip_liquid_amount_1h",
 
@@ -26,10 +25,7 @@ const metricKeys = [
   "wind_gust_max_1h",
 
   "visibility",
-  "visibility_prob_below_1000m",
-
   "global_irradiance_1h",
-  "sunshine_duration_1h",
 ]
 
 export async function fetchForecast(latitude, longitude, timezone) {
