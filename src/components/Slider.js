@@ -27,7 +27,7 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
   useEffect(() => {
     const handleResize = () => {
       const windowWidth = window.innerWidth - 16
-      const divide = windowWidth > 1000 ? 10 : isMobile(windowWidth) ? 6 : 4
+      const divide = windowWidth > 1000 ? 10 : isMobile(windowWidth) ? 4 : 6
       const box = windowWidth / divide
 
       setBoxWidth(box)

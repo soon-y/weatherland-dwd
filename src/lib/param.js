@@ -376,7 +376,7 @@ export const useIsDebug = () => {
 }
 
 export const isMobile = (windowWidth) => {
-  return windowWidth > 500
+  return windowWidth <= 500
 }
 
 export const getTimeIndex = (currentTime, timestamps) => {
