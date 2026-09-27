@@ -24,7 +24,7 @@ export default function Thermometer({ temp, weather }) {
 
   useEffect(() => {
     if (!liquidMaterialRef.current) return
-  
+
     let face
     const visible = tempValue != null
 
@@ -64,10 +64,14 @@ export default function Thermometer({ temp, weather }) {
 
   useFrame((_, delta) => {
     delta = Math.min(delta, 0.05)
-    if (!liquidRef.current ) return
+    if (!liquidRef.current) return
+
+    const clampedTemp = THREE.MathUtils.clamp(
+      tempValue ?? 0, -50, 50
+    )
 
     const targetScale = THREE.MathUtils.mapLinear(
-      tempValue ?? 0, -50, 50, -0.04, 0.04
+      clampedTemp, -50, 50, -0.04, 0.04
     )
 
     liquidRef.current.scale.y = THREE.MathUtils.lerp(
