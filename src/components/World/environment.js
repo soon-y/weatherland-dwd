@@ -53,7 +53,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
   }, { store })
 
   const { rain, snow, probability } = useControls('Precipitation', {
-    rain: { value: 0, min: 0, max: 10, step: 0.1 },
+    rain: { value: 0, min: 0, max: 100, step: 0.1 },
     snow: { value: 0, min: 0, max: 10, step: 0.1 },
     probability: { value: 0, min: 0, max: 100, step: 5 },
   }, { store })
@@ -177,20 +177,26 @@ export default function Environment({ store, forecast, index, indexD, levaValues
     )
 
     const cycleTime = timeRef.current % gustCycle
+    const baseSpeed = windSpeedRef.current
 
-    let gustEffect = 0
+    if (targetGustSpeed <= targetSpeed) {
+      finalWindSpd.current = baseSpeed
+    } else {
+      const gustIncrease = Math.max(0, targetGustSpeed - baseSpeed)
 
-    if (cycleTime < gustDuration) {
-      gustEffect = Math.sin((cycleTime / gustDuration) * Math.PI) * targetGustSpeed
+      const gustEffect =
+        cycleTime < gustDuration
+          ? Math.sin((cycleTime / gustDuration) * Math.PI) * gustIncrease
+          : 0
+
+      const targetFinalWindSpd = baseSpeed + gustEffect
+
+      finalWindSpd.current = THREE.MathUtils.lerp(
+        finalWindSpd.current,
+        targetFinalWindSpd,
+        delta * gustTransitionSpeed
+      )
     }
-
-    const targetFinalWindSpd = windSpeedRef.current + gustEffect
-
-    finalWindSpd.current = THREE.MathUtils.lerp(
-      finalWindSpd.current,
-      targetFinalWindSpd,
-      delta * gustTransitionSpeed
-    )
 
     const sway = Math.sin(timeRef.current * 2) * (finalWindSpd.current * 0.001)
 
