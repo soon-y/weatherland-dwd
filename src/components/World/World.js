@@ -3,7 +3,7 @@ import { Canvas, useThree } from "@react-three/fiber"
 import { levaStore } from 'leva'
 import { param, useIsDebug } from "@/lib/param"
 import DebugUI from "../debugUI"
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, useState, Suspense, useRef } from "react"
 import WorldGround from "./Ground"
 import Environment from "./environment"
 import Loading from "@/components/loading"
@@ -13,6 +13,7 @@ import * as THREE from 'three'
 function World({ forecast, index }) {
   const [indexD, setIndexD] = useState(0)
   const isDebug = useIsDebug()
+  const levaValuesRef = useRef({})
 
   useEffect(() => {
     if (!forecast || index == null) return
@@ -50,12 +51,14 @@ function World({ forecast, index }) {
           <CameraController />
 
           <group position={param.worldPos}>
-            <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} />
+            <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} levaValuesRef={levaValuesRef} />
             <WorldGround store={levaStore} forecast={forecast} index={index} />
           </group>
         </Suspense>
       </Canvas>
-      {isDebug && <PerformanceButton />}
+      {isDebug && <PerformanceButton
+        levaValues={levaValuesRef}
+      />}
     </>)
 }
 
@@ -93,18 +96,56 @@ function CameraController() {
   return null
 }
 
-function PerformanceButton() {
+function PerformanceButton({ levaValues }) {
   const getReport = usePerf((state) => state.getReport)
 
   const handleClick = () => {
-    console.log(getReport())
+    const report = getReport()
+
+    if (!report) {
+      alert('No performance result yet.')
+      return
+    }
+
+    const recordedAt = new Date().toISOString()
+
+    const content = [
+      'WeatherLand Performance Report',
+      `Recorded at: ${recordedAt}`,
+      `Browser: ${navigator.userAgent}`,
+      `Viewport: ${window.innerWidth} x ${window.innerHeight}`,
+      `Device pixel ratio: ${window.devicePixelRatio}`,
+      '',
+      '--- Leva Settings ---',
+      JSON.stringify(levaValues, null, 2),
+      '',
+      '--- Performance Results ---',
+      JSON.stringify(report, null, 2),
+    ].join('\n')
+
+    const blob = new Blob([content], {
+      type: 'text/plain;charset=utf-8',
+    })
+
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+
+    link.href = url
+    link.download = `weatherland-performance-${recordedAt.replace(/[:.]/g, '-')}.txt`
+
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
   }
 
   return (
     <button
       className="absolute top-30 left-4 z-50 px-3 py-2 bg-black text-white rounded"
-      onClick={handleClick}>
-      Log performance report
+      onClick={handleClick}
+    >
+      Download performance report
     </button>
   )
 }

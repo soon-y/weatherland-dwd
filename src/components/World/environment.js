@@ -15,7 +15,7 @@ import MistOverlay from './mistOverlay'
 import Umbrella from './umbrella'
 import Thermometer from './thermometer'
 
-export default function Environment({ store, forecast, index, indexD }) {
+export default function Environment({ store, forecast, index, indexD, levaValuesRef }) {
   const [sunProgress, setSunProgress] = useState(0)
   const [animatedProgress, setAnimatedProgress] = useState(0)
   const [windDirH, setWindDirH] = useState(0)
@@ -68,6 +68,15 @@ export default function Environment({ store, forecast, index, indexD }) {
     period: { value: 20, min: 5, max: 60, step: 1 },
     duration: { value: 3, min: 1, max: 10, step: 1 },
   }, { store })
+
+  useEffect(() => {
+    levaValuesRef.current = {
+      progress, visibility, temperature, rain, snow, probability, direction, speed, strength, period, duration
+    }
+  }, [
+    levaValuesRef,
+    progress, visibility, temperature, rain, snow, probability, direction, speed, strength, period, duration
+  ])
 
   useEffect(() => {
     if (!forecast || index == null || indexD == null) return
@@ -222,7 +231,7 @@ export default function Environment({ store, forecast, index, indexD }) {
 
   return (
     <>
-      <WorldSky progress={isDebug ? progress : animatedProgress} store={store}/>
+      <WorldSky progress={isDebug ? progress : animatedProgress} store={store} />
       <Windvane windDir={finalWindDir} windSpd={finalWindSpd} />
       <Grass progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} />
       <Pond progress={isDebug ? progress : animatedProgress} windDir={finalWindDir} windSpd={finalWindSpd} rain={isDebug ? rain : undefined} temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
