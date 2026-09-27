@@ -42,7 +42,7 @@ export async function fetchForecast(latitude, longitude, timezone) {
   const aimpulse = `${API}?${params.toString()}&timeDuration=P%2B7d`
 
   const baseWeatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}`
-  const dailyUrl = `${baseWeatherUrl}&daily=daylight_duration,sunrise,sunset&timezone=${encodedTimezone}&forecast_days=9`
+  const dailyUrl = `${baseWeatherUrl}&daily=daylight_duration,sunrise,sunset&timezone=${encodedTimezone}&forecast_days=7`
   
   const [dailyRes, forecastRes] = await Promise.all([
     fetch(dailyUrl),
