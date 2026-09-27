@@ -8,7 +8,7 @@ const nunito = Onest({
 })
 
 export const metadata = {
-  title: "Weather Land",
+  title: "WeatherLand",
   description: "weather forecast application",
 }
 
