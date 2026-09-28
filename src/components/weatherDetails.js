@@ -12,7 +12,7 @@ import Humidity from './weatherBox/humidity'
 import Pressure from './weatherBox/pressure'
 import WeeklyBox from './weatherGraph/weeklyBox'
 import Tmperature from './weatherBox/temperature'
-import Irradiance from './weatherBox/irradiance'
+import Sunshine from './weatherBox/sunshine'
 
 export default function WeatherDetails({ open, forecast, daily, index, indexD, setOpen, clicked }) {
   const [display, setDisplay] = useState(null)
@@ -31,7 +31,7 @@ export default function WeatherDetails({ open, forecast, daily, index, indexD, s
         <Forecast hourly={forecast} />
         <Tmperature hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Precipitation hourly={forecast} index={index} indexD={indexD} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
-        <Irradiance hourly={forecast.metrics.global_irradiance_1h} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
+        <Sunshine hourly={forecast.metrics.sunshine_duration_1h} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Sunrise daily={daily} hourly={forecast} index={index} indexD={indexD} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Wind hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Visibility hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />

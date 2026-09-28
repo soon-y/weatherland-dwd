@@ -25,7 +25,7 @@ const metricKeys = [
   "wind_gust_max_1h",
 
   "visibility",
-  "global_irradiance_1h",
+  "sunshine_duration_1h",
 ]
 
 export async function fetchForecast(latitude, longitude, timezone) {

@@ -262,24 +262,24 @@ export function precipIntensity(type, amount) {
   }
 }
 
-export const uvOffsets = [20, 40, 50, 80]
-export const uvColorList = [
-  '#A1E142',
+export const sunshineOffsets = [20, 40, 60, 80]
+export const sunshineColorList = [
+  '#7e7e7e',
   '#FDE047',
   '#FBCC24',
   '#EF4444'
 ]
-export const irradiance = (val) => {
-  if (val == null) return { pos: 0, state: "" }
+export const sunshineDuration = (val) => {
+  if (val == null) return { pos: 0, value: 0, state: "" }
 
-  let max = 95
-  let ratio = Math.floor(val / 15 * max)
-  let pos = ratio >= max ? max : ratio
+  const max = 95
+  const ratio = Math.floor((val / 3600) * max)
+  const pos = Math.min(ratio, max)
 
-  if (val < 500) return { pos, state: "Low" }
-  else if (val < 1500) return { pos, state: "Moderate" }
-  else if (val < 2500) return { pos, state: "High" }
-  else return { pos, state: "Very High" }
+  if (val < 900) return { pos, state: "Little" }
+  else if (val < 1800) return { pos, state: "Some" }
+  else if (val < 2700) return { pos, state: "Mostly" }
+  else return { pos, state: "Full" }
 }
 
 export const visibilityOffsets = [3, 7, 10, 13, 25]
@@ -452,6 +452,29 @@ export function getAvgArr(arr, divide = 1) {
     } else {
       const sum = chunk.reduce((a, b) => a + b, 0)
       result.push(Math.round((sum / chunk.length) / divide))
+    }
+  }
+
+  return result
+}
+
+export function getAvgArrDaytime(arr, divide = 1) {
+  const result = []
+
+  for (let i = 0; i < arr.length; i += 24) {
+    const chunk = arr.slice(i, i + 24)
+
+    if (chunk.some(value => value == null)) {
+      result.push(null)
+    } else {
+      const validValues = chunk.filter(value => value !== 0)
+
+      if (validValues.length === 0) {
+        result.push(0)
+      } else {
+        const sum = validValues.reduce((a, b) => a + b, 0)
+        result.push(Math.round((sum / validValues.length) / divide))
+      }
     }
   }
 

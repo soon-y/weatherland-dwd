@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import WeeklyVisibility from "./visibility"
 import WeeklyHumidity from "./humidity"
 import WeeklyPressure from "./pressure"
-import WeeklySolarEnergy from "./solarEnergy"
+import WeeklySunshine from "./sunshine"
 import WeeklyWind from "./wind"
 import WeeklyTemperature from "./temperature"
 import WeeklyPrecipitation from "./precipitation"
@@ -88,10 +88,10 @@ export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDispl
                 hourly={weeklyArr(hourly.metrics.surface_pressure.forecast, firstTimestamp)}
               />
             }
-            {display === 'solar energy' &&
-              <WeeklySolarEnergy
+            {display === 'sunshine' &&
+              <WeeklySunshine
                 display={display} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.global_irradiance_1h.forecast, firstTimestamp)}
+                hourly={weeklyArr(hourly.metrics.sunshine_duration_1h.forecast, firstTimestamp)}
               />
             }
             {display === 'wind' &&

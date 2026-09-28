@@ -1,4 +1,4 @@
-import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, uvColorList, uvOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
+import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, sunshineColorList, sunshineOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
 import { useEffect, useMemo, useState } from "react"
 
 export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay }) {
@@ -18,9 +18,9 @@ export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, 
     maxIndex = tempColorIndex(max)
     colorRange = tempColorList.slice(minIndex, maxIndex + 1)
   }
-  else if (display === 'solar energy') {
-    colorRange = uvColorList
-    offset = uvOffsets
+  else if (display === 'sunshine') {
+    colorRange = sunshineColorList
+    offset = sunshineOffsets
   }
   else if (display === 'visibility') {
     colorRange = visibilityColorList
