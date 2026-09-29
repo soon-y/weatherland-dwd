@@ -42,21 +42,21 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
           }
         </div>
 
-        <div className="text-2xl flex gap-2 justify-between">
+        <div className="text-xl flex gap-2 justify-between">
           {
             validIndex ?
               <>
                 <div className="flex gap-2 items-end">
                   {current}
-                  <span className={`${current == null ? 'opacity-0' : ''}`}>
+                  <span className={`${current == null ? 'opacity-0' : 'text-base'}`}>
                     {unit}
                   </span>
-                  <span className="text-lg">{getWindLevel(current)}</span>
+                  <span className="text-base">{getWindLevel(current)}</span>
                 </div>
 
                 <div className="flex gap-2 text-lg text-gray-400 items-end">
                   {gusts[hoverIndex]}
-                  <span className={`text-lg ${current == null ? 'opacity-0' : ''}`}>
+                  <span className={`text-base ${current == null ? 'opacity-0' : ''}`}>
                     {unit}
                   </span>
                   {getWindLevel(gusts[hoverIndex])}
