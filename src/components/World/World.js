@@ -67,25 +67,16 @@ function CameraController() {
 
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth < 768
+      const scale = Math.max(1, 600 / window.innerWidth)
 
-      if (isMobile) {
-        const width = window.innerWidth
-        const scale = Math.max(1, 600 / width)
-
-        camera.position.set(
-          param.camPos[0] * scale,
-          param.camPos[1] * scale,
-          param.camPos[2] * scale,)
-      } else {
-        camera.position.set(...param.camPos)
-      }
-
-      camera.updateProjectionMatrix()
+      camera.position.set(
+        param.camPos[0] * scale,
+        param.camPos[1] * scale,
+        param.camPos[2] * scale
+      )
     }
 
     handleResize()
-
     window.addEventListener('resize', handleResize)
 
     return () => {
@@ -142,7 +133,7 @@ function PerformanceButton({ levaValues }) {
 
   return (
     <button
-      className="absolute top-30 left-4 z-50 px-3 py-2 bg-black text-white rounded"
+      className="absolute bottom-4 left-4 z-50 px-3 py-2 bg-black text-white rounded"
       onClick={handleClick}
     >
       Download performance report
