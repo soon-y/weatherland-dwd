@@ -245,21 +245,19 @@ export const rainColorList = [
   '#78d7e8'
 ]
 export function precipIntensity(type, amount) {
-  if (amount == null) return ''
-  if (type === 'snow') {
-    const cm = amount / 10
+  if (!Number.isFinite(amount) || amount < 0) return ''
+  if (amount === 0) return 'No precipitation'
 
-    if (cm < 1) return 'light'
-    if (cm < 5) return 'moderate'
-    if (cm < 10) return 'heavy'
-    return 'blizzard'
-  } else {
-    if (amount == 0) return 'No precipitation'
-    if (amount < 10) return 'light'
-    if (amount < 30) return 'moderate'
-    if (amount < 50) return 'heavy'
-    return 'torrential'
+  if (type === 'snow') {
+    if (amount < 1) return 'light'
+    if (amount < 5) return 'moderate'
+    return 'heavy'
   }
+
+  if (amount < 2.5) return 'light'
+  if (amount < 10) return 'moderate'
+  if (amount < 50) return 'heavy'
+  return 'very heavy'
 }
 
 export const sunshineOffsets = [20, 40, 60, 80]
@@ -291,14 +289,39 @@ export const visibilityColorList = [
   '#22C55E'
 ]
 export const visibilityInfo = (val) => {
-  if (val === null || val === 'Unknown') return { state: "", desc: "" }
-  if (val >= 10) return { state: "Clear", desc: "Clear conditions with excellent visibility." }
-  if (val >= 5) return { state: "Good", desc: "Good visibility across the area." }
-  if (val >= 2) return { state: "Moderate", desc: "Moderate visibility due to haze." }
-  if (val >= 1) return { state: "Poor", desc: "Poor visibility because of fog." }
-  return { state: "Very poor", desc: "Very poor visibility. Travel may be difficult." }
-}
+  if (!Number.isFinite(val) || val < 0) {
+    return { state: "", desc: "" }
+  }
 
+  if (val >= 10) {
+    return {
+      state: "Very good",
+      desc: "Clear conditions with excellent visibility."
+    }
+  }
+  if (val >= 4) {
+    return {
+      state: "Good",
+      desc: "Good visibility across the area."
+    }
+  }
+  if (val >= 2) {
+    return {
+      state: "Moderate",
+      desc: "Distant objects may be difficult to see."
+    }
+  }
+  if (val >= 1) {
+    return {
+      state: "Poor",
+      desc: "Visibility is limited to a short distance."
+    }
+  }
+  return {
+    state: "Very poor",
+    desc: "Very poor visibility. Travel may be difficult."
+  }
+}
 export const pressureOffsets = [10, 35, 60, 100]
 export const pressureColorList = [
   '#0094DD',
@@ -314,7 +337,7 @@ export const pressure = (current) => {
   else return 'Very high'
 }
 
-export const windOffsets = [0, 4, 8, 13, 20, 25]
+export const windOffsets = [0, 4, 8, 13, 25, 50]
 export const windColorList = [
   '#22D3EE',
   '#64D2B4',
@@ -324,13 +347,17 @@ export const windColorList = [
   '#DB3232'
 ]
 export function getWindLevel(speed) {
-  if (speed == null) return null
-  if (speed < 2) return "Calm"
-  if (speed < 6) return "Light"
-  if (speed < 10) return "Breeze"
-  if (speed < 15) return "Moderate"
-  if (speed < 20) return "Strong"
-  return "Storm"
+  if (!Number.isFinite(speed) || speed < 0) return null
+
+  if (speed < 1) return "Calm"
+  if (speed < 6) return "Light breeze"
+  if (speed < 12) return "Gentle breeze"
+  if (speed < 29) return "Moderate wind"
+  if (speed < 50) return "Strong wind"
+  if (speed < 62) return "Very strong wind"
+  if (speed < 89) return "Gale"
+  if (speed < 118) return "Storm"
+  return "Hurricane force"
 }
 
 export function getWindDirectionArrow(deg, size = 12) {

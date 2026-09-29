@@ -94,13 +94,13 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           <InfoBox title={'wind'} isDay={isDay}
             info1={windSpeed} unit1={'km/h'}
             info2={getWindDirectionArrow(windDirection, 18)}
-            condition={windSpeed > 15}
+            condition={windSpeed > 29}
           />
 
           <InfoBox title={'visibility'} isDay={isDay}
             info1={visibilityInfo(visibility).state}
             info2={visibility} unit2={'km'}
-            condition={visibility < 5}
+            condition={visibility < 4}
           />
 
           <InfoBox title={'sunrise'} isDay={isDay}
