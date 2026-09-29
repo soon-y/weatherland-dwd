@@ -24,8 +24,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const sunsetToday = daily.sunset[indexD]
   const sunriseTimeToday = new Date(sunriseToday)
   const sunsetTimeToday = new Date(sunsetToday)
-  const currentHour = String(index % 24).padStart(2, '0')
-  const now = new Date(daily.time[indexD] + 'T' + currentHour + ':00')
+  const now = new Date(forecast.timestamps[index])
   const weatherCode12h = forecast.metrics.weather_code_priority_12h
 
   useEffect(() => {
