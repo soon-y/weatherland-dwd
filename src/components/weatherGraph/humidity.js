@@ -42,8 +42,8 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
               <>
                 <div>
                   {current}
-                  <span className={`text-lg ${current == null ? 'opacity-0' : ''}`}>
-                    {unit}
+                  <span className="text-lg">
+                    {current != null ? unit : 'N/A'}
                   </span>
                 </div>
 

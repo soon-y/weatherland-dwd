@@ -42,12 +42,18 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
           {
             validIndex ?
               <>
-                <span className="font-bold">{visibilityInfo(current).state}</span>
-                <span>{current}
-                  <span className={`text-lg ${current == null ? 'opacity-0' : ''}`}>
-                    {unit}
-                  </span>
-                </span>
+                {current ?
+                  <>
+                    <span className="font-bold">{visibilityInfo(current).state}</span>
+                    <span>{current}
+                      <span className={`ml-1 text-lg ${current == null ? 'opacity-0' : ''}`}>
+                        {unit}
+                      </span>
+                    </span>
+                  </>
+                  :
+                  <span className="text-lg mt-1">N/A</span>
+                }
               </>
               :
               <>

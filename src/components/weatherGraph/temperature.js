@@ -47,8 +47,8 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
               <>
                 <div>
                   {current}
-                  <span className={`text-base ${current == null ? 'opacity-0' : ''}`}>
-                    {unit}
+                  <span className="text-base" >
+                    {current ? unit : 'N/A'}
                   </span>
                 </div>
               </>

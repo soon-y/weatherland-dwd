@@ -10,7 +10,6 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
   const unit = 'hPa'
   const minVal = Math.min(960, param.min(hourly))
   const maxVal = Math.max(1060, param.max(hourly))
-  const isNull = current == null
 
   useEffect(() => {
     const result = getAvgArr(hourly)
@@ -32,10 +31,10 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
           {
             validIndex ?
               <>
-                {!isNull && <span>{current}<span className="text-lg"> {unit}</span></span>}
+                <span>{current} <span className="text-lg">{current ? unit : 'N/A'}</span></span>
                 <span className={`${current == null ? 'opacity-0' : ''}`}>
-                    {pressure(current)}
-                  </span>
+                  {pressure(current)}
+                </span>
               </>
               :
               <>

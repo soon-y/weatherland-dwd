@@ -32,14 +32,22 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
           {
             validIndex ?
               <>
-                <span className="font-bold">{sunshineDuration(current).state}</span>
-                <span>{current / 60}
-                  <span className={`text-base ${current == null ? 'opacity-0' : ''}`}> {unit}</span>
-                </span>
+                {current != null ?
+                  <>
+                    <span className="font-bold">{sunshineDuration(current).state}</span>
+                    <span>
+                      {current / 60}
+                      <span className="text-base"> {unit}</span>
+                    </span>
+                  </>
+                  :
+                  <span className="mt-1 text-xl">N/A</span>
+                }
+
               </>
               :
               <span>
-                <span>{Math.floor(avg[indexW] / 60)}<span className="text-lg"> mins</span></span>
+                <span>{Math.floor(avg[indexW] / 60)}<span className="text-lg"> {unit}</span></span>
               </span>
           }
         </div>

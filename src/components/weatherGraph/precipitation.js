@@ -12,7 +12,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
   const precipitation = hourPrecipitation[hoverIndex]
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
   const maxVal = Math.max(10, param.max(hourPrecipitation))
-  let unit = 'mm' 
+  let unit = 'mm'
 
   useEffect(() => {
     const resultTotal = getTotalSumArr(hourPrecipitation)
@@ -63,21 +63,22 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
               <>
                 <div>
                   {probability}
-                  <span className={`text-lg ${probability == null ? 'opacity-0' : ''}`}> %</span>
+                  <span className="text-lg">
+                    {probability ? ' %' : 'N/A'}
+                  </span>
                 </div>
 
                 {
                   <div>
                     <span className="capitalize text-lg">{precipIntensity(type, precipitation)} </span>
-                    {precipitation > 0 && <>{precipitation} <span className="text-base"> {unit}</span></>
-                    }
+                    {precipitation > 0 && <>{precipitation} <span className="text-base"> {unit}</span></>}
                   </div>
                 }
               </>
               :
               <>
                 <div>
-                  {dailyMean[indexW]} <span className="text-base">%</span>
+                  {dailyMean[indexW]}<span className="text-base"> %</span>
                 </div>
 
                 <div>

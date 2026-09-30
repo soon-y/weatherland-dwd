@@ -48,8 +48,8 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
               <>
                 <div className="flex gap-2 items-end">
                   {current}
-                  <span className={`${current == null ? 'opacity-0' : 'text-base'}`}>
-                    {unit}
+                  <span className='text-base mt-1'>
+                    {current ? unit : 'N/A'}
                   </span>
                   <span className="text-base">{getWindLevel(current)}</span>
                 </div>
