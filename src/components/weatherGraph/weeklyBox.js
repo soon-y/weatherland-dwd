@@ -11,12 +11,12 @@ import WeeklyPrecipitation from "./precipitation"
 import DailySun from "./dailySun"
 import BoxTitle from "../weatherBox/boxTitle"
 
-export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDisplay, daily, hourly, indexD }) {
+export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDisplay, daily, hourly, indexD, index }) {
   const [weekly, setWeekly] = useState([])
   const [indexW, setIndexW] = useState(indexD)
   const today = new Date()
   const firstTimestamp = hourly.timestamps[0]
-  const firstIndex = new Date(firstTimestamp).getHours()
+  const firstIndex = new Date(hourly.timestamps[index]).getHours() + indexD * 24
 
   useEffect(() => {
     const weeklyArr = []
