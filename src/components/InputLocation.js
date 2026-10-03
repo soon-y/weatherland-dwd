@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Input from './Input'
 
 export default function InputArea({ setGeolocation, hide }) {
-  const { latitude, longitude, errorGeo } = useGeolocation()
+  const { latitude, longitude, error } = useGeolocation()
   const [suburbArea, setSuburbArea] = useState("Unknown")
   const [postcodeVal, setPostcodeVal] = useState('Zip code')
   const [latitudeVal, setLatitudeVal] = useState(0)
@@ -13,11 +13,14 @@ export default function InputArea({ setGeolocation, hide }) {
   const [flag, setFlag] = useState(false)
 
   useEffect(() => {
-    if ((latitude == 0 && longitude == 0) ||(latitude == null && longitude == null)) return
+    if (error === 'IP location failed') return
+    if (latitude == null || longitude == null) return
 
     const fetchInfo = async () => {
       try {
-        const { suburb, postcode, country, timezone, offset } = await reverseGeo(latitude, longitude)
+        const { suburb, postcode, country, timezone, offset } =
+          await reverseGeo(latitude, longitude)
+
         setLatitudeVal(latitude)
         setLongitudeVal(longitude)
         setGeolocation({ lat: latitude, lon: longitude, timezone, offset })
@@ -30,7 +33,7 @@ export default function InputArea({ setGeolocation, hide }) {
     }
 
     fetchInfo()
-  }, [latitude, longitude])
+  }, [latitude, longitude, error])
 
   useEffect(() => {
     if (flag == 'Latitude' || flag == 'Longitude') {

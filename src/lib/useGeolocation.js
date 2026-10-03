@@ -12,11 +12,12 @@ export function useGeolocation() {
     const getIPLocation = async () => {
       try {
         const res = await fetch("https://ipapi.co/json/")
+        if (!res.ok) throw new Error('IP location failed')
         const data = await res.json()
 
         setLocation({
-          latitude: data.latitude,
-          longitude: data.longitude,
+          latitude: data.latitude.toFixed(3),
+          longitude: data.longitude.toFixed(3),
           error: null,
         })
       } catch {
