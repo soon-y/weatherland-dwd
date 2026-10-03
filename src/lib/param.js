@@ -234,8 +234,37 @@ export function todayProgress(date) {
   return (currentMinutes / totalMinutes * 100).toFixed(4)
 }
 
-export function timeToSec(hour, min = 0) {
-  return hour * 60 * 60 + min * 60
+export function timeToSec(timestamp) {
+  const time = timestamp.split('T')[1]
+  return Number(time.split(':')[0]) * 3600 + Number(time.split(':')[1]) * 60
+}
+
+export function daylightDuration(sunriseTimestamp, sunsetTimestamp, inSec = true) {
+  if (
+    typeof sunriseTimestamp !== 'string' || typeof sunsetTimestamp !== 'string' ||
+    !sunriseTimestamp.includes('T') || !sunsetTimestamp.includes('T')||
+    Number.isNaN(new Date(sunriseTimestamp).getTime())|| Number.isNaN(new Date(sunsetTimestamp).getTime())
+  ) {
+    return null
+  }
+  const sunrise = sunriseTimestamp.split('T')[1]
+  const sunset = sunsetTimestamp.split('T')[1]
+
+  const sunriseInSec =
+    Number(sunrise.split(':')[0]) * 3600 +
+    Number(sunrise.split(':')[1]) * 60
+
+  const sunsetInSec =
+    Number(sunset.split(':')[0]) * 3600 +
+    Number(sunset.split(':')[1]) * 60
+
+  const duration = sunsetInSec - sunriseInSec
+
+  if (inSec) return duration
+  else return {
+    hour: Math.floor(duration / 3600),
+    min: Math.floor((duration % 3600) / 60),
+  }
 }
 
 export const rainColorList = [
@@ -407,6 +436,8 @@ export const isMobile = (windowWidth) => {
 }
 
 export const getTimeIndex = (currentTime, timestamps) => {
+  if (!currentTime || !timestamps) return null
+
   const current = new Date(currentTime)
 
   return timestamps.findIndex(
@@ -415,6 +446,8 @@ export const getTimeIndex = (currentTime, timestamps) => {
 }
 
 export const weeklyArr = (arr, current) => {
+  if (!arr) return
+
   return [
     ...Array(new Date(current).getHours()).fill(null),
     ...arr

@@ -1,12 +1,9 @@
+import { daylightDuration } from "@/lib/param"
 import DailyGraphBox from "./graphBox/dailyBarGraphBox"
 
-export default function DailySun({ indexW, setIndexW, sunrise, sunset, daylight }) {
-  function secondsToHoursMinutes(seconds) {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-
-    return `${hours}h ${minutes}m`
-  }
+export default function DailySun({ indexW, setIndexW, sunrise, sunset}) {
+  const { hour, min } = daylightDuration(sunrise[indexW], sunset[indexW], false)
+  const daylight = daylightDuration(sunrise[indexW], sunset[indexW])
 
   return (
     <div className="w-full pb-4">
@@ -24,7 +21,7 @@ export default function DailySun({ indexW, setIndexW, sunrise, sunset, daylight 
             <span>{sunrise[indexW].split('T')[1]}</span>
             <span>{sunset[indexW].split('T')[1]}</span>
           </div>
-          <span>{secondsToHoursMinutes(daylight[indexW])}</span>
+          <span>{hour + 'h '+ min + 'm'}</span>
         </div>
 
       </div>
