@@ -6,12 +6,14 @@ import Slider from '@/components/Slider'
 import InputArea from '@/components/InputLocation'
 import WeatherInfo from '@/components/weatherInfo'
 import { param } from '@/lib/param'
+import Image from 'next/image'
 
 export default function Home() {
   const [forecastData, setForecastData] = useState(null)
   const [{ lat, lon, timezone, offset }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null, offset: null })
   const [index, setIndex] = useState(null)
   const [infoClicked, setInfoClicked] = useState(false)
+  const [resOk, setResOk] = useState(true)
 
   useEffect(() => {
     if (!(lat && lon && timezone)) return
@@ -32,6 +34,11 @@ export default function Home() {
         const res = await fetch(
           `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}&offset=${offset}`
         )
+        if (!res.ok) {
+          setResOk(false)
+          throw new Error("Unable to load weather data. Please try again later.")
+        }
+
         const data = await res.json()
         if (cancelled) return
 
@@ -41,7 +48,7 @@ export default function Home() {
         }
 
         const elapsed = Date.now() - startTime
-        console.log(`[${Math.round(elapsed / 1000)}s]`, data.stale ? 'stale' : 'fresh')
+        //console.log(`[${Math.round(elapsed / 1000)}s]`, data.stale ? 'stale' : 'fresh')
 
         if (data.stale && elapsed < MAX_ELAPSED) {
           const nextDelay = attemptCount === 0 ? INITIAL_WAIT : RETRY_INTERVAL
@@ -49,7 +56,9 @@ export default function Home() {
           retryTimer = setTimeout(fetchInfo, nextDelay)
         }
       } catch (err) {
-        console.log(err)
+        if (cancelled) return
+        setResOk(false)
+        console.error(err)
       }
     }
 
@@ -85,6 +94,21 @@ export default function Home() {
       {<div className='fixed top-0 right-0'>
         <InputArea setGeolocation={setGeolocation} hide={!infoClicked} />
       </div>}
+
+      {!resOk && (
+        <div className="border animate-pulse absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md flex flex-col items-center gap-1 p-4 backdrop-blur-sm rounded-lg select-none">
+          <Image
+            className="w-[50px] h-auto"
+            src="/textures/face/sad.svg"
+            width={100}
+            height={100}
+            alt="freeze face"
+          />
+          <p className="text-center text-white">
+            Unable to load weather data. Please try again later.
+          </p>
+        </div>
+      )}
     </div>
   )
 }
