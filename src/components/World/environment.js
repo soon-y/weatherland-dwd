@@ -248,7 +248,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
       <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} weather={isDebug ? undefined : weather} />
       <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} weather={isDebug ? undefined : weather} />
-      <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} />
+      <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]}/>
       <Thermometer temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
     </>
   )

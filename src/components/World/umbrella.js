@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import gsap from 'gsap'
 
-export default function Umbrella({ probability, weather }) {
+export default function Umbrella({ probability, weather, isDay = 0 }) {
   const { nodes, materials } = useGLTF('/models/umbrella.glb')
   const umbrellaRef = useRef()
   const probabilityValue = probability ?? weather.current.probability
@@ -35,7 +35,29 @@ export default function Umbrella({ probability, weather }) {
   }, [probabilityValue])
 
   return (
-    <group dispose={null} scale={2.3} position={[0.33, -4.0, -3.05]} visible={probabilityValue > 0.3}>
+    <group dispose={null} scale={2.3} position={[0.33, -4.0, -3.05]} visible={probabilityValue > 0.5}>
+      <mesh
+        castShadow
+        receiveShadow
+        geometry={nodes.Cylinder.geometry}
+        material={isDay ? materials.benchMetal : undefined}
+        position={[1.051, 1.248, -0.015]}
+        rotation={[0.062, 0.695, -0.675]}
+        scale={[0.013, 0.622, 0.013]}
+      >
+        {!isDay && (
+          <meshBasicMaterial
+            color="#a0a0a0"
+            transparent
+            opacity={THREE.MathUtils.clamp(
+              1 - (probabilityValue / 100) * 0.8,
+              0.2,
+              1
+            )}
+          />
+        )}
+      </mesh>
+
       <mesh
         castShadow
         receiveShadow
@@ -45,6 +67,7 @@ export default function Umbrella({ probability, weather }) {
         rotation={[0.062, 0.695, -0.675]}
         scale={[0.013, 0.622, 0.013]}
       />
+
       <mesh
         castShadow
         receiveShadow
