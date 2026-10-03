@@ -3,8 +3,8 @@ import Box from "./box"
 import BoxTitle from "./boxTitle"
 
 export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setBoxClicked }) {
-  const sunrise = daily.sunrise?.[indexD] ?? null
-  const sunset = daily.sunset?.[indexD] ?? null
+  const sunrise = daily.sunrise?.[indexD]
+  const sunset = daily.sunset?.[indexD]
   const sunriseNext = daily.sunrise?.[indexD + 1] ?? sunrise
   const sunsetNext = daily.sunset?.[indexD + 1] ?? sunset
   const now = hourly.timestamps[index]
@@ -92,15 +92,16 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setB
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setBoxClicked={setBoxClicked} clickable={hourly === undefined ? false : true}>
-      {sunrise !== null ?
+    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setBoxClicked={setBoxClicked} clickable={(sunrise && sunset) ? true : false}>
+      {(sunrise && sunset) ?
         title() :
         <div>
           <BoxTitle title={'sunrise'} />
-          <p>N/A</p></div>
+          <p className={param.weatherDescMain}>N/A</p>
+        </div>
       }
 
-      {sunrise !== null &&
+      {(sunrise && sunset) &&
         <div className="relative">
           <svg style={{ overflow: "visible" }}
             viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"

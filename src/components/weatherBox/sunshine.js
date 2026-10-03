@@ -10,16 +10,16 @@ export default function Sunshine({ hourly, index, setDisplay, setBoxClicked }) {
     <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={hourly === undefined ? false : true}>
       <div>
         <BoxTitle title={title} />
-        {hourly !== null ?
+        {hourly ?
           <>
             <p className={param.weatherDescMain}>{current/60} mins</p>
             <p className={param.weatherDescSub}>{sunshineDuration(current).state}</p>
           </>
           :
-          <p>N/A</p>
+          <p className={param.weatherDescMain}>N/A</p>
         }
       </div>
-      {hourly !== null &&
+      {hourly &&
         <div className={`${param.weatherBarContainer}`}>
           <div className={`${param.weatherBar} rounded-full bg-gradient-to-r from-gray-500 from-10% via-yellow-300 via-40% to-red-500 to-90%`} />
           <div

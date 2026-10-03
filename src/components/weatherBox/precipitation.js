@@ -13,14 +13,15 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setBo
     <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={precipitation === undefined ? false : true}>
       <div>
         <BoxTitle title={title} />
-        {probability ? <p className={param.weatherDescMain}>{probability.forecast[index]} {probability.unit}</p> :
-          <p>N/A</p>}
-        {precipitation !== null ?
+        {probability ?
+          <p className={param.weatherDescMain}>{probability.forecast[index]} {probability.unit}</p> :
+          <p className={param.weatherDescMain}>N/A</p>}
+        {precipitation ?
           <>
-            {totalSum.forecast[indexD] != 0 &&
+            {totalSum?.forecast[indexD] != 0 &&
               <p className={param.weatherDescSub}>
-                {precipitation.forecast[index]}
-                <span className="text-sm"> mm / {totalSum.forecast[indexD]} mm  in total</span>
+                {precipitation?.forecast[index]}
+                <span className="text-sm"> mm / {totalSum?.forecast[indexD]} mm  in total</span>
               </p>}
           </>
           :
@@ -28,10 +29,11 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setBo
         }
       </div>
 
-      {code !== null &&
+      {code &&
         <div className={`${param.weatherDesc}`}>
           {weatherInfo(code).label}
-        </div>}
+        </div>
+      }
     </Box>
   )
 }

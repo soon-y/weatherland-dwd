@@ -6,107 +6,121 @@ export function processForecast(data, offset) {
   const temperature = result.find(item => item.metricKey === 'temperature_2m')
   const dewPoint = result.find(item => item.metricKey === 'dewpoint_2m')
 
-  const timestamps = temperature.forecast.map(item =>
+  const timestampSource = temperature ?? result.find(metric =>
+    (
+      metric.metricKey.includes('1h') ||
+      metric.metricKey.includes('10m')
+    ) &&
+    metric.forecast?.some(item => item?.timestamp != null)
+  )
+
+  const timestamps = (timestampSource?.forecast ?? []).map(item =>
     new Date(new Date(item.timestamp).getTime() + offsetMs)
       .toISOString()
       .replace('Z', '')
   )
 
-  const dayMap = Object.fromEntries(
-    daily.sunrise.map((sunrise, i) => [
-      sunrise.slice(0, 10),
-      {
-        sunrise,
-        sunset: daily.sunset[i]
-      }
-    ])
-  )
-
-  function isDay(timestamp) {
-    const day = dayMap[timestamp.slice(0, 10)]
-    if (!day) return false
-
-    const current = new Date(timestamp)
-
-    return (
-      current >= new Date(day.sunrise) &&
-      current < new Date(day.sunset)
+  if (daily.sunrise && daily.sunset) {
+    const dayMap = Object.fromEntries(
+      daily.sunrise.map((sunrise, i) => [
+        sunrise.slice(0, 10),
+        {
+          sunrise,
+          sunset: daily.sunset[i]
+        }
+      ])
     )
-  }
 
-  result.push({
-    metricKey: 'is_day',
-    unit: 'boolean',
-    description: 'Is daytime',
-    forecast: timestamps.map((temp) => isDay(temp))
-  })
+    function isDay(timestamp) {
+      const day = dayMap[timestamp.slice(0, 10)]
+      if (!day) return false
+
+      const current = new Date(timestamp)
+
+      return (
+        current >= new Date(day.sunrise) &&
+        current < new Date(day.sunset)
+      )
+    }
+
+    result.push({
+      metricKey: 'is_day',
+      unit: 'boolean',
+      description: 'Is daytime',
+      forecast: timestamps.map((temp) => isDay(temp))
+    })
+  }
 
   result.forEach(metric => {
-  if (
-    (metric.metricKey.includes('24h') ||
-      metric.metricKey.includes('12h')) &&
-    metric.forecast.length &&
-    typeof metric.forecast[0] === 'object'
-  ) {
-    metric.timestamps = metric.forecast.map(item =>
-      new Date(new Date(item.timestamp).getTime() + offsetMs)
-        .toISOString()
-        .replace('Z', '')
-    )
-  }
+    if (
+      (metric.metricKey.includes('24h') ||
+        metric.metricKey.includes('12h')) &&
+      metric.forecast.length &&
+      typeof metric.forecast[0] === 'object'
+    ) {
+      metric.timestamps = metric.forecast.map(item =>
+        new Date(new Date(item.timestamp).getTime() + offsetMs)
+          .toISOString()
+          .replace('Z', '')
+      )
+    }
 
-  metric.forecast = metric.forecast.map(item => item?.value ?? item)
+    metric.forecast = metric.forecast.map(item => item?.value ?? item)
 
-  if (metric.unit === 'Pa') {
-    metric.forecast = metric.forecast.map(value =>
-      Math.round(value / 100)
-    )
-    metric.unit = 'hPa'
-  }
+    if (metric.unit === 'Pa') {
+      metric.forecast = metric.forecast.map(value =>
+        Math.round(value / 100)
+      )
+      metric.unit = 'hPa'
+    }
 
-  if (metric.unit === 'm/s') {
-    metric.forecast = metric.forecast.map(value =>
-      +(value * 3.6).toFixed(1)
-    )
-    metric.unit = 'km/h'
-  }
+    if (metric.unit === 'm/s') {
+      metric.forecast = metric.forecast.map(value =>
+        +(value * 3.6).toFixed(1)
+      )
+      metric.unit = 'km/h'
+    }
 
-  if (
-    metric.metricKey.includes('temperature') ||
-    metric.metricKey.includes('dewpoint_2m')
-  ) {
-    metric.forecast = metric.forecast.map(value =>
-      +(value - 273.15).toFixed(1)
-    )
-    metric.unit = '°C'
-  }
-})
-
-  result.push({
-    metricKey: 'relative_humidity',
-    unit: '%',
-    description: 'Calculated relative humidity',
-    forecast: temperature.forecast.map((temp, i) =>
-      calcRelativeHumidity(temp, dewPoint.forecast[i])
-    )
+    if (
+      metric.metricKey.includes('temperature') ||
+      metric.metricKey.includes('dewpoint_2m')
+    ) {
+      metric.forecast = metric.forecast.map(value =>
+        +(value - 273.15).toFixed(1)
+      )
+      metric.unit = '°C'
+    }
   })
 
+  if (dewPoint && temperature) {
+    result.push({
+      metricKey: 'relative_humidity',
+      unit: '%',
+      description: 'Calculated relative humidity',
+      forecast: temperature.forecast.map((temp, i) =>
+        calcRelativeHumidity(temp, dewPoint.forecast[i])
+      )
+    })
+  }
+
+  if (temperature) {
     const { min, max } = calcDailyMinMax(
-    temperature.forecast,
-    timestamps
-  )
+      temperature.forecast,
+      timestamps
+    )
 
-  result.push({
-    metricKey: 'daily_min_temperature',
-    unit: '°C',
-    forecast: min
-  })
+    result.push({
+      metricKey: 'daily_min_temperature',
+      unit: '°C',
+      forecast: min
+    })
 
-  result.push({
-    metricKey: 'daily_max_temperature',
-    unit: '°C',
-    forecast: max
-  })
+    result.push({
+      metricKey: 'daily_max_temperature',
+      unit: '°C',
+      forecast: max
+    })
+  }
 
   const metrics = Object.fromEntries(
     result.map(({ metricKey, ...rest }) => [

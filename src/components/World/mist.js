@@ -10,7 +10,7 @@ const center = [0, 0, 0]
 const area = 17
 const height = 17
 
-export default function Mist({ visibility, isDay, weather }) {
+export default function Mist({ visibility, isDay = 0, weather }) {
   const pointsRef = useRef()
   const materialRef = useRef()
   const visibilityValue = visibility ?? weather.current.visibility

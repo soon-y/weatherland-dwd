@@ -5,14 +5,14 @@ import { getAvgArr, param, visibilityInfo } from "@/lib/param";
 export default function WeeklyVisibility({ display, hourly, indexW, index }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
-  const value = hourly[hoverIndex]
-  const current = value == null ? value : Math.floor(value / 1000)
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
   const maxVal = Math.max(50000, param.max(hourly))
-  const unit = 'km'
+  const value = hourly?.[hoverIndex]
+  const current = value < 1000 ? value : (value / 1000).toFixed(1)
+  const unit = value < 1000 ? 'm' : 'km'
 
   useEffect(() => {
-    const result = getAvgArr(hourly, 1000)
+    const result = getAvgArr(hourly)
 
     for (let i = 0; i < hourly.length; i += 24) {
       const chunk = hourly.slice(i, i + 24)
@@ -21,7 +21,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
         result.push(null)
       } else {
         const sum = chunk.reduce((a, b) => a + b, 0)
-        result.push(Math.round((sum / chunk.length) / 1000))
+        result.push(Math.round((sum / chunk.length)))
       }
     }
     setDailyAvg(result)
@@ -44,7 +44,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
               <>
                 {current ?
                   <>
-                    <span className="font-bold">{visibilityInfo(current).state}</span>
+                    <span className="font-bold">{visibilityInfo(value).state}</span>
                     <span>{current}
                       <span className={`ml-1 text-lg ${current == null ? 'opacity-0' : ''}`}>
                         {unit}
@@ -58,8 +58,8 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
               :
               <>
                 <span className="font-bold">{visibilityInfo(avg[indexW]).state}</span>
-                <span>{avg[indexW]}
-                  <span className={`text-lg ${avg[indexW] == null ? 'opacity-0' : ''}`}>
+                <span>{(avg[indexW] / 1000).toFixed(1)}
+                  <span className={`ml-1 text-lg ${avg[indexW] == null ? 'opacity-0' : ''}`}>
                     {unit}
                   </span>
                 </span>

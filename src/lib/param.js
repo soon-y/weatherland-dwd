@@ -322,25 +322,25 @@ export const visibilityInfo = (val) => {
     return { state: "", desc: "" }
   }
 
-  if (val >= 10) {
+  if (val >= 10000) {
     return {
       state: "Very good",
       desc: "Clear conditions with excellent visibility."
     }
   }
-  if (val >= 4) {
+  if (val >= 4000) {
     return {
       state: "Good",
       desc: "Good visibility across the area."
     }
   }
-  if (val >= 2) {
+  if (val >= 2000) {
     return {
       state: "Moderate",
       desc: "Distant objects may be difficult to see."
     }
   }
-  if (val >= 1) {
+  if (val >= 1000) {
     return {
       state: "Poor",
       desc: "Visibility is limited to a short distance."

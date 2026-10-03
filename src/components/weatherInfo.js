@@ -13,14 +13,14 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const [index12, setIndex12] = useState(0)
   const daily = forecast.daily
   const temperature = forecast.metrics.temperature_2m
-  const windSpeed = forecast.metrics.wind_speed_10m?.forecast[index] ?? 0
-  const windDirection = forecast.metrics.wind_direction_10m?.forecast[index] ?? 0
+  const windSpeed = forecast.metrics.wind_speed_10m?.forecast[index]
+  const windDirection = forecast.metrics.wind_direction_10m?.forecast[index]
   const prob = forecast.metrics.ww_prob_precip_1h
   const precip = forecast.metrics.precip_amount_1h
-  const visibility = (forecast.metrics.visibility?.forecast[index] ?? 100000) / 1000
-  const isDay = forecast.metrics.is_day.forecast[index] ?? 0
-  const sunriseToday = daily.sunrise?.[indexD < 0 ? 0 : indexD] ?? null
-  const sunriseNext = daily.sunrise?.[indexD === 6 ? indexD : indexD + 1] ?? sunriseToday
+  const visibility = forecast.metrics.visibility?.forecast[index]
+  const isDay = forecast.metrics.is_day?.forecast[index]
+  const sunriseToday = daily?.sunrise?.[indexD < 0 ? 0 : indexD]
+  const sunriseNext = daily?.sunrise?.[indexD + 1] ?? sunriseToday
   const sunsetToday = daily.sunset[indexD]
   const sunriseTimeToday = new Date(sunriseToday)
   const sunsetTimeToday = new Date(sunsetToday)
@@ -31,7 +31,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
     const tempIndex = daily.time.findIndex(el => el === forecast.timestamps[index].split("T")[0])
     setIndexD(tempIndex)
 
-    const index24 = getTimeIndex(forecast.timestamps[index], weatherCode12h.timestamps)
+    const index24 = getTimeIndex(forecast.timestamps[index], weatherCode12h?.timestamps)
     setIndex12(index24)
   }, [index])
 
@@ -69,7 +69,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           </p>
           <div>
             {!open ?
-              <WeatherIcon code={weatherCode12h.forecast[index12]} probability={null} isDay={isDay} background={true} />
+              <WeatherIcon code={weatherCode12h?.forecast[index12]} probability={null} isDay={isDay} background={true} />
               :
               <span className='text-base sm:text-lg'>{forecast.timestamps[index].slice(11, 16)}</span>
             }
@@ -80,14 +80,16 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           ${open && 'hidden'} 
           ${isDay ? 'text-black' : 'text-white'}`}
         >
-          <InfoBox title={'temperature'} isDay={isDay}
-            info1={temperature.forecast[index]} unit1={temperature.unit}
-          />
+          {temperature &&
+            <InfoBox title={'temperature'} isDay={isDay}
+              info1={temperature.forecast[index]} unit1={temperature.unit}
+            />
+          }
 
           <InfoBox title={'precipitation'} isDay={isDay}
-            info1={prob.forecast[index]} unit1={prob.unit}
-            info2={precip.forecast[index]} unit2={'mm'}
-            condition={prob.forecast[index] > 0 && precip.forecast[index] > 0}
+            info1={prob?.forecast[index]} unit1={prob?.unit}
+            info2={precip?.forecast[index]} unit2={'mm'}
+            condition={prob?.forecast[index] > 0 && precip?.forecast[index] > 0}
           />
 
           <InfoBox title={'wind'} isDay={isDay}
@@ -98,24 +100,26 @@ export default function WeatherInfo({ forecast, index, clicked }) {
 
           <InfoBox title={'visibility'} isDay={isDay}
             info1={visibilityInfo(visibility).state}
-            info2={visibility} unit2={'km'}
-            condition={visibility < 4}
+            info2={visibility} unit2={'m'}
+            condition={visibility < 4000}
           />
 
-          <InfoBox title={'sunrise'} isDay={isDay}
-            info1={sunriseToday.split('T')[1]}
-            condition={now < sunriseTimeToday}
-          />
+          {daily.sunrise && daily.sunset && <>
+            <InfoBox title={'sunrise'} isDay={isDay}
+              info1={sunriseToday.split('T')[1]}
+              condition={now < sunriseTimeToday}
+            />
 
-          <InfoBox title={'sunset'} isDay={isDay}
-            info1={sunsetToday.split('T')[1]}
-            condition={sunriseTimeToday <= now && now < sunsetTimeToday}
-          />
+            <InfoBox title={'sunset'} isDay={isDay}
+              info1={sunsetToday.split('T')[1]}
+              condition={sunriseTimeToday <= now && now < sunsetTimeToday}
+            />
 
-          <InfoBox title={'sunrise'} isDay={isDay}
-            info1={sunriseNext.split('T')[1]}
-            condition={sunsetTimeToday <= now}
-          />
+            <InfoBox title={'sunrise'} isDay={isDay}
+              info1={sunriseNext.split('T')[1]}
+              condition={sunsetTimeToday <= now}
+            />
+          </>}
         </motion.div>
       </div>
     </div>

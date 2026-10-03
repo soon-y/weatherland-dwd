@@ -10,13 +10,15 @@ export default function WeatherIcon({ code, isDay = true, probability, backgroun
   return (
     <>
       <div className={`relative flex items-center`} style={{ aspectRatio: 0.75 }}>
-        {weatherIcon(code, isDay, background)}
-        {isRainy && probability !== null &&
-          <div className="w-full h-full absolute top-0 flex justify-center leading-none items-end font-bold text-xs"
-            style={{ color: !background && isDay ? 'black' : tempColorList[0] }}>
+        {code && weatherIcon(code, isDay, background)}
+        {isRainy && probability != null && (
+          <div
+            className="w-full h-full absolute top-0 flex justify-center leading-none items-end font-bold text-xs"
+            style={{ color: !background && isDay ? 'black' : tempColorList[0] }}
+          >
             {probability}%
           </div>
-        }
+        )}
       </div>
     </>
   )

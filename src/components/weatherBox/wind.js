@@ -6,7 +6,7 @@ import BoxTitle from "./boxTitle"
 export default function Wind({ hourly, index, setDisplay, setBoxClicked }) {
   const wind = hourly.metrics.wind_speed_10m
   const gusts = hourly.metrics.wind_gust_max_1h
-  const angle = hourly.metrics.wind_direction_10m.forecast[index] ?? 0
+  const angle = hourly.metrics.wind_direction_10m?.forecast[index]
   const unit = wind?.unit ?? ''
   const title = 'wind'
 

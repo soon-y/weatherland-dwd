@@ -13,12 +13,12 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
   const [hover, setHover] = useState(null)
   const [sliderHeight, setSliderHeight] = useState(150)
   const graphSize = { w: graphWidth, h: sliderHeight * 0.3 }
-  const temperature = forecast.metrics.temperature_2m.forecast
-  const weatherCode = forecast.metrics.weather_code.forecast
-  const probability = forecast.metrics.ww_prob_precip_1h.forecast
-  const isDay = forecast.metrics.is_day.forecast
-  const max = Math.max(...temperature) + 5
-  const min = Math.min(...temperature) - 5
+  const temperature = forecast.metrics.temperature_2m?.forecast
+  const weatherCode = forecast.metrics.weather_code?.forecast
+  const probability = forecast.metrics.ww_prob_precip_1h?.forecast
+  const isDay = forecast.metrics.is_day?.forecast
+  const max = temperature && Math.max(...temperature) + 5
+  const min = temperature && Math.min(...temperature) - 5
   const minIndex = tempColorIndex(min)
   const maxIndex = tempColorIndex(max)
   const colorRange = tempColorList.slice(minIndex, maxIndex + 1)
@@ -59,11 +59,11 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
     for (let i = 0; i < forecast.timestamps.length; i++) {
       tempArr.push({
         index: i,
-        time: forecast.timestamps[i].split('T')[1].slice(0, 2),
-        code: weatherCode[i],
-        temp: temperature[i],
-        probability: probability[i],
-        isDay: isDay[i],
+        time: forecast.timestamps[i]?.split('T')[1].slice(0, 2),
+        code: weatherCode?.[i],
+        temp: temperature?.[i],
+        probability: probability?.[i],
+        isDay: isDay?.[i],
       })
     }
 
@@ -137,7 +137,7 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
     setHover(Math.round(x / boxWidth))
   }
 
-  const ptsTemp = points(temperature)
+  const ptsTemp = temperature && points(temperature)
 
   if (!hourlyData) return
   return (
@@ -156,9 +156,9 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
               </div>
               <div />
 
-              <div className={`leading-none opacity-80 flex items-center justify-center text-[11px] text-xs sm:text-sm`}>
-                {el.temp}°
-              </div>
+              {<div className={`leading-none opacity-80 flex items-center justify-center text-[11px] text-xs sm:text-sm`}>
+                {el.temp ? el.temp + '°' : 'N/A'}
+              </div>}
 
               <div className="flex items-start justify-center text-xs sm:text-base">
                 {i === timeIndex ? 'Now' : el.time + 'h'}
@@ -168,39 +168,41 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
         ))}
 
         {/* graph */}
-        <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
-          top: '44px', left: boxWidth / 2,
-          height: sliderHeight * 0.35 + 'px',
-          width: boxWidth * (length - 1),
-        }}>
-          <svg width='100%' height='100%' className="relative overflow-visible" viewBox={`0 0 ${graphSize.w} ${graphSize.h}`}>
-            <defs>
-              <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
-                {colorRange.map((color, i) => (
-                  <stop
-                    key={i}
-                    offset={`${(i / (colorRange.length - 1)) * 100}%`}
-                    stopColor={color}
-                  />
+        {temperature &&
+          <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
+            top: '44px', left: boxWidth / 2,
+            height: sliderHeight * 0.35 + 'px',
+            width: boxWidth * (length - 1),
+          }}>
+            <svg width='100%' height='100%' className="relative overflow-visible" viewBox={`0 0 ${graphSize.w} ${graphSize.h}`}>
+              <defs>
+                <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
+                  {colorRange.map((color, i) => (
+                    <stop
+                      key={i}
+                      offset={`${(i / (colorRange.length - 1)) * 100}%`}
+                      stopColor={color}
+                    />
+                  ))}
+                </linearGradient>
+              </defs>
+
+              <g mask="url(#sliderMask)">
+                <path
+                  d={getSmoothPath(ptsTemp).d}
+                  fill="none"
+                  stroke={`url(#${gradientId})`}
+                  strokeWidth="2"
+                  className="opacity-50"
+                />
+
+                {ptsTemp.map((p, i) => (
+                  <circle key={i} cx={p.x} cy={p.y} r="4" fill={`url(#${gradientId})`} />
                 ))}
-              </linearGradient>
-            </defs>
-
-            <g mask="url(#sliderMask)">
-              <path
-                d={getSmoothPath(ptsTemp).d}
-                fill="none"
-                stroke={`url(#${gradientId})`}
-                strokeWidth="2"
-                className="opacity-50"
-              />
-
-              {ptsTemp.map((p, i) => (
-                <circle key={i} cx={p.x} cy={p.y} r="4" fill={`url(#${gradientId})`} />
-              ))}
-            </g>
-          </svg>
-        </div>
+              </g>
+            </svg>
+          </div>
+        }
       </div>
 
       <div className="fixed left-2 bottom-2 select-none pointer-events-none">

@@ -97,29 +97,29 @@ export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDispl
             {display === 'wind' &&
               <WeeklyWind
                 display={display} indexW={indexW} index={firstIndex}
-                wind={weeklyArr(hourly.metrics.wind_speed_10m.forecast, firstTimestamp)}
-                gusts={weeklyArr(hourly.metrics.wind_gust_max_1h.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.wind_direction_10m.forecast, firstTimestamp)} />
+                wind={weeklyArr(hourly.metrics.wind_speed_10m?.forecast, firstTimestamp)}
+                gusts={weeklyArr(hourly.metrics.wind_gust_max_1h?.forecast, firstTimestamp)}
+                code={weeklyArr(hourly.metrics.wind_direction_10m?.forecast, firstTimestamp)} />
             }
             {display === 'temperature' &&
               <WeeklyTemperature
                 display={'temperature'} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.temperature_2m.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.weather_code.forecast, firstTimestamp)}
-                isDay={weeklyArr(hourly.metrics.is_day.forecast, firstTimestamp)} />
+                hourly={weeklyArr(hourly.metrics.temperature_2m?.forecast, firstTimestamp)}
+                code={weeklyArr(hourly.metrics.weather_code?.forecast, firstTimestamp)}
+                isDay={weeklyArr(hourly.metrics.is_day?.forecast, firstTimestamp)} />
             }
             {display === 'precipitation' &&
               <WeeklyPrecipitation display={'precipitation'}
-                hourProbability={weeklyArr(hourly.metrics.ww_prob_precip_1h.forecast, firstTimestamp)}
-                hourPrecipitation={weeklyArr(hourly.metrics.precip_amount_1h.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.weather_code.forecast, firstTimestamp)}
+                hourProbability={weeklyArr(hourly.metrics.ww_prob_precip_1h?.forecast, firstTimestamp)}
+                hourPrecipitation={weeklyArr(hourly.metrics.precip_amount_1h?.forecast, firstTimestamp)}
+                code={weeklyArr(hourly.metrics.weather_code?.forecast, firstTimestamp)}
                 indexW={indexW} index={firstIndex}
               />
             }
             {display === 'daily sun' &&
               <DailySun
                 display={display} indexW={indexW} setIndexW={setIndexW}
-                sunrise={daily.sunrise} sunset={daily.sunset} daylight={daily.daylight_duration} />
+                sunrise={daily.sunrise} sunset={daily.sunset} />
             }
           </div>
         </div>

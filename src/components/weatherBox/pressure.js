@@ -5,7 +5,7 @@ import BoxTitle from "./boxTitle"
 
 export default function Pressure({ hourly, index, setDisplay, setBoxClicked }) {
   const current = Math.round(hourly?.forecast[index] ?? 0)
-  const before = index > 1 ? hourly.forecast[index - 1] : current
+  const before = index > 1 ? hourly?.forecast[index - 1] : current
   const title = 'pressure'
   let flag = ''
 
@@ -37,7 +37,7 @@ export default function Pressure({ hourly, index, setDisplay, setBoxClicked }) {
           {
             hourly ?
               <p className={`${param.weatherDescMain} capitalize font-bold`}>{pressure(current)}</p> :
-              <p>N/A</p>
+              <p className={`${param.weatherDescMain}`}>N/A</p>
           }
         </div>
         {hourly &&

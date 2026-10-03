@@ -40,7 +40,7 @@ vec3 nightColor = vec3(0.03, 0.04, 0.06);
 }
 `
 
-export default function MistOverlay({ visibility, isDay, weather }) {
+export default function MistOverlay({ visibility, isDay = 0, weather }) {
   const meshRef = useRef()
   const matRef = useRef()
   const visibilityValue = visibility ?? weather.current.visibility
