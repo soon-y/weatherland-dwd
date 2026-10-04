@@ -23,6 +23,7 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
   const maxIndex = tempColorIndex(max)
   const colorRange = tempColorList.slice(minIndex, maxIndex + 1)
   const length = forecast.timestamps.length
+  const invalidTime = Number.isNaN(new Date(forecast?.timestamps?.[index]).getTime())
 
   useEffect(() => {
     const handleResize = () => {
@@ -142,80 +143,82 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
   if (!hourlyData) return
   return (
     <>
-      <div ref={ref} onScrollEnd={handleScroll}
-        className={`${param.sliderStyles} flex overflow-y-hidden overflow-x-auto snap-x snap-mandatory scroll-smooth select-none scrollbar-hide`}>
-        {hourlyData.map((el, i) => (
-          <div key={i} onClick={() => setIndex(i)}
-            className={`flex-shrink-0 snap-start flex flex-col relative cursor-pointer duration-500 hover:bg-white/10 text-white
+      {!invalidTime && <>
+        <div ref={ref} onScrollEnd={handleScroll}
+          className={`${param.sliderStyles} flex overflow-y-hidden overflow-x-auto snap-x snap-mandatory scroll-smooth select-none scrollbar-hide`}>
+          {hourlyData.map((el, i) => (
+            <div key={i} onClick={() => setIndex(i)}
+              className={`flex-shrink-0 snap-start flex flex-col relative cursor-pointer duration-500 hover:bg-white/10 text-white
               ${i === index && "font-bold"} ${i === hover && "bg-white/10"}`}
-            style={{ width: `${boxWidth}px`, height: sliderHeight + 'px' }}
-          >
-            <div className="grid grid-rows-[42px_35%_15%_20%] h-full">
-              <div className={`flex justify-center`}>
-                <WeatherIcon code={el.code} isDay={el.isDay} probability={el.probability} />
-              </div>
-              <div />
+              style={{ width: `${boxWidth}px`, height: sliderHeight + 'px' }}
+            >
+              <div className="grid grid-rows-[42px_35%_15%_20%] h-full">
+                <div className={`flex justify-center`}>
+                  <WeatherIcon code={el.code} isDay={el.isDay} probability={el.probability} />
+                </div>
+                <div />
 
-              {<div className={`leading-none opacity-80 flex items-center justify-center text-[11px] text-xs sm:text-sm`}>
-                {el.temp ? el.temp + '°' : 'N/A'}
-              </div>}
+                {<div className={`leading-none opacity-80 flex items-center justify-center text-[11px] text-xs sm:text-sm`}>
+                  {el.temp ? el.temp + '°' : 'N/A'}
+                </div>}
 
-              <div className="flex items-start justify-center text-xs sm:text-base">
-                {i === timeIndex ? 'Now' : el.time + 'h'}
+                <div className="flex items-start justify-center text-xs sm:text-base">
+                  {i === timeIndex ? 'Now' : el.time + 'h'}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
 
-        {/* graph */}
-        {temperature &&
-          <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
-            top: '44px', left: boxWidth / 2,
-            height: sliderHeight * 0.35 + 'px',
-            width: boxWidth * (length - 1),
-          }}>
-            <svg width='100%' height='100%' className="relative overflow-visible" viewBox={`0 0 ${graphSize.w} ${graphSize.h}`}>
-              <defs>
-                <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
-                  {colorRange.map((color, i) => (
-                    <stop
-                      key={i}
-                      offset={`${(i / (colorRange.length - 1)) * 100}%`}
-                      stopColor={color}
-                    />
+          {/* graph */}
+          {temperature &&
+            <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
+              top: '44px', left: boxWidth / 2,
+              height: sliderHeight * 0.35 + 'px',
+              width: boxWidth * (length - 1),
+            }}>
+              <svg width='100%' height='100%' className="relative overflow-visible" viewBox={`0 0 ${graphSize.w} ${graphSize.h}`}>
+                <defs>
+                  <linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" y1="100%" x2="0" y2="0">
+                    {colorRange.map((color, i) => (
+                      <stop
+                        key={i}
+                        offset={`${(i / (colorRange.length - 1)) * 100}%`}
+                        stopColor={color}
+                      />
+                    ))}
+                  </linearGradient>
+                </defs>
+
+                <g mask="url(#sliderMask)">
+                  <path
+                    d={getSmoothPath(ptsTemp).d}
+                    fill="none"
+                    stroke={`url(#${gradientId})`}
+                    strokeWidth="2"
+                    className="opacity-50"
+                  />
+
+                  {ptsTemp.map((p, i) => (
+                    <circle key={i} cx={p.x} cy={p.y} r="4" fill={`url(#${gradientId})`} />
                   ))}
-                </linearGradient>
-              </defs>
+                </g>
+              </svg>
+            </div>
+          }
+        </div>
 
-              <g mask="url(#sliderMask)">
-                <path
-                  d={getSmoothPath(ptsTemp).d}
-                  fill="none"
-                  stroke={`url(#${gradientId})`}
-                  strokeWidth="2"
-                  className="opacity-50"
-                />
+        <div className="fixed left-2 bottom-2 select-none pointer-events-none">
+          <div className={`shadow-l2g outline rounded-lg duration-500 ${isDay ? 'outline-black/50' : 'outline-white/30'}`}
+            style={{ width: boxWidth, height: sliderHeight + 'px' }}
+          />
+        </div>
 
-                {ptsTemp.map((p, i) => (
-                  <circle key={i} cx={p.x} cy={p.y} r="4" fill={`url(#${gradientId})`} />
-                ))}
-              </g>
-            </svg>
-          </div>
-        }
-      </div>
-
-      <div className="fixed left-2 bottom-2 select-none pointer-events-none">
-        <div className={`shadow-l2g outline rounded-lg duration-500 ${isDay ? 'outline-black/50' : 'outline-white/30'}`}
-          style={{ width: boxWidth, height: sliderHeight + 'px' }}
-        />
-      </div>
-
-      <button className={`cursor-pointer absolute top-[-26px] right-2 text-sm text-white bg-black/40 py-1 px-3 rounded-full backdrop-blur-lg duration-500`}
-        style={{ display: index === timeIndex ? 'none' : 'block' }}
-        onClick={() => setIndex(timeIndex)}>
-        back to NOW
-      </button>
+        <button className={`cursor-pointer absolute top-[-26px] right-2 text-sm text-white bg-black/40 py-1 px-3 rounded-full backdrop-blur-lg duration-500`}
+          style={{ display: index === timeIndex ? 'none' : 'block' }}
+          onClick={() => setIndex(timeIndex)}>
+          back to NOW
+        </button>
+      </>}
     </>
   )
 }

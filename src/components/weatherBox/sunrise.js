@@ -7,12 +7,12 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setB
   const sunset = daily.sunset?.[indexD]
   const sunriseNext = daily.sunrise?.[indexD + 1] ?? sunrise
   const sunsetNext = daily.sunset?.[indexD + 1] ?? sunset
-  const now = hourly.timestamps[index]
+  const now = hourly?.timestamps[index]
   const nowDate = new Date(now)
   const sunriseDate = new Date(sunrise)
   const sunsetDate = new Date(sunset)
-  const startOfDay = new Date(now.split('T')[0] + 'T00:00:00')
-  const endOfDay = new Date(now.split('T')[0] + 'T23:59:59')
+  const startOfDay = now && new Date(now.split('T')[0] + 'T00:00:00')
+  const endOfDay = now && new Date(now.split('T')[0] + 'T23:59:59')
   const pathSize = { w: 300, h: 100 }
   const pathStart = generateWaveSegment(pathSize.w, pathSize.h, 0, 0.25)
   const pathMiddle = generateWaveSegment(pathSize.w, pathSize.h, 0, 1)
@@ -101,7 +101,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setB
         </div>
       }
 
-      {(sunrise && sunset) &&
+      {(sunrise && sunset && now) &&
         <div className="relative">
           <svg style={{ overflow: "visible" }}
             viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"

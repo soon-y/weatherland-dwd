@@ -9,7 +9,9 @@ export function processForecast(data, offset) {
   const timestampSource = temperature ?? result.find(metric =>
     (
       metric.metricKey.includes('1h') ||
-      metric.metricKey.includes('10m')
+      metric.metricKey.includes('10m') ||
+      metric.metricKey.includes('dewpoint_2m') ||
+      metric.metricKey.includes('surface_pressure')
     ) &&
     metric.forecast?.some(item => item?.timestamp != null)
   )

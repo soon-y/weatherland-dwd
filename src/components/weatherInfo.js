@@ -24,11 +24,12 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const sunsetToday = daily.sunset[indexD]
   const sunriseTimeToday = new Date(sunriseToday)
   const sunsetTimeToday = new Date(sunsetToday)
-  const now = new Date(forecast.timestamps[index])
+  const now = new Date(forecast?.timestamps?.[index])
   const weatherCode12h = forecast.metrics.weather_code_priority_12h
+  const invalidTime =  Number.isNaN(now.getTime())
 
   useEffect(() => {
-    const tempIndex = daily.time.findIndex(el => el === forecast.timestamps[index].split("T")[0])
+    const tempIndex = daily.time.findIndex(el => el === forecast?.timestamps[index]?.split("T")[0])
     setIndexD(tempIndex)
 
     const index24 = getTimeIndex(forecast.timestamps[index], weatherCode12h?.timestamps)
@@ -48,25 +49,29 @@ export default function WeatherInfo({ forecast, index, clicked }) {
       </div>
 
       <div onClick={() => {
+        if (invalidTime) return
         setOpen(true)
         clicked(true)
       }}
         className={`fixed top-0 m-2 px-2 pt-0 pb-2 select-none grid text-white font-semibold gap-1 rounded-xl
           ${open ? "bg-white/0" : "bg-black/20 backdrop-blur-xl"}
-          ${!open && "hover:outline cursor-pointer "}
+          ${!open && !invalidTime && "hover:outline cursor-pointer "}
           ${!open && (isDay ? "hover:outline-black/50" : "hover:outline-white/50")}
       `}>
-        <div className={`flex w-full gap-2 items-center h-8 duration-500 
-        ${!open && 'justify-between'}
+        <div className={`flex w-full gap-2 items-center duration-500 
+        ${!open && 'justify-between'} ${!invalidTime && 'h-8'} 
           ${isDay && !open ? 'text-black' : 'text-white'}`}
         >
+          {!invalidTime ?
           <p className='font-bold text-base sm:text-lg'>{
             new Date(forecast.timestamps[index]).toLocaleDateString("en-GB", {
               weekday: "short",
               day: "numeric",
               month: "short"
             }).replace(",", "")}
-          </p>
+          </p> :
+          <p className='pt-2 pl-1 sm:text-lg'>Unable to load weather data. <br/> Please try again later.</p>
+          }
           <div>
             {!open ?
               <WeatherIcon code={weatherCode12h?.forecast[index12]} probability={null} isDay={isDay} background={true} />
@@ -106,17 +111,17 @@ export default function WeatherInfo({ forecast, index, clicked }) {
 
           {daily.sunrise && daily.sunset && <>
             <InfoBox title={'sunrise'} isDay={isDay}
-              info1={sunriseToday.split('T')[1]}
+              info1={sunriseToday?.split('T')[1]}
               condition={now < sunriseTimeToday}
             />
 
             <InfoBox title={'sunset'} isDay={isDay}
-              info1={sunsetToday.split('T')[1]}
+              info1={sunsetToday?.split('T')[1]}
               condition={sunriseTimeToday <= now && now < sunsetTimeToday}
             />
 
             <InfoBox title={'sunrise'} isDay={isDay}
-              info1={sunriseNext.split('T')[1]}
+              info1={sunriseNext?.split('T')[1]}
               condition={sunsetTimeToday <= now}
             />
           </>}
