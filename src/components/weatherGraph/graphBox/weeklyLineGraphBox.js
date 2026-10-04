@@ -12,7 +12,7 @@ export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, 
   const unitWidth = 'grid-cols-[1fr_24px]'
   const graphWidth = 'w-[calc(100%-24px)]'
   let minIndex, maxIndex, colorRange, offset
-
+  
   if (display === 'feels like' || display === 'temperature') {
     minIndex = tempColorIndex(min)
     maxIndex = tempColorIndex(max)
@@ -107,7 +107,7 @@ export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, 
     const start = indexW * 24
 
     for (let i = start; i < start + 24; i++) {
-      if (hourly[i] == null) continue
+      if (hourly2[i] == null) continue
       const localIndex = i - start
       x = (localIndex / 23) * graphSize.w
       y = graphSize.h - ((hourly2[i] - min) / (max - min)) * graphSize.h
@@ -205,19 +205,20 @@ export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, 
               </g>
             }
 
-            <g mask="url(#graphMask)">
-              <path
-                d={getSmoothPath(points()).d}
-                fill="none"
-                stroke={`url(#${gradientId})`}
-                strokeWidth="2"
-                className="opacity-50"
-              />
+            {hourly &&
+              <g mask="url(#graphMask)">
+                <path
+                  d={getSmoothPath(points()).d}
+                  fill="none"
+                  stroke={`url(#${gradientId})`}
+                  strokeWidth="2"
+                  className="opacity-50"
+                />
 
-              {points().map((p, i) => (
-                <circle key={i} cx={p.x} cy={p.y} r="3" fill={`url(#${gradientId})`} />
-              ))}
-            </g>
+                {points().map((p, i) => (
+                  <circle key={i} cx={p.x} cy={p.y} r="3" fill={`url(#${gradientId})`} />
+                ))}
+              </g>}
 
           </svg>
         </div>
