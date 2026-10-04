@@ -158,9 +158,7 @@ export function weatherIcon(code, isDay = 0, background = 1) {
   )
 
   return (
-    <WeatherBase>
-      <Layer style={{ transform: 'translateX(-4%) translateY(12%)' }}><Cloud isDay={isDay} background={background} /></Layer>
-    </WeatherBase>
+    <></>
   )
 }
 
@@ -208,7 +206,7 @@ export function weatherInfo(code, isDay = 1) {
     99: { type: 'thunderstorm', intensity: 'heavy', label: 'Thunderstorm with heavy hail', src: '/icon/weather/thunder.svg' },
   }
 
-  return map[code] || { type: 'unknown', label: 'Unknown', src: '/icon/weather/overcast.svg' }
+  return map[code] || { type: 'unknown', label: 'Unknown', src: null }
 }
 
 export function titleSvg(title, isDay) {
