@@ -14,6 +14,7 @@ export default function Home() {
   const [index, setIndex] = useState(null)
   const [infoClicked, setInfoClicked] = useState(false)
   const [resOk, setResOk] = useState(true)
+  const [isStale, setIsStale] = useState(true)
 
   useEffect(() => {
     if (!(lat && lon && timezone)) return
@@ -43,6 +44,7 @@ export default function Home() {
         if (cancelled) return
 
         if (!hasShownData || !data.stale) {
+          setIsStale(false)
           setForecastData(data)
           hasShownData = true
         }
@@ -76,7 +78,7 @@ export default function Home() {
 
       <div className='fixed bottom-0 w-full p-2'>
         {forecastData ?
-          <Slider forecast={forecastData} setIndex={setIndex} index={index} timezone={timezone} />
+          <Slider forecast={forecastData} setIndex={setIndex} index={index} timezone={timezone} isStale={isStale}/>
           :
           <div className={`${param.sliderStyles} bg-white/10 animate-pulse opacity-40`} style={{ height: param.sliderHeight + 'px' }}>
           </div>

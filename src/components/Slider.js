@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, useMemo } from "react"
 import WeatherIcon from "./weatherIcon"
 import { isMobile, param, tempColorIndex, tempColorList } from "@/lib/param"
 
-export default function Slider({ forecast, setIndex, index, timezone }) {
+export default function Slider({ forecast, setIndex, index, timezone, isStale }) {
   const ref = useRef(null)
   const [boxWidth, setBoxWidth] = useState(0)
   const [graphWidth, setGraphWidth] = useState(0)
@@ -212,6 +212,14 @@ export default function Slider({ forecast, setIndex, index, timezone }) {
             style={{ width: boxWidth, height: sliderHeight + 'px' }}
           />
         </div>
+
+        {isStale && (
+          <div className="absolute bottom-full mb-1 left-2 w-fit max-w-[70%] text-sm text-white">
+            <div className="bg-black/40 py-1 px-3 rounded-xl backdrop-blur-lg">
+              Showing cached weather data. It may not be up to date.
+            </div>
+          </div>
+        )}
 
         <button className={`cursor-pointer absolute top-[-26px] right-2 text-sm text-white bg-black/40 py-1 px-3 rounded-full backdrop-blur-lg duration-500`}
           style={{ display: index === timeIndex ? 'none' : 'block' }}
