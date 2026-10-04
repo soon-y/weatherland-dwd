@@ -26,7 +26,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
   const sunsetTimeToday = new Date(sunsetToday)
   const now = new Date(forecast?.timestamps?.[index])
   const weatherCode12h = forecast.metrics.weather_code_priority_12h
-  const invalidTime =  Number.isNaN(now.getTime())
+  const invalidTime = Number.isNaN(now.getTime())
 
   useEffect(() => {
     const tempIndex = daily.time.findIndex(el => el === forecast?.timestamps[index]?.split("T")[0])
@@ -63,14 +63,14 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           ${isDay && !open ? 'text-black' : 'text-white'}`}
         >
           {!invalidTime ?
-          <p className='font-bold text-base sm:text-lg'>{
-            new Date(forecast.timestamps[index]).toLocaleDateString("en-GB", {
-              weekday: "short",
-              day: "numeric",
-              month: "short"
-            }).replace(",", "")}
-          </p> :
-          <p className='pt-2 pl-1 sm:text-lg'>Unable to load weather data. <br/> Please try again later.</p>
+            <p className='font-bold text-base sm:text-lg'>{
+              new Date(forecast.timestamps[index]).toLocaleDateString("en-GB", {
+                weekday: "short",
+                day: "numeric",
+                month: "short"
+              }).replace(",", "")}
+            </p> :
+            <p className='pt-2 pl-1 sm:text-lg'>Unable to load weather data. <br /> Please try again later.</p>
           }
           <div>
             {!open ?
@@ -85,31 +85,51 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           ${open && 'hidden'} 
           ${isDay ? 'text-black' : 'text-white'}`}
         >
-          {temperature &&
+          {temperature ?
             <InfoBox title={'temperature'} isDay={isDay}
               info1={temperature.forecast[index]} unit1={temperature.unit}
-            />
+            /> :
+            <InfoBox title={'temperature'} isDay={isDay} info1={'N/A'} />
           }
 
-          <InfoBox title={'precipitation'} isDay={isDay}
-            info1={prob?.forecast[index]} unit1={prob?.unit}
-            info2={precip?.forecast[index]} unit2={'mm'}
-            condition={prob?.forecast[index] > 0 && precip?.forecast[index] > 0}
-          />
+          {(prob != null || precip != null) ? (
+            <InfoBox title="precipitation" isDay={isDay}
+              info1={prob?.forecast?.[index] ?? 'N/A'}
+              unit1={prob?.forecast?.[index] != null ? '%' : ''}
+              info2={precip?.forecast?.[index] > 0 ? precip.forecast[index] : ''}
+              unit2={precip?.forecast?.[index] > 0 ? 'mm' : ''}
+            />
+          ) : (
+            <InfoBox title="precipitation" isDay={isDay} info1="N/A" />
+          )}
 
-          <InfoBox title={'wind'} isDay={isDay}
-            info1={windSpeed} unit1={'km/h'}
-            info2={getWindDirectionArrow(windDirection, 18)}
-            condition={windSpeed > 29}
-          />
+          {windSpeed != null ? (
+            <InfoBox
+              title="wind"
+              isDay={isDay}
+              info1={windSpeed}
+              unit1="km/h"
+              info2={
+                windDirection != null
+                  ? getWindDirectionArrow(windDirection, 18)
+                  : ''
+              }
+              condition={windSpeed > 29}
+            />
+          ) : (
+            <InfoBox title="wind" isDay={isDay} info1="N/A" />
+          )}
 
-          <InfoBox title={'visibility'} isDay={isDay}
-            info1={visibilityInfo(visibility).state}
-            info2={visibility} unit2={'m'}
-            condition={visibility < 4000}
-          />
+          {visibility ?
+            <InfoBox title={'visibility'} isDay={isDay}
+              info1={visibilityInfo(visibility).state}
+              info2={visibility} unit2={'m'}
+              condition={visibility < 4000}
+            /> :
+            <InfoBox title={'visibility'} isDay={isDay} info1={'N/A'} />
+          }
 
-          {daily.sunrise && daily.sunset && <>
+          {(daily.sunrise && daily.sunset) ? <>
             <InfoBox title={'sunrise'} isDay={isDay}
               info1={sunriseToday?.split('T')[1]}
               condition={now < sunriseTimeToday}
@@ -124,7 +144,9 @@ export default function WeatherInfo({ forecast, index, clicked }) {
               info1={sunriseNext?.split('T')[1]}
               condition={sunsetTimeToday <= now}
             />
-          </>}
+          </> :
+            <InfoBox title={'sunrise'} isDay={isDay} info1={'N/A'} />
+          }
         </motion.div>
       </div>
     </div>

@@ -77,10 +77,10 @@ export default function WeeklyBarGraphBox({ display, hourly, indexW, min, max, s
 
         {/* Graph */}
         <div className="w-full flex -translate-x-[calc(100%/48)]" style={{ aspectRatio: ratio }}>
-          {Array.from({ length: 24 }).map((_, i) => (
+          {hourly && Array.from({ length: 24 }).map((_, i) => (
             <div key={i} className={`flex-1 h-full flex justify-center items-end  `}>
               <div className={`rounded-t-sm w-[50%] flex justify-center ${(indexW === 0 && i < hour) ? 'opacity-50' : 'opacity-100'}`}
-                style={{ height: hourly[i + indexW * 24] / max * 100 + '%', background: barColor(hourly[i + indexW * 24]) }}
+                style={{ height: hourly?.[i + indexW * 24] / max * 100 + '%', background: barColor(hourly[i + indexW * 24]) }}
               />
             </div>
 

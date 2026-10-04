@@ -8,15 +8,15 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
   const [dailyTotal, setDailyTotal] = useState([])
   const [dailyMean, setDailyMean] = useState([])
   const [type, setType] = useState('')
-  const probability = hourProbability[hoverIndex]
-  const precipitation = hourPrecipitation[hoverIndex]
+  const probability = hourProbability?.[hoverIndex]
+  const precipitation = hourPrecipitation?.[hoverIndex]
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
   const maxVal = Math.max(10, param.max(hourPrecipitation))
   let unit = 'mm'
 
   useEffect(() => {
-    const resultTotal = getTotalSumArr(hourPrecipitation)
-    const resultMean = getAvgArr(hourProbability)
+    const resultTotal = hourPrecipitation && getTotalSumArr(hourPrecipitation)
+    const resultMean = probability && getAvgArr(hourProbability)
 
     setDailyTotal(resultTotal)
     setDailyMean(resultMean)
@@ -77,13 +77,19 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
               </>
               :
               <>
-                <div>
-                  {dailyMean[indexW]}<span className="text-base"> %</span>
-                </div>
+                {dailyMean ?
+                  <div>
+                    {dailyMean[indexW]}<span className="text-base"> %</span>
+                  </div> :
+                  <p className="text-lg">N/A</p>
+                }
 
-                <div>
-                  {dailyTotal[indexW]}<span className="text-base"> {unit}</span>
-                </div>
+                {dailyTotal ?
+                  <div>
+                    {dailyTotal[indexW]}<span className="text-base"> {unit}</span>
+                  </div> :
+                  <p className="text-lg">N/A</p>
+                }
               </>
           }
         </div>

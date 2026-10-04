@@ -6,15 +6,14 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
   const [hoverIndex, setHover] = useState(index)
   const [dailyWind, setDailyWindAvg] = useState([])
   const [dailyGust, setDailyGustAvg] = useState([])
-  const current = wind[hoverIndex]
+  const current = wind?.[hoverIndex]
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
-  const maxVal = Math.max(100, param.maxInTwo(wind, gusts))
-  const isNull = current == null
+  const maxVal = (wind || gusts) && Math.max(100, param.maxInTwo(wind, gusts))
   let unit = 'km/h'
 
   useEffect(() => {
-    const resultWind = getMaxArr(wind)
-    const resultGust = getMaxArr(gusts)
+    const resultWind = wind && getMaxArr(wind)
+    const resultGust = gusts && getMaxArr(gusts)
 
     setDailyWindAvg(resultWind)
     setDailyGustAvg(resultGust)
@@ -32,12 +31,12 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
             validIndex ?
               <>
                 <span>{hoverIndex - indexW * 24}:00</span>
-                {!isNull && <span className="text-gray-400">Gusts</span>}
+                {gusts && <span className="text-gray-400">Gusts</span>}
               </>
               :
               <>
                 <span>Max</span>
-                <span className="text-gray-400">Gusts Max</span>
+                {gusts && <span className="text-gray-400">Gusts Max</span>}
               </>
           }
         </div>
@@ -54,26 +53,33 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
                   <span className="text-base">{getWindLevel(current)}</span>
                 </div>
 
+                {gusts?.[hoverIndex] &&
                 <div className="flex gap-2 text-lg text-gray-400 items-end">
-                  {gusts[hoverIndex]}
-                  <span className={`text-base ${current == null ? 'opacity-0' : ''}`}>
+                  {gusts?.[hoverIndex]}
+                  <span className={`text-base ${gusts == null ? 'opacity-0' : ''}`}>
                     {unit}
                   </span>
                   {getWindLevel(gusts[hoverIndex])}
                 </div>
+                }
               </>
               :
               <>
-                <div className="flex gap-2 items-end">
+                {dailyWind?
+                  <div className="flex gap-2 items-end">
                   {dailyWind[indexW]} <span> {unit}</span>
                   <span className="text-lg">{getWindLevel(dailyWind[indexW])}</span>
-                </div>
+                </div> :
+                <div>N/A</div>
+                }
 
-                <div className="flex gap-2 text-lg text-gray-400 items-end">
+                {dailyGust &&
+                  <div className="flex gap-2 text-lg text-gray-400 items-end">
                   {dailyGust[indexW]}
                   <span className="text-base"> {unit}</span>
                   {getWindLevel(dailyGust[indexW])}
                 </div>
+                }
               </>
           }
         </div>

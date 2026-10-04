@@ -30,10 +30,26 @@ export const param = {
   weatherDescSub: 'text-sm/5 sm:text-base/6',
   weatherBoxheight: 'h-[calc(100dvh-40px)]',
   weatherBoxStyles: 'absolute top-12 w-full min-w-[340px] sm:px-[calc((100%-600px)/2)] sm:left-1/2 sm:-translate-x-1/2 overflow-x-hidden',
-  max: (arr) => { return Math.ceil(Math.max(...arr) / 10) * 10 },
-  min: (arr) => { return Math.floor(Math.min(...arr) / 10) * 10 },
-  maxInTwo: (arr1, arr2) => { return Math.ceil(Math.max(...arr1, ...arr2) / 10) * 10 },
-  minInTwo: (arr1, arr2) => { return Math.floor(Math.min(...arr1, ...arr2) / 10) * 10 },
+  max: (arr) => {
+    const values = (arr ?? []).filter(value => value != null)
+    return values.length
+      ? Math.ceil(Math.max(...values) / 10) * 10 : 0
+  },
+  min: (arr) => {
+    const values = (arr ?? []).filter(value => value != null)
+    return values.length
+      ? Math.floor(Math.min(...values) / 10) * 10 : 0
+  },
+  maxInTwo: (arr1, arr2) => {
+    const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
+    return values.length
+      ? Math.ceil(Math.max(...values) / 10) * 10 : 0
+  },
+  minInTwo: (arr1, arr2) => {
+    const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
+    return values.length
+      ? Math.floor(Math.min(...values) / 10) * 10 : 0
+  },
 
   // Scene
   worldPos: [0, 0, 0],
