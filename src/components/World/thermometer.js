@@ -126,6 +126,7 @@ export default function Thermometer({ temp, weather }) {
         <meshBasicMaterial
           ref={liquidMaterialRef}
           color="#fff"
+          visible={tempValue == null ? 0 : 1}
         />
       </mesh>
 
