@@ -44,7 +44,7 @@ export default function Home() {
         if (cancelled) return
 
         if (!hasShownData || !data.stale) {
-          setIsStale(false)
+          setIsStale(data.stale)
           setForecastData(data)
           hasShownData = true
         }
