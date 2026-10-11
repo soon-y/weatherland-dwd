@@ -1,6 +1,6 @@
-import Box from "./card"
+import Card from "./card"
 import { visibilityInfo, param } from "@/lib/param"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Visibility({ hourly, index, setDisplay, setCardClicked }) {
   const visibility = hourly.metrics.visibility?.forecast[index]
@@ -9,9 +9,9 @@ export default function Visibility({ hourly, index, setDisplay, setCardClicked }
   const title = 'visibility'
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={visibility === undefined ? false : true}>
+    <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={visibility === undefined ? false : true}>
       <div>
-        <BoxTitle title={title} />
+        <CardTitle title={title} />
         {visibility ?
           <p className={param.weatherDescMain}>{current} k{hourly?.metrics.visibility.unit}</p> :
           <p className={param.weatherDescMain}>N/A</p>
@@ -23,6 +23,6 @@ export default function Visibility({ hourly, index, setDisplay, setCardClicked }
           {visibilityInfo(current).desc}
         </p>
       </div>}
-    </Box>
+    </Card>
   )
 }

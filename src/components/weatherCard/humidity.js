@@ -1,6 +1,6 @@
-import Box from "./card"
+import Card from "./card"
 import { param } from "@/lib/param"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Humidity({ hourly, index, setDisplay, setCardClicked }) {
   const dewpoint = hourly?.metrics?.dewpoint_2m
@@ -42,9 +42,9 @@ export default function Humidity({ hourly, index, setDisplay, setCardClicked }) 
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly.metrics.dewpoint_2m === undefined ? false : true}>
+    <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly.metrics.dewpoint_2m === undefined ? false : true}>
       <div>
-        <BoxTitle title={title} />
+        <CardTitle title={title} />
         {dewpoint && relativeHumidity ?
           <>
             <p className={param.weatherDescMain}>{relativeHumidity.forecast[index]} {relativeHumidity.unit}</p>
@@ -60,6 +60,6 @@ export default function Humidity({ hourly, index, setDisplay, setCardClicked }) 
           {humidityBar(dewpoint.forecast[index])}
         </div>
       }
-    </Box>
+    </Card>
   )
 }

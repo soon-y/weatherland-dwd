@@ -1,6 +1,6 @@
-import Box from "./card"
+import Card from "./card"
 import { param, weatherInfo } from "@/lib/param"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Precipitation({ hourly, index, indexD, setDisplay, setCardClicked }) {
   const title = 'precipitation'
@@ -10,10 +10,10 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
   const totalSum = hourly.metrics.precip_amount_24h
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
+    <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
       clickable={precipitation != null || probability != null}>
       <div>
-        <BoxTitle title={title} />
+        <CardTitle title={title} />
 
         {probability?.forecast?.[index] == null &&
           precipitation?.forecast?.[index] == null ? (
@@ -46,6 +46,6 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
           {weatherInfo(code).label}
         </div>
       }
-    </Box>
+    </Card>
   )
 }

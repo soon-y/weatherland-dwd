@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { getAvgArr, getTotalSumArr, param, precipIntensity, weatherInfo } from "@/lib/param"
-import WeeklyBarGraphBox from "./graphCard/weeklyBarGraphCard"
-import WeeklyLineGraphBox from "./graphCard/weeklyLineGraphCard"
+import WeeklyBarGraphCard from "./graphCard/weeklyBarGraphCard"
+import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard"
 
 export default function WeeklyPrecipitation({ display, indexW, index, hourProbability, hourPrecipitation, code }) {
   const [hoverIndex, setHover] = useState(index)
@@ -94,12 +94,12 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
           }
         </div>
       </div>
-      <WeeklyLineGraphBox ratio={2} graphRatio={2}
+      <WeeklyLineGraphCard ratio={2} graphRatio={2}
         display={'probability'} unit={'%'} min={0} max={100} step={20}
         hourly={hourProbability} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
-      <WeeklyBarGraphBox ratio={2}
+      <WeeklyBarGraphCard ratio={2}
         display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
         hourly={hourPrecipitation} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

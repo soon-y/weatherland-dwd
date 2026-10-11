@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
+import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param, visibilityInfo } from "@/lib/param";
 
 export default function WeeklyVisibility({ display, hourly, indexW, index }) {
@@ -68,7 +68,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
         </div>
       </div>
 
-      <WeeklyGraphBox
+      <WeeklyGraphCard
         display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

@@ -1,7 +1,7 @@
 import Image from "next/image"
-import Box from "./card"
+import Card from "./card"
 import { param, pressure } from "@/lib/param"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Pressure({ hourly, index, setDisplay, setCardClicked }) {
   const current = Math.round(hourly?.forecast[index] ?? 0)
@@ -31,9 +31,9 @@ export default function Pressure({ hourly, index, setDisplay, setCardClicked }) 
 
   return (
     <>
-      <Box className="hidden sm:block" style={'square'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
+      <Card className="hidden sm:block" style={'square'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
         <div>
-          <BoxTitle title={title} />
+          <CardTitle title={title} />
           {
             hourly ?
               <p className={`${param.weatherDescMain} capitalize font-bold`}>{pressure(current)}</p> :
@@ -62,10 +62,10 @@ export default function Pressure({ hourly, index, setDisplay, setCardClicked }) 
               <span className="mr-[10%]">High</span>
             </div>
           </div>}
-      </Box>
+      </Card>
 
-      <Box className="sm:hidden" style={'wide'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
-        <BoxTitle title={title} />
+      <Card className="sm:hidden" style={'wide'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
+        <CardTitle title={title} />
 
         <div className='grid grid-cols-[58%_40%_2%]'>
           <div className="grid items-center">
@@ -102,7 +102,7 @@ export default function Pressure({ hourly, index, setDisplay, setCardClicked }) 
               </div>}
           </div>
         </div>
-      </Box>
+      </Card>
     </>
   )
 }

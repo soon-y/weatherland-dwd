@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
+import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param, pressure } from "@/lib/param";
 
 export default function WeeklyPressure({ display, hourly, indexW, index }) {
@@ -45,7 +45,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
         </div>
       </div>
 
-      <WeeklyGraphBox
+      <WeeklyGraphCard
         display={display} unit={unit} min={minVal} max={maxVal} step={(maxVal - minVal) * 0.2}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

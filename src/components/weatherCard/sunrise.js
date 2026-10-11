@@ -1,6 +1,6 @@
 import { param } from "@/lib/param"
-import Box from "./card"
-import BoxTitle from "./cardTitle"
+import Card from "./card"
+import CardTitle from "./cardTitle"
 
 export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setCardClicked }) {
   const sunrise = daily.sunrise?.[indexD]
@@ -23,7 +23,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
       if (nowDate > sunsetDate) {
         return (
           <div>
-            <BoxTitle title={'sunrise'} />
+            <CardTitle title={'sunrise'} />
             <p className={param.weatherDescMain}>{sunriseNext.split("T")[1]}</p>
             <p className={param.weatherDescSub}>Sunset at {sunsetNext.split("T")[1]}</p>
           </div>
@@ -31,7 +31,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
       } else {
         return (
           <div>
-            <BoxTitle title={'sunset'} />
+            <CardTitle title={'sunset'} />
             <p className={param.weatherDescMain}>{sunset.split("T")[1]}</p>
             <p className={param.weatherDescSub}>Sunrise at {sunriseNext.split("T")[1]}</p>
           </div>
@@ -40,7 +40,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
     } else {
       return (
         <div>
-          <BoxTitle title={'sunrise'} />
+          <CardTitle title={'sunrise'} />
           <p className={param.weatherDescMain}>{sunrise.split("T")[1]}</p>
           <p className={param.weatherDescSub}>Sunset at {sunset.split("T")[1]}</p>
         </div>
@@ -92,11 +92,11 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setCardClicked={setCardClicked} clickable={(sunrise && sunset) ? true : false}>
+    <Card style={'square'} setDisplay={setDisplay} title={'daily sun'} setCardClicked={setCardClicked} clickable={(sunrise && sunset) ? true : false}>
       {(sunrise && sunset) ?
         title() :
         <div>
-          <BoxTitle title={'sunrise'} />
+          <CardTitle title={'sunrise'} />
           <p className={param.weatherDescMain}>N/A</p>
         </div>
       }
@@ -104,7 +104,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
       {(sunrise && sunset && now) &&
         <div className="relative">
           <svg style={{ overflow: "visible" }}
-            viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
+            viewCard={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
           >
             <defs>
               <linearGradient id="horizonFade" x1="0" y1="0" x2="0" y2="1">
@@ -176,6 +176,6 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
           </svg>
           <div className="absolute bottom-0 w-full h-[50%] border-t-1 opacity-50 "></div>
         </div>}
-    </Box>
+    </Card>
   )
 }

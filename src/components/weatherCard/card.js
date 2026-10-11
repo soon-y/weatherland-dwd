@@ -1,14 +1,14 @@
 export default function Card({ style, children, setDisplay, title, setCardClicked, className, clickable }) {
-  const boxStyleForecast = 'w-full'
-  const boxStyleWide = 'aspect-2/1 w-full sm:w-[calc(66.9%-7px)] sm:aspect-[2.5]'
-  const boxStyleSquare = 'flex flex-col justify-between aspect-square w-[calc(50%-6px)] sm:w-[calc(33.3%-8px)]'
+  const cardStyleForecast = 'w-full'
+  const cardStyleWide = 'aspect-2/1 w-full sm:w-[calc(66.9%-7px)] sm:aspect-[2.5]'
+  const cardStyleSquare = 'flex flex-col justify-between aspect-square w-[calc(50%-6px)] sm:w-[calc(33.3%-8px)]'
 
   return (
     <div className={`${className} z-10 bg-white/20 rounded-xl px-3 py-2 sm:px-4 sm:py-3 select-none duration-500 transition-all
     ${clickable && 'hover:outline-1 hover:outline-white/50'}
-    ${style === 'forecast' && boxStyleForecast}
-    ${style === 'wide' && boxStyleWide}
-    ${style === 'square' && boxStyleSquare}
+    ${style === 'forecast' && cardStyleForecast}
+    ${style === 'wide' && cardStyleWide}
+    ${style === 'square' && cardStyleSquare}
     `} onClick={() => {
         if (!clickable) return
         setDisplay(title)

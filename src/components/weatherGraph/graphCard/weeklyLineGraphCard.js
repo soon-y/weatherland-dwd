@@ -1,7 +1,7 @@
 import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, sunshineColorList, sunshineOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
 import { useEffect, useMemo, useState } from "react"
 
-export default function WeeklyLineGraphBox({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay }) {
+export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay }) {
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const [codes, setCodes] = useState([])

@@ -1,15 +1,15 @@
-import Box from "./card"
+import Card from "./card"
 import { sunshineDuration, param } from "@/lib/param"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Sunshine({ hourly, index, setDisplay, setCardClicked }) {
   const current = hourly?.forecast[index]
   const title = 'sunshine'
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
+    <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
       <div>
-        <BoxTitle title={title} />
+        <CardTitle title={title} />
         {hourly ?
           <>
             <p className={param.weatherDescMain}>{current/60} mins</p>
@@ -28,6 +28,6 @@ export default function Sunshine({ hourly, index, setDisplay, setCardClicked }) 
           />
         </div>
       }
-    </Box >
+    </Card >
   )
 }

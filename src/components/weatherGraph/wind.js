@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
+import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getMaxArr, getWindLevel, param } from "@/lib/param";
 
 export default function WeeklyWind({ display, indexW, index, wind, gusts, code }) {
@@ -84,7 +84,7 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
           }
         </div>
       </div>
-      <WeeklyGraphBox
+      <WeeklyGraphCard
         display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.1} hourly2={gusts}
         hourly={wind} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover} code={code}
       />

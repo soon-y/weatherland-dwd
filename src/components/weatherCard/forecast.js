@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import Box from "./card"
+import Card from "./card"
 import { param, tempColorIndex, tempColorList } from "@/lib/param"
 import WeatherIcon from "../weatherIcon"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Forecast({ hourly }) {
   const today = new Date()
@@ -51,8 +51,8 @@ export default function Forecast({ hourly }) {
   return (
     <>
       {isValid &&
-        <Box style={'forecast'} clickable={false}>
-          <BoxTitle title={'7-day forecast'} />
+        <Card style={'forecast'} clickable={false}>
+          <CardTitle title={'7-day forecast'} />
           <div className='grid gap-2 mb-1'>
             {weekly.map((el, i) => (
               <div key={i} className='grid grid-cols-7 sm:grid-cols-8 items-center justify-center h-9'>
@@ -73,7 +73,7 @@ export default function Forecast({ hourly }) {
               </div>
             ))}
           </div>
-        </Box>}
+        </Card>}
     </>
   )
 }

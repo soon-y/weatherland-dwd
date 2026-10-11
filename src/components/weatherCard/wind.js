@@ -1,7 +1,7 @@
-import Box from "./card"
+import Card from "./card"
 import { getWindDirection, getWindLevel, param } from "@/lib/param"
 import Image from "next/image"
-import BoxTitle from "./cardTitle"
+import CardTitle from "./cardTitle"
 
 export default function Wind({ hourly, index, setDisplay, setCardClicked }) {
   const wind = hourly.metrics.wind_speed_10m
@@ -11,9 +11,9 @@ export default function Wind({ hourly, index, setDisplay, setCardClicked }) {
   const title = 'wind'
 
   return (
-    <Box style={'wide'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
+    <Card style={'wide'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
       clickable={wind != null || gusts != null}>
-      <BoxTitle title={title} />
+      <CardTitle title={title} />
 
       <div className='grid grid-cols-[58%_40%_2%]'>
         <div className="grid items-center">
@@ -63,6 +63,6 @@ export default function Wind({ hourly, index, setDisplay, setCardClicked }) {
           </>}
         </div>
       </div>
-    </Box>
+    </Card>
   )
 }

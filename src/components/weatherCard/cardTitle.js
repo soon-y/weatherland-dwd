@@ -1,6 +1,6 @@
 import { titleIcon } from "@/lib/param"
 
-export default function BoxTitle({ title }) {
+export default function CardTitle({ title }) {
   if (!title) return
 
   return (
