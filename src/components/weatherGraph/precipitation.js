@@ -43,55 +43,71 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         <div className="flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
-                <span>{hoverIndex - indexW * 24}:00</span>
-                {precipitation > 0 && <span className="capitalize">{type}</span>}
-              </>
-              :
-              <>
-                <span>Probability mean</span>
-                <span>Total</span>
-              </>
-          }
+          {validIndex ? (
+            <>
+              <span>{hoverIndex - indexW * 24}:00</span>
+              {precipitation > 0 && (
+                <span className="capitalize">{type}</span>
+              )}
+            </>
+          ) : (
+            <>
+              <span>Probability mean</span>
+              <span>Total</span>
+            </>
+          )}
         </div>
 
         <div className="text-2xl flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
+          {validIndex ? (
+            <>
+              {probability != null ? (
                 <div>
                   {probability}
-                  <span className="text-lg">
-                    {probability !=null ? ' %' : 'N/A'}
-                  </span>
+                  <span className="text-lg"> %</span>
                 </div>
+              ) : (
+                <p className="text-lg">N/A</p>
+              )}
 
-                {
-                  <div>
-                    <span className="capitalize text-lg">{precipIntensity(type, precipitation)} </span>
-                    {precipitation > 0 && <>{precipitation} <span className="text-base"> {unit}</span></>}
-                  </div>
-                }
-              </>
-              :
-              <>
-                {dailyMean ?
-                  <div>
-                    {dailyMean[indexW]}<span className="text-base"> %</span>
-                  </div> :
-                  <p className="text-lg">N/A</p>
-                }
+              {precipitation != null ? (
+                <div>
+                  <span className="capitalize text-lg">
+                    {precipIntensity(type, precipitation)}{' '}
+                  </span>
 
-                {dailyTotal ?
-                  <div>
-                    {dailyTotal[indexW]}<span className="text-base"> {unit}</span>
-                  </div> :
-                  <p className="text-lg">N/A</p>
-                }
-              </>
-          }
+                  {precipitation > 0 && (
+                    <>
+                      {precipitation}
+                      <span className="text-base"> {unit}</span>
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p className="text-lg">N/A</p>
+              )}
+            </>
+          ) : (
+            <>
+              {dailyMean?.[indexW] != null ? (
+                <div>
+                  {dailyMean[indexW]}
+                  <span className="text-base"> %</span>
+                </div>
+              ) : (
+                <p className="text-lg mt-1">N/A</p>
+              )}
+
+              {dailyTotal?.[indexW] != null ? (
+                <div>
+                  {dailyTotal[indexW]}
+                  <span className="text-base"> {unit}</span>
+                </div>
+              ) : (
+                <p className="text-lg mt-1">N/A</p>
+              )}
+            </>
+          )}
         </div>
       </div>
       <WeeklyLineGraphCard ratio={2} graphRatio={2}

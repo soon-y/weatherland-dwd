@@ -22,34 +22,37 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
   return (
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
-        {
-          validIndex ?
-            <span>{hoverIndex - indexW * 24}:00</span> :
-            <span>Average during daytime</span>
-        }
+        {validIndex ? (
+          <span>{hoverIndex - indexW * 24}:00</span>
+        ) : (
+          <span>Average during daytime</span>
+        )}
 
         <div className="text-2xl flex gap-2 justify-between">
-          {
-            validIndex ?
+          {validIndex ? (
+            current != null ? (
               <>
-                {current != null ?
-                  <>
-                    <span className="font-bold">{sunshineDuration(current).state}</span>
-                    <span>
-                      {current / 60}
-                      <span className="text-base"> {unit}</span>
-                    </span>
-                  </>
-                  :
-                  <span className="mt-1 text-xl">N/A</span>
-                }
-
+                <span className="font-bold">
+                  {sunshineDuration(current).state}
+                </span>
+                <span>
+                  {current / 60}
+                  <span className="text-base"> {unit}</span>
+                </span>
               </>
-              :
+            ) : (
+              <span className="mt-1 text-xl">N/A</span>
+            )
+          ) : (
+            avg[indexW] != null ? (
               <span>
-                <span>{Math.floor(avg[indexW] / 60)}<span className="text-lg"> {unit}</span></span>
+                {Math.floor(avg[indexW] / 60)}
+                <span className="text-lg"> {unit}</span>
               </span>
-          }
+            ) : (
+              <span className="mt-1 text-xl">N/A</span>
+            )
+          )}
         </div>
       </div>
 

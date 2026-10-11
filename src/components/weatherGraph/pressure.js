@@ -23,25 +23,38 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
   return (
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
-        {
-          validIndex ? <span>{hoverIndex - indexW * 24}:00</span> : <span>Average</span>
-        }
+        {validIndex ? (
+          <span>{hoverIndex - indexW * 24}:00</span>
+        ) : (
+          <span>Average</span>
+        )}
 
         <div className="text-2xl flex gap-2 justify-between">
-          {
-            validIndex ?
+          {validIndex ? (
+            current != null ? (
               <>
-                <span>{current} <span className="text-lg">{current ? unit : 'N/A'}</span></span>
-                <span className={`${current == null ? 'opacity-0' : ''}`}>
-                  {pressure(current)}
+                <span>
+                  {current}
+                  <span className="text-lg"> {unit}</span>
                 </span>
-              </>
-              :
-              <>
-                <span>{avg[indexW]}<span className="text-lg"> {unit}</span></span>
                 <span>{pressure(current)}</span>
               </>
-          }
+            ) : (
+              <span className="text-xl mt-1">N/A</span>
+            )
+          ) : (
+            avg[indexW] != null ? (
+              <>
+                <span>
+                  {avg[indexW]}
+                  <span className="text-lg"> {unit}</span>
+                </span>
+                <span>{pressure(avg[indexW])}</span>
+              </>
+            ) : (
+              <span className="text-xl mt-1">N/A</span>
+            )
+          )}
         </div>
       </div>
 

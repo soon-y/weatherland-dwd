@@ -28,43 +28,56 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         <div className="flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
-                <span>{hoverIndex - indexW * 24}:00</span>
-              </>
-              :
-              <>
-                <span>Min</span>
-                <span>Max</span>
-              </>
-          }
+          {validIndex ? (
+            <span>{hoverIndex - indexW * 24}:00</span>
+          ) : (
+            <>
+              <span>Min</span>
+              <span>Max</span>
+            </>
+          )}
         </div>
 
         <div className="text-2xl flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
-                <div>
+          {validIndex ? (
+            <div>
+              {current != null ? (
+                <>
                   {current}
-                  <span className="text-base" >
-                    {current ? unit : 'N/A'}
-                  </span>
-                </div>
-              </>
-              :
-              <>
-                <div>
-                  {dailyMin[indexW]} <span className="text-base">{unit}</span>
-                </div>
+                  <span className="text-base">{unit}</span>
+                </>
+              ) : (
+                <span>N/A</span>
+              )}
+            </div>
+          ) : (
+            <>
+              <div>
+                {dailyMin[indexW] != null ? (
+                  <>
+                    {dailyMin[indexW]}
+                    <span className="text-base">{unit}</span>
+                  </>
+                ) : (
+                  <span>N/A</span>
+                )}
+              </div>
 
-                <div>
-                  {dailyMax[indexW]} <span className="text-base">{unit}</span>
-                </div>
-              </>
-          }
+              <div>
+                {dailyMax[indexW] != null ? (
+                  <>
+                    {dailyMax[indexW]}
+                    <span className="text-base">{unit}</span>
+                  </>
+                ) : (
+                  <span>N/A</span>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
+
       <WeeklyLineGraphCard
         display={display} unit={unit} min={minVal} max={maxVal} step={(maxVal - minVal) * 0.2}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover} code={code} isDay={isDay}

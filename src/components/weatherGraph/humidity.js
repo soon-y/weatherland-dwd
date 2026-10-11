@@ -25,40 +25,50 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         <div className="flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
-                <span>{hoverIndex - indexW * 24}:00</span>
-                {!isNull && <span>Dew point / Temperature</span>}
-              </>
-              :
-              <span>Average</span>
-          }
+          {validIndex ? (
+            <>
+              <span>{hoverIndex - indexW * 24}:00</span>
+              {!isNull && <span>Dew point / Temperature</span>}
+            </>
+          ) : (
+            <span>Average</span>
+          )}
         </div>
 
         <div className="text-2xl flex gap-2 justify-between">
-          {
-            validIndex ?
-              <>
+          {validIndex ? (
+            <>
+              {current != null ? (
                 <div>
                   {current}
-                  <span className="text-lg">
-                    {current != null ? unit : 'N/A'}
-                  </span>
+                  <span className="text-lg"> {unit}</span>
                 </div>
+              ) : (
+                <span className="text-xl mt-1">N/A</span>
+              )}
 
-                {!isNull && <p>
-                  {dewPoint[hoverIndex]} <span className="text-base">°C</span> /
-                  <span> {temp[hoverIndex]}
+              {!isNull && (
+                <p>
+                  {dewPoint[hoverIndex]}
+                  <span className="text-base"> °C</span>
+                  {' / '}
+                  <span>
+                    {temp[hoverIndex]}
                     <span className="text-base"> °C</span>
                   </span>
-                </p>}
-              </>
-              :
-              <>
-                <span>{avg[indexW]}{unit}</span>
-              </>
-          }
+                </p>
+              )}
+            </>
+          ) : (
+            avg[indexW] != null ? (
+              <span>
+                {avg[indexW]}
+                <span className="text-lg"> {unit}</span>
+              </span>
+            ) : (
+              <span className="text-xl mt-1">N/A</span>
+            )
+          )}
         </div>
       </div>
 

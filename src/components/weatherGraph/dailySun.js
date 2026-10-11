@@ -1,9 +1,19 @@
 import { daylightDuration } from "@/lib/param"
 import DailyGraphCard from "./graphCard/dailyBarGraphCard"
 
-export default function DailySun({ indexW, setIndexW, sunrise, sunset}) {
-  const { hour, min } = daylightDuration(sunrise[indexW], sunset[indexW], false)
-  const daylight = daylightDuration(sunrise[indexW], sunset[indexW])
+export default function DailySun({ indexW, setIndexW, sunrise, sunset }) {
+  const sunriseValue = sunrise?.[indexW]
+  const sunsetValue = sunset?.[indexW]
+
+  const hasData = sunriseValue != null && sunsetValue != null
+
+  const { hour, min } = hasData
+    ? daylightDuration(sunriseValue, sunsetValue, false)
+    : { hour: null, min: null }
+
+  const daylight = hasData
+    ? daylightDuration(sunriseValue, sunsetValue)
+    : null
 
   return (
     <div className="w-full pb-4">
@@ -18,12 +28,25 @@ export default function DailySun({ indexW, setIndexW, sunrise, sunset}) {
 
         <div className="text-2xl flex justify-between">
           <div className="grid grid-cols-[80px_1fr]">
-            <span>{sunrise[indexW].split('T')[1]}</span>
-            <span>{sunset[indexW].split('T')[1]}</span>
-          </div>
-          <span>{hour + 'h '+ min + 'm'}</span>
-        </div>
+            <span>
+              {sunriseValue != null
+                ? sunriseValue.split('T')[1]
+                : 'N/A'}
+            </span>
 
+            <span>
+              {sunsetValue != null
+                ? sunsetValue.split('T')[1]
+                : 'N/A'}
+            </span>
+          </div>
+
+          <span>
+            {hasData
+              ? `${hour}h ${min}m`
+              : 'N/A'}
+          </span>
+        </div>
       </div>
 
       <DailyGraphCard
