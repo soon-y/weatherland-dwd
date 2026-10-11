@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard"
+import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard"
 import { getMaxArr, getMinArr, param } from "@/lib/param"
 
 export default function WeeklyTemperature({ display, hourly, indexW, index, code, isDay }) {
@@ -65,7 +65,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
           }
         </div>
       </div>
-      <WeeklyGraphCard
+      <WeeklyLineGraphCard
         display={display} unit={unit} min={minVal} max={maxVal} step={(maxVal - minVal) * 0.2}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover} code={code} isDay={isDay}
       />

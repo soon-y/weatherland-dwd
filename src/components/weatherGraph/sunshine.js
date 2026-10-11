@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
+import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArrDaytime, sunshineDuration } from "@/lib/param";
 
 export default function WeeklySunshine({ display, hourly, indexW, index, }) {
@@ -53,7 +53,7 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
         </div>
       </div>
 
-      <WeeklyGraphCard
+      <WeeklyLineGraphCard
         display={display} unit={'seconds'} min={0} max={maxVal} step={(maxVal) / 6}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

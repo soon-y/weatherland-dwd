@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
+import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param, visibilityInfo } from "@/lib/param";
 
 export default function WeeklyVisibility({ display, hourly, indexW, index }) {
@@ -28,7 +28,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
   }, [])
 
   useEffect(() => {
-    setHover()
+    setHover(index)
   }, [indexW])
 
   return (
@@ -68,7 +68,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
         </div>
       </div>
 
-      <WeeklyGraphCard
+      <WeeklyLineGraphCard
         display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

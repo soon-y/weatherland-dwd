@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphCard from "./graphCard/weeklyLineGraphCard";
+import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param } from "@/lib/param";
 
 export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp }) {
@@ -62,12 +62,12 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
         </div>
       </div>
 
-      <WeeklyGraphCard ratio={2} graphRatio={2}
+      <WeeklyLineGraphCard ratio={2} graphRatio={2}
         display={'probability'} unit={unit} min={0} max={100} step={20}
         hourly={humidity} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
-      <WeeklyGraphCard ratio={2} graphRatio={2}
+      <WeeklyLineGraphCard ratio={2} graphRatio={2}
         display={'temperature'} unit={'°C'} min={minVal} max={maxVal} step={5} hourly2={temp}
         hourly={dewPoint} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
