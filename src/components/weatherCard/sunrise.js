@@ -104,7 +104,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setC
       {(sunrise && sunset && now) &&
         <div className="relative">
           <svg style={{ overflow: "visible" }}
-            viewCard={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
+            viewBox={`-10 -10 ${pathSize.w + 20} ${pathSize.h + 20}`} width="100%"
           >
             <defs>
               <linearGradient id="horizonFade" x1="0" y1="0" x2="0" y2="1">
