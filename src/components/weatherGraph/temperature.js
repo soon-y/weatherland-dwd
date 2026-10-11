@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import WeeklyGraphBox from "./graphBox/weeklyLineGraphBox"
+import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard"
 import { getMaxArr, getMinArr, param } from "@/lib/param"
 
 export default function WeeklyTemperature({ display, hourly, indexW, index, code, isDay }) {

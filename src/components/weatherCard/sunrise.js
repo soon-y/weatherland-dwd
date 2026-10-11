@@ -1,8 +1,8 @@
 import { param } from "@/lib/param"
-import Box from "./box"
-import BoxTitle from "./boxTitle"
+import Box from "./card"
+import BoxTitle from "./cardTitle"
 
-export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setBoxClicked }) {
+export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setCardClicked }) {
   const sunrise = daily.sunrise?.[indexD]
   const sunset = daily.sunset?.[indexD]
   const sunriseNext = daily.sunrise?.[indexD + 1] ?? sunrise
@@ -92,7 +92,7 @@ export default function Sunrise({ daily, hourly, index, indexD, setDisplay, setB
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setBoxClicked={setBoxClicked} clickable={(sunrise && sunset) ? true : false}>
+    <Box style={'square'} setDisplay={setDisplay} title={'daily sun'} setCardClicked={setCardClicked} clickable={(sunrise && sunset) ? true : false}>
       {(sunrise && sunset) ?
         title() :
         <div>

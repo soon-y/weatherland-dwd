@@ -1,4 +1,4 @@
-export default function Box({ style, children, setDisplay, title, setBoxClicked, className, clickable }) {
+export default function Card({ style, children, setDisplay, title, setCardClicked, className, clickable }) {
   const boxStyleForecast = 'w-full'
   const boxStyleWide = 'aspect-2/1 w-full sm:w-[calc(66.9%-7px)] sm:aspect-[2.5]'
   const boxStyleSquare = 'flex flex-col justify-between aspect-square w-[calc(50%-6px)] sm:w-[calc(33.3%-8px)]'
@@ -12,7 +12,7 @@ export default function Box({ style, children, setDisplay, title, setBoxClicked,
     `} onClick={() => {
         if (!clickable) return
         setDisplay(title)
-        setBoxClicked(true)
+        setCardClicked(true)
       }}>
       {children}
     </div>

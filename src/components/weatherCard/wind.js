@@ -1,9 +1,9 @@
-import Box from "./box"
+import Box from "./card"
 import { getWindDirection, getWindLevel, param } from "@/lib/param"
 import Image from "next/image"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
-export default function Wind({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Wind({ hourly, index, setDisplay, setCardClicked }) {
   const wind = hourly.metrics.wind_speed_10m
   const gusts = hourly.metrics.wind_gust_max_1h
   const angle = hourly.metrics.wind_direction_10m?.forecast[index]
@@ -11,7 +11,7 @@ export default function Wind({ hourly, index, setDisplay, setBoxClicked }) {
   const title = 'wind'
 
   return (
-    <Box style={'wide'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked}
+    <Box style={'wide'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
       clickable={wind != null || gusts != null}>
       <BoxTitle title={title} />
 

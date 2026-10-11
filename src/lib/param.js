@@ -28,8 +28,8 @@ export const param = {
   weatherDesc: 'text-xs/4 sm:text-sm/5',
   weatherDescMain: 'text-lg sm:text-2xl font-semibold',
   weatherDescSub: 'text-sm/5 sm:text-base/6',
-  weatherBoxheight: 'h-[calc(100dvh-40px)]',
-  weatherBoxStyles: 'absolute top-12 w-full min-w-[340px] sm:px-[calc((100%-600px)/2)] sm:left-1/2 sm:-translate-x-1/2 overflow-x-hidden',
+  weatherCardheight: 'h-[calc(100dvh-40px)]',
+  weatherCardStyles: 'absolute top-12 w-full min-w-[340px] sm:px-[calc((100%-600px)/2)] sm:left-1/2 sm:-translate-x-1/2 overflow-x-hidden',
   max: (arr) => {
     const values = (arr ?? []).filter(value => value != null)
     return values.length

@@ -9,9 +9,9 @@ import WeeklyWind from "./wind"
 import WeeklyTemperature from "./temperature"
 import WeeklyPrecipitation from "./precipitation"
 import DailySun from "./dailySun"
-import BoxTitle from "../weatherBox/boxTitle"
+import CardTitle from "../weatherCard/cardTitle"
 
-export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDisplay, daily, hourly, indexD, index }) {
+export default function WeeklyCard({ cardClicked, setCardClicked, display, setDisplay, daily, hourly, indexD, index }) {
   const [weekly, setWeekly] = useState([])
   const [indexW, setIndexW] = useState(indexD)
   const today = new Date()
@@ -40,9 +40,9 @@ export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDispl
 
   return (
     <>
-      <div className={`${param.weatherBoxheight} ${param.weatherBoxStyles} px-2 duration-500 ease-in-out ${boxClicked ? 'top-12 opacity-100' : 'top-[100%] opacity-0'}`}>
-        {boxClicked && <div className='fixed left-0 w-full h-full z-0' onClick={() => {
-          setBoxClicked(false)
+      <div className={`${param.weatherCardheight} ${param.weatherCardStyles} px-2 duration-500 ease-in-out ${cardClicked ? 'top-12 opacity-100' : 'top-[100%] opacity-0'}`}>
+        {cardClicked && <div className='fixed left-0 w-full h-full z-0' onClick={() => {
+          setCardClicked(false)
           setTimeout(() => {
             setDisplay(null)
             setIndexW(indexD)
@@ -52,7 +52,7 @@ export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDispl
         <div className={`h-full w-full rounded-t-xl backdrop-blur-2xl bg-black/80 overflow-y-scroll select-none scrollbar-hide`}>
           <div className="px-4 py-4 sm:py-6 sm:px-16">
             <div className="mb-4 flex justify-center">
-              <BoxTitle title={display} />
+              <CardTitle title={display} />
             </div>
 
             <div className="grid grid-cols-7 gap-2 sm:gap-4">
@@ -125,8 +125,8 @@ export default function WeeklyBox({ boxClicked, setBoxClicked, display, setDispl
         </div>
       </div>
 
-      {boxClicked && <button onClick={() => {
-        setBoxClicked(false)
+      {cardClicked && <button onClick={() => {
+        setCardClicked(false)
         setTimeout(() => {
           setDisplay(null)
           setIndexW(indexD)

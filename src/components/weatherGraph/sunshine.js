@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphBox/weeklyLineGraphBox";
+import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
 import { getAvgArrDaytime, sunshineDuration } from "@/lib/param";
 
 export default function WeeklySunshine({ display, hourly, indexW, index, }) {

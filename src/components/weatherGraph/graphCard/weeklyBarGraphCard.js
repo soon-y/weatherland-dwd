@@ -1,7 +1,7 @@
 import { rainColorList, todayProgress } from "@/lib/param"
 import { useEffect, useState } from "react"
 
-export default function WeeklyBarGraphBox({ display, hourly, indexW, min, max, step, unit, index, hoverIndex, setHover, ratio = 1 }) {
+export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, step, unit, index, hoverIndex, setHover, ratio = 1 }) {
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const borderCnt = (max - min) / step

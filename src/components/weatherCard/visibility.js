@@ -1,15 +1,15 @@
-import Box from "./box"
+import Box from "./card"
 import { visibilityInfo, param } from "@/lib/param"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
-export default function Visibility({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Visibility({ hourly, index, setDisplay, setCardClicked }) {
   const visibility = hourly.metrics.visibility?.forecast[index]
 
   const current = visibility / 1000 < 10 ? visibility : Math.round(visibility / 1000)
   const title = 'visibility'
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={visibility === undefined ? false : true}>
+    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={visibility === undefined ? false : true}>
       <div>
         <BoxTitle title={title} />
         {visibility ?

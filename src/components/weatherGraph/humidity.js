@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphBox/weeklyLineGraphBox";
+import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param } from "@/lib/param";
 
 export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp }) {

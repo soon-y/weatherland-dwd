@@ -1,8 +1,8 @@
-import Box from "./box"
+import Box from "./card"
 import { param } from "@/lib/param"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
-export default function Humidity({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Humidity({ hourly, index, setDisplay, setCardClicked }) {
   const dewpoint = hourly?.metrics?.dewpoint_2m
   const relativeHumidity = hourly?.metrics?.relative_humidity
   const title = 'humidity'
@@ -42,7 +42,7 @@ export default function Humidity({ hourly, index, setDisplay, setBoxClicked }) {
   }
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={hourly.metrics.dewpoint_2m === undefined ? false : true}>
+    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly.metrics.dewpoint_2m === undefined ? false : true}>
       <div>
         <BoxTitle title={title} />
         {dewpoint && relativeHumidity ?

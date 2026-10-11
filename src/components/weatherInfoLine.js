@@ -1,6 +1,6 @@
 import { titleSvg } from "@/lib/param";
 
-export default function InfoBox({title=null, info1, unit1 = '', info2 = '', unit2 = '', condition = true, isDay = 0, info3 = null}) {
+export default function InfoLine({title=null, info1, unit1 = '', info2 = '', unit2 = '', condition = true, isDay = 0, info3 = null}) {
   return (
     <>
       {condition &&

@@ -1,5 +1,5 @@
 import { daylightDuration } from "@/lib/param"
-import DailyGraphBox from "./graphBox/dailyBarGraphBox"
+import DailyGraphCard from "./graphCard/dailyBarGraphCard"
 
 export default function DailySun({ indexW, setIndexW, sunrise, sunset}) {
   const { hour, min } = daylightDuration(sunrise[indexW], sunset[indexW], false)
@@ -26,7 +26,7 @@ export default function DailySun({ indexW, setIndexW, sunrise, sunset}) {
 
       </div>
 
-      <DailyGraphBox
+      <DailyGraphCard
         indexW={indexW} setIndexW={setIndexW} min={0} max={24} step={2} unit={'time'}
         barStart={sunrise} barEnd={sunset} barLength={daylight} total={24 * 60 * 60 * 1000}
       />

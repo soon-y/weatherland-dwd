@@ -1,7 +1,7 @@
 import { param, todayProgress } from "@/lib/param"
 import { useEffect, useState } from "react"
 
-export default function DailyBarGraphBox({ min, max, step, unit, barStart, barEnd, barLength, total, setIndexW, ratio = 1 }) {
+export default function DailyBarGraphCard({ min, max, step, unit, barStart, barEnd, barLength, total, setIndexW, ratio = 1 }) {
   const today = new Date()
   const todayDay = today.getDay()
   const [val, setVal] = useState([])

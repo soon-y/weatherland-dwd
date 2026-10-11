@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import WeeklyGraphBox from "./graphBox/weeklyLineGraphBox";
+import WeeklyGraphBox from "./graphCard/weeklyLineGraphCard";
 import { getMaxArr, getWindLevel, param } from "@/lib/param";
 
 export default function WeeklyWind({ display, indexW, index, wind, gusts, code }) {

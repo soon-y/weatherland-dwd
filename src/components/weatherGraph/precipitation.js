@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { getAvgArr, getTotalSumArr, param, precipIntensity, weatherInfo } from "@/lib/param"
-import WeeklyBarGraphBox from "./graphBox/weeklyBarGraphBox"
-import WeeklyLineGraphBox from "./graphBox/weeklyLineGraphBox"
+import WeeklyBarGraphBox from "./graphCard/weeklyBarGraphCard"
+import WeeklyLineGraphBox from "./graphCard/weeklyLineGraphCard"
 
 export default function WeeklyPrecipitation({ display, indexW, index, hourProbability, hourPrecipitation, code }) {
   const [hoverIndex, setHover] = useState(index)

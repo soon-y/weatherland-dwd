@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
-import Box from "./box"
+import Box from "./card"
 import { param, tempColorIndex, tempColorList } from "@/lib/param"
 import WeatherIcon from "../weatherIcon"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
 export default function Forecast({ hourly }) {
   const today = new Date()

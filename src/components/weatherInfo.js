@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { getTimeIndex, getWindDirectionArrow, visibilityInfo } from '@/lib/param'
 import WeatherDetails from './weatherDetails'
 import WeatherIcon from './weatherIcon'
-import InfoBox from './weatherInfoBox'
+import InfoLine from './weatherInfoLine'
 import { motion } from 'framer-motion'
 
 export default function WeatherInfo({ forecast, index, clicked }) {
@@ -86,25 +86,25 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           ${isDay ? 'text-black' : 'text-white'}`}
         >
           {temperature ?
-            <InfoBox title={'temperature'} isDay={isDay}
+            <InfoLine title={'temperature'} isDay={isDay}
               info1={temperature.forecast[index]} unit1={temperature.unit}
             /> :
-            <InfoBox title={'temperature'} isDay={isDay} info1={'N/A'} />
+            <InfoLine title={'temperature'} isDay={isDay} info1={'N/A'} />
           }
 
           {(prob != null || precip != null) ? (
-            <InfoBox title="precipitation" isDay={isDay}
+            <InfoLine title="precipitation" isDay={isDay}
               info1={prob?.forecast?.[index] ?? 'N/A'}
               unit1={prob?.forecast?.[index] != null ? '%' : ''}
               info2={precip?.forecast?.[index] > 0 ? precip.forecast[index] : ''}
               unit2={precip?.forecast?.[index] > 0 ? 'mm' : ''}
             />
           ) : (
-            <InfoBox title="precipitation" isDay={isDay} info1="N/A" />
+            <InfoLine title="precipitation" isDay={isDay} info1="N/A" />
           )}
 
           {windSpeed != null ? (
-            <InfoBox
+            <InfoLine
               title="wind"
               isDay={isDay}
               info1={windSpeed}
@@ -117,35 +117,35 @@ export default function WeatherInfo({ forecast, index, clicked }) {
               condition={windSpeed > 29}
             />
           ) : (
-            <InfoBox title="wind" isDay={isDay} info1="N/A" />
+            <InfoLine title="wind" isDay={isDay} info1="N/A" />
           )}
 
           {visibility ?
-            <InfoBox title={'visibility'} isDay={isDay}
+            <InfoLine title={'visibility'} isDay={isDay}
               info1={visibilityInfo(visibility).state}
               info2={visibility} unit2={'m'}
               condition={visibility < 4000}
             /> :
-            <InfoBox title={'visibility'} isDay={isDay} info1={'N/A'} />
+            <InfoLine title={'visibility'} isDay={isDay} info1={'N/A'} />
           }
 
           {(daily.sunrise && daily.sunset) ? <>
-            <InfoBox title={'sunrise'} isDay={isDay}
+            <InfoLine title={'sunrise'} isDay={isDay}
               info1={sunriseToday?.split('T')[1]}
               condition={now < sunriseTimeToday}
             />
 
-            <InfoBox title={'sunset'} isDay={isDay}
+            <InfoLine title={'sunset'} isDay={isDay}
               info1={sunsetToday?.split('T')[1]}
               condition={sunriseTimeToday <= now && now < sunsetTimeToday}
             />
 
-            <InfoBox title={'sunrise'} isDay={isDay}
+            <InfoLine title={'sunrise'} isDay={isDay}
               info1={sunriseNext?.split('T')[1]}
               condition={sunsetTimeToday <= now}
             />
           </> :
-            <InfoBox title={'sunrise'} isDay={isDay} info1={'N/A'} />
+            <InfoLine title={'sunrise'} isDay={isDay} info1={'N/A'} />
           }
         </motion.div>
       </div>

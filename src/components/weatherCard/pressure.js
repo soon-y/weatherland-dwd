@@ -1,9 +1,9 @@
 import Image from "next/image"
-import Box from "./box"
+import Box from "./card"
 import { param, pressure } from "@/lib/param"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
-export default function Pressure({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Pressure({ hourly, index, setDisplay, setCardClicked }) {
   const current = Math.round(hourly?.forecast[index] ?? 0)
   const before = index > 1 ? hourly?.forecast[index - 1] : current
   const title = 'pressure'
@@ -31,7 +31,7 @@ export default function Pressure({ hourly, index, setDisplay, setBoxClicked }) {
 
   return (
     <>
-      <Box className="hidden sm:block" style={'square'} setDisplay={setDisplay} title={'pressure'} setBoxClicked={setBoxClicked} clickable={hourly === undefined ? false : true}>
+      <Box className="hidden sm:block" style={'square'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
         <div>
           <BoxTitle title={title} />
           {
@@ -64,7 +64,7 @@ export default function Pressure({ hourly, index, setDisplay, setBoxClicked }) {
           </div>}
       </Box>
 
-      <Box className="sm:hidden" style={'wide'} setDisplay={setDisplay} title={'pressure'} setBoxClicked={setBoxClicked} clickable={hourly === undefined ? false : true}>
+      <Box className="sm:hidden" style={'wide'} setDisplay={setDisplay} title={'pressure'} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
         <BoxTitle title={title} />
 
         <div className='grid grid-cols-[58%_40%_2%]'>

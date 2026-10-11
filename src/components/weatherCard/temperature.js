@@ -1,8 +1,8 @@
-import Box from "./box"
+import Box from "./card"
 import { getTimeIndex, param } from "@/lib/param"
-import BoxTitle from "./boxTitle"
+import BoxTitle from "./cardTitle"
 
-export default function Temperature({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Temperature({ hourly, index, setDisplay, setCardClicked }) {
   const title = 'temperature'
   const temp = hourly.metrics.temperature_2m?.forecast[index]
   const unit = hourly.metrics.temperature_2m?.unit ?? ''
@@ -13,7 +13,7 @@ export default function Temperature({ hourly, index, setDisplay, setBoxClicked }
   const max = hourly.metrics.temperature_max_12h?.forecast[index12]
 
   return (
-    <Box style={'square'} setDisplay={setDisplay} title={title} setBoxClicked={setBoxClicked} clickable={hourly.metrics.temperature_2m === undefined ? false : true}>
+    <Box style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly.metrics.temperature_2m === undefined ? false : true}>
       <div className="flex flex-col justify-between h-full">
         <div>
           <BoxTitle title={title} />
