@@ -64,7 +64,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
                 <div>
                   {probability}
                   <span className="text-lg">
-                    {probability ? ' %' : 'N/A'}
+                    {probability !=null ? ' %' : 'N/A'}
                   </span>
                 </div>
 

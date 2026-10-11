@@ -93,7 +93,10 @@ export default function WeatherInfo({ forecast, index, clicked }) {
           }
 
           {(prob != null || precip != null) ? (
-            <InfoLine title="precipitation" isDay={isDay}
+            <InfoLine
+              title="precipitation"
+              isDay={isDay}
+              condition={prob?.forecast?.[index] !== 0}
               info1={prob?.forecast?.[index] ?? 'N/A'}
               unit1={prob?.forecast?.[index] != null ? '%' : ''}
               info2={precip?.forecast?.[index] > 0 ? precip.forecast[index] : ''}
