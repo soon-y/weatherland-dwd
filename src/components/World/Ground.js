@@ -1,9 +1,9 @@
 import { useGLTF } from '@react-three/drei'
-import { param, useIsDebug } from '@/lib/param'
+import { param } from '@/lib/param'
 import { Bench } from './Bench'
 import { Post } from './post'
 
-export default function WorldGround({ store, forecast, index }) {
+export default function WorldGround() {
   const { nodes, materials } = useGLTF('models/land.glb')
 
   return (

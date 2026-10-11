@@ -52,7 +52,7 @@ function World({ forecast, index }) {
 
           <group position={param.worldPos}>
             <Environment store={levaStore} forecast={forecast} index={index} indexD={indexD} levaValuesRef={levaValuesRef} />
-            <WorldGround store={levaStore} forecast={forecast} index={index} />
+            <WorldGround />
           </group>
         </Suspense>
       </Canvas>
