@@ -11,7 +11,7 @@ import Wind from './weatherBox/wind'
 import Humidity from './weatherBox/humidity'
 import Pressure from './weatherBox/pressure'
 import WeeklyBox from './weatherGraph/weeklyBox'
-import Tmperature from './weatherBox/temperature'
+import Temperature from './weatherBox/temperature'
 import Sunshine from './weatherBox/sunshine'
 
 export default function WeatherDetails({ open, forecast, daily, index, indexD, setOpen, clicked }) {
@@ -29,7 +29,7 @@ export default function WeatherDetails({ open, forecast, daily, index, indexD, s
         }}></div>
         }
         <Forecast hourly={forecast} />
-        <Tmperature hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
+        <Temperature hourly={forecast} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Precipitation hourly={forecast} index={index} indexD={indexD} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Sunshine hourly={forecast.metrics.sunshine_duration_1h} index={index} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />
         <Sunrise daily={daily} hourly={forecast} index={index} indexD={indexD} setDisplay={setDisplay} setBoxClicked={setBoxClicked} />

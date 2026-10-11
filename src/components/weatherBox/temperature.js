@@ -2,7 +2,7 @@ import Box from "./box"
 import { getTimeIndex, param } from "@/lib/param"
 import BoxTitle from "./boxTitle"
 
-export default function Tmperature({ hourly, index, setDisplay, setBoxClicked }) {
+export default function Temperature({ hourly, index, setDisplay, setBoxClicked }) {
   const title = 'temperature'
   const temp = hourly.metrics.temperature_2m?.forecast[index]
   const unit = hourly.metrics.temperature_2m?.unit ?? ''
