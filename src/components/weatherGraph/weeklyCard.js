@@ -40,7 +40,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
 
   return (
     <>
-      <div className={`${param.weatherCardheight} ${param.weatherCardStyles} px-2 duration-500 ease-in-out ${cardClicked ? 'top-12 opacity-100' : 'top-[100%] opacity-0'}`}>
+      <div className={`${param.weatherCardheight} ${param.weatherCardStyles} z-1000 px-2 duration-500 ease-in-out ${cardClicked ? 'top-12 opacity-100' : 'top-[100%] opacity-0'}`}>
         {cardClicked && <div className='fixed left-0 w-full h-full z-0' onClick={() => {
           setCardClicked(false)
           setTimeout(() => {
@@ -49,7 +49,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
           }, 300)
         }}></div>
         }
-        <div className={`h-full w-full rounded-t-xl backdrop-blur-2xl bg-black/80 overflow-y-scroll select-none scrollbar-hide`}>
+        <div className={`h-full w-full rounded-t-xl backdrop-blur-2xl bg-black/80 overflow-y-hidden select-none scrollbar-hide`}>
           <div className="px-4 py-4 sm:py-6 sm:px-16">
             <div className="mb-4 flex justify-center">
               <CardTitle title={display} />
