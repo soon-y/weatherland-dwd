@@ -67,7 +67,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
                   <span className="text-lg"> %</span>
                 </div>
               ) : (
-                <p className="text-lg">N/A</p>
+                <p className="text-lg mt-1">N/A</p>
               )}
 
               {precipitation != null ? (
@@ -84,7 +84,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
                   )}
                 </div>
               ) : (
-                <p className="text-lg">N/A</p>
+                <p className="text-lg mt-1">N/A</p>
               )}
             </>
           ) : (
