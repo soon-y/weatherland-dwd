@@ -211,6 +211,13 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       delta
     )
 
+    weather.current.snow = THREE.MathUtils.damp(
+      weather.current.snow,
+      targetWeather.current.snow,
+      5,
+      delta
+    )
+
     weather.current.visibility = THREE.MathUtils.damp(
       weather.current.visibility,
       targetWeather.current.visibility,
