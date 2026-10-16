@@ -132,7 +132,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
           setIndexW(indexD)
         }, 300)
       }}
-        className='fixed right-3 bottom-3 text-white p-2 bg-black/50 outline outline-black rounded-full cursor-pointer'><X />
+        className='z-10000 fixed right-3 bottom-3 text-white p-2 bg-black/50 outline outline-black rounded-full cursor-pointer'><X />
       </button>}
     </>
   )
