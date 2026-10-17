@@ -4,8 +4,8 @@ import CardTitle from "./cardTitle"
 
 export default function Visibility({ hourly, index, setDisplay, setCardClicked }) {
   const visibility = hourly.metrics.visibility?.forecast[index]
-
-  const current = visibility / 1000 < 10 ? visibility : Math.round(visibility / 1000)
+  const isless5k = visibility / 1000 < 5
+  const current = isless5k ? visibility : Math.round(visibility / 1000)
   const title = 'visibility'
 
   return (
@@ -13,7 +13,7 @@ export default function Visibility({ hourly, index, setDisplay, setCardClicked }
       <div>
         <CardTitle title={title} />
         {visibility ?
-          <p className={param.weatherDescMain}>{current} k{hourly?.metrics.visibility.unit}</p> :
+          <p className={param.weatherDescMain}>{current} {!isless5k && 'k'}{hourly?.metrics.visibility.unit}</p> :
           <p className={param.weatherDescMain}>N/A</p>
         }
       </div>
