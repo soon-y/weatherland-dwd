@@ -1,8 +1,7 @@
-export function processForecast(data, offset) {
+export function processForecast(data, timezone) {
   const result = structuredClone(data.forecast.data)
   const daily = data.daily.daily
 
-  const offsetMs = parseOffset(offset)
   const temperature = result.find(item => item.metricKey === 'temperature_2m')
   const dewPoint = result.find(item => item.metricKey === 'dewpoint_2m')
 
@@ -17,9 +16,7 @@ export function processForecast(data, offset) {
   )
 
   const timestamps = (timestampSource?.forecast ?? []).map(item =>
-    new Date(new Date(item.timestamp).getTime() + offsetMs)
-      .toISOString()
-      .replace('Z', '')
+    toLocalTimestamp(item.timestamp, timezone)
   )
 
   if (daily.sunrise && daily.sunset) {
@@ -61,9 +58,7 @@ export function processForecast(data, offset) {
       typeof metric.forecast[0] === 'object'
     ) {
       metric.timestamps = metric.forecast.map(item =>
-        new Date(new Date(item.timestamp).getTime() + offsetMs)
-          .toISOString()
-          .replace('Z', '')
+        toLocalTimestamp(item.timestamp, timezone)
       )
     }
 
@@ -181,9 +176,23 @@ function calcDailyMinMax(values, timestamps) {
   return { min, max }
 }
 
-function parseOffset(offset) {
-  const sign = offset.startsWith('-') ? -1 : 1
-  const [hours, minutes] = offset.slice(1).split(':').map(Number)
+function toLocalTimestamp(timestamp, timeZone) {
+  const date = new Date(new Date(timestamp).getTime() - 60 * 60 * 1000)
 
-  return sign * (hours * 60 + minutes) * 60 * 1000
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(date)
+
+  const p = Object.fromEntries(
+    parts.map(({ type, value }) => [type, value])
+  )
+
+  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`
 }

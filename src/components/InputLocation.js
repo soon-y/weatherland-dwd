@@ -18,12 +18,12 @@ export default function InputArea({ setGeolocation, hide }) {
 
     const fetchInfo = async () => {
       try {
-        const { suburb, postcode, country, timezone, offset } =
+        const { suburb, postcode, country, timezone } =
           await reverseGeo(latitude, longitude)
 
         setLatitudeVal(latitude)
         setLongitudeVal(longitude)
-        setGeolocation({ lat: latitude, lon: longitude, timezone, offset })
+        setGeolocation({ lat: latitude, lon: longitude, timezone })
         setSuburbArea(suburb)
         setPostcodeVal(postcode)
         setCountryVal(country)
@@ -39,11 +39,11 @@ export default function InputArea({ setGeolocation, hide }) {
     if (flag == 'Latitude' || flag == 'Longitude') {
       const fetchInfo = async () => {
         try {
-          const { suburb, postcode, country, timezone, offset } = await reverseGeo(latitudeVal, longitudeVal)
+          const { suburb, postcode, country, timezone } = await reverseGeo(latitudeVal, longitudeVal)
           setSuburbArea(suburb)
           setPostcodeVal(postcode)
           setCountryVal(country)
-          setGeolocation({ lat: latitudeVal, lon: longitudeVal, timezone, offset })
+          setGeolocation({ lat: latitudeVal, lon: longitudeVal, timezone })
         } catch (err) {
           console.log(err)
         }
@@ -52,10 +52,10 @@ export default function InputArea({ setGeolocation, hide }) {
     } else if (flag == 'Region' || flag == 'Postcode' || flag == 'Country') {
       const fetchInfo = async () => {
         try {
-          const { lat, lon, suburb, postcode, country, timezone, offset } = await forwardGeo(suburbArea, postcodeVal, countryVal)
+          const { lat, lon, suburb, postcode, country, timezone } = await forwardGeo(suburbArea, postcodeVal, countryVal)
           setLatitudeVal(lat)
           setLongitudeVal(lon)
-          setGeolocation({ lat, lon, timezone, offset })
+          setGeolocation({ lat, lon, timezone })
           setSuburbArea(suburb)
           setPostcodeVal(postcode)
           setCountryVal(country)

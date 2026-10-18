@@ -10,7 +10,7 @@ import Image from 'next/image'
 
 export default function Home() {
   const [forecastData, setForecastData] = useState(null)
-  const [{ lat, lon, timezone, offset }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null, offset: null })
+  const [{ lat, lon, timezone }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null})
   const [index, setIndex] = useState(null)
   const [infoClicked, setInfoClicked] = useState(false)
   const [resOk, setResOk] = useState(true)
@@ -33,7 +33,7 @@ export default function Home() {
     const fetchInfo = async () => {
       try {
         const res = await fetch(
-          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}&offset=${offset}`
+          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}`
         )
         if (!res.ok) {
           setResOk(false)
@@ -42,6 +42,7 @@ export default function Home() {
 
         const data = await res.json()
         if (cancelled) return
+        //console.log(data)
 
         if (!hasShownData || !data.stale) {
           setIsStale(data.stale)
@@ -70,7 +71,7 @@ export default function Home() {
       cancelled = true
       clearTimeout(retryTimer)
     }
-  }, [lat, lon, timezone, offset])
+  }, [lat, lon, timezone])
 
   return (
     <div className='w-screen h-dvh overflow-hidden'>

@@ -5,7 +5,6 @@ export async function reverseGeo(lat, lon) {
 
   const fallback = {
     timezone: "Europe/Berlin",
-    offset: "+01:00",
     suburb: "Unknown",
     postcode: "Zip code",
     country: "Country",
@@ -24,7 +23,6 @@ export async function reverseGeo(lat, lon) {
 
     return {
       timezone: props.timezone?.name || "",
-      offset: props.timezone?.offset_STD || "+00:00",
       suburb: props.suburb || props.district || props.city || "Unknown",
       postcode: props.postcode || "Zip code",
       country: props.country || "Country",
@@ -37,7 +35,6 @@ export async function reverseGeo(lat, lon) {
 export async function forwardGeo(place, zip, country) {
   const fallback = {
     timezone: "Europe/Berlin",
-    offset: "+01:00",
     suburb: "HafenCity",
     postcode: "20457",
     country: "Germany",
@@ -83,7 +80,6 @@ export async function forwardGeo(place, zip, country) {
 
     return {
       timezone: props.timezone?.name || "",
-      offset: props.timezone?.offset_STD || "+00:00",
       suburb:
         props.suburb ||
         props.district ||

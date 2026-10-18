@@ -29,7 +29,6 @@ export async function GET(req) {
   const lon = Number(searchParams.get('lon'))
   const date = searchParams.get('date')
   const timezone = searchParams.get('timezone')
-  const offset = searchParams.get('offset')
 
   try {
     let raw
@@ -47,7 +46,7 @@ export async function GET(req) {
       raw = await fetchForecast(lat, lon, timezone)
     }
 
-    const processed = processForecast(raw, offset)
+    const processed = processForecast(raw, timezone)
 
     if (sql) {
       await sql`
