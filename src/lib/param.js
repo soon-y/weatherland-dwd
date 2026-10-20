@@ -33,22 +33,22 @@ export const param = {
   max: (arr) => {
     const values = (arr ?? []).filter(value => value != null)
     return values.length
-      ? Math.ceil(Math.max(...values) / 10) * 10 : 0
+      ? Math.ceil(Math.max(...values) / 1000) * 1000 : 0
   },
   min: (arr) => {
     const values = (arr ?? []).filter(value => value != null)
     return values.length
-      ? Math.floor(Math.min(...values) / 10) * 10 : 0
+      ? Math.floor(Math.min(...values) / 1000) * 1000 : 0
   },
   maxInTwo: (arr1, arr2) => {
     const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
     return values.length
-      ? Math.ceil(Math.max(...values) / 10) * 10 : 0
+      ? Math.ceil(Math.max(...values) / 1000) * 1000 : 0
   },
   minInTwo: (arr1, arr2) => {
     const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
     return values.length
-      ? Math.floor(Math.min(...values) / 10) * 10 : 0
+      ? Math.floor(Math.min(...values) / 1000) * 1000 : 0
   },
 
   // Scene
@@ -343,34 +343,12 @@ export const visibilityInfo = (val) => {
     return { state: "", desc: "" }
   }
 
-  if (val >= 10000) {
-    return {
-      state: "Very good",
-      desc: "Clear conditions with excellent visibility."
-    }
-  }
-  if (val >= 4000) {
-    return {
-      state: "Good",
-      desc: "Good visibility across the area."
-    }
-  }
-  if (val >= 2000) {
-    return {
-      state: "Moderate",
-      desc: "Distant objects may be difficult to see."
-    }
-  }
-  if (val >= 1000) {
-    return {
-      state: "Poor",
-      desc: "Visibility is limited to a short distance."
-    }
-  }
-  return {
-    state: "Very poor",
-    desc: "Very poor visibility. Travel may be difficult."
-  }
+  if (val >= 40000) return { state: "Excellent", desc: "Exceptional visibility over long distances." }
+  if (val >= 20000) return { state: "Very good", desc: "Very good visibility over long distances." }
+  if (val >= 10000) return { state: "Good", desc: "Good visibility." }
+  if (val >= 4000) return { state: "Moderate", desc: "Distant objects may appear less clear." }
+  if (val >= 1000) return { state: "Poor", desc: "Distant objects are difficult to see." }
+  return { state: "Very poor", desc: "Visibility is severely reduced." }
 }
 export const pressureOffsets = [10, 35, 60, 100]
 export const pressureColorList = [
