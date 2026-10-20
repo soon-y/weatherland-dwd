@@ -33,7 +33,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
   const weather = useRef({
     rain: 0,
     snow: 0,
-    visibility: 5000,
+    visibility: 10000,
     probability: 0,
     temperature: null
   })
@@ -41,7 +41,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
   const targetWeather = useRef({
     rain: 0,
     snow: 0,
-    visibility: 5000,
+    visibility: 10000,
     probability: 0,
     temperature: null
   })
@@ -172,10 +172,11 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       delta * 3
     )
 
-    windSpeedRef.current = THREE.MathUtils.lerp(
+    windSpeedRef.current = THREE.MathUtils.damp(
       windSpeedRef.current,
       targetSpeed,
-      delta * 3
+      3,
+      delta
     )
 
     const cycleTime = timeRef.current % gustCycle
@@ -193,10 +194,11 @@ export default function Environment({ store, forecast, index, indexD, levaValues
 
       const targetFinalWindSpd = baseSpeed + gustEffect
 
-      finalWindSpd.current = THREE.MathUtils.lerp(
+      finalWindSpd.current = THREE.MathUtils.damp(
         finalWindSpd.current,
         targetFinalWindSpd,
-        delta * gustTransitionSpeed
+        gustTransitionSpeed,
+        delta
       )
     }
 
