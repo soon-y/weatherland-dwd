@@ -49,7 +49,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
           }, 300)
         }}></div>
         }
-        <div className={`h-full w-full rounded-t-xl backdrop-blur-2xl bg-black/80 overflow-y-hidden select-none scrollbar-hide`}>
+        <div className={`h-full w-full rounded-t-xl backdrop-blur-2xl bg-black/80 overflow-y-auto select-none scrollbar-hide`}>
           <div className="px-4 py-4 sm:py-6 sm:px-16">
             <div className="mb-4 flex justify-center">
               <CardTitle title={display} />
