@@ -229,8 +229,11 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
         >
           {val.map((el, i) => (
             display === 'visibility' ?
-              <p key={i}>{Math.round(el / 1000)}</p> :
-              <p key={i}>{el}</p>
+              <p key={i}>{Math.round(el / 1000)}</p>
+              : display === 'sunshine' ?
+                <p key={i}>{el / 60}</p>
+                :
+                <p key={i}>{el}</p>
           ))}
         </div>
 
