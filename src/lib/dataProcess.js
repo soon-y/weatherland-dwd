@@ -1,23 +1,84 @@
 export function processForecast(data, timezone) {
+
   const result = structuredClone(data.forecast.data)
   const daily = data.daily.daily
 
   const temperature = result.find(item => item.metricKey === 'temperature_2m')
   const dewPoint = result.find(item => item.metricKey === 'dewpoint_2m')
 
-  const timestampSource = temperature ?? result.find(metric =>
-    (
-      metric.metricKey.includes('1h') ||
-      metric.metricKey.includes('10m') ||
-      metric.metricKey.includes('dewpoint_2m') ||
-      metric.metricKey.includes('surface_pressure')
-    ) &&
-    metric.forecast?.some(item => item?.timestamp != null)
-  )
+console.log(temperature.forecast[0])
+
+  const isHourlyMetric = metric =>
+    metric.metricKey === 'temperature_2m' ||
+    metric.metricKey.includes('1h') ||
+    metric.metricKey.includes('10m') ||
+    metric.metricKey.includes('dewpoint_2m') ||
+    metric.metricKey.includes('surface_pressure')
+
+  const timestampSource =
+    temperature ??
+    result.find(metric =>
+      isHourlyMetric(metric) &&
+      metric.forecast?.some(item => item?.timestamp != null)
+    )
 
   const timestamps = (timestampSource?.forecast ?? []).map(item =>
     toLocalTimestamp(item.timestamp, timezone)
   )
+
+  // DST correction
+  for (let i = 1; i < timestamps.length; i++) {
+    const prev = timestamps[i - 1]
+    const current = timestamps[i]
+
+    if (!prev || !current) continue
+
+    // ----------------------------------------
+    // 1. Overlapping hour
+    // ----------------------------------------
+
+    if (prev === current) {
+      timestamps.splice(i, 1)
+
+      result.forEach(metric => {
+        if (!isHourlyMetric(metric)) return
+
+        metric.forecast.splice(i, 1)
+      })
+
+      i--
+      continue
+    }
+
+    // ----------------------------------------
+    // 2. Missing hour
+    // ----------------------------------------
+
+    const prevTime = timestampToNumber(prev)
+    const currentTime = timestampToNumber(current)
+
+    const oneHour = 60 * 60 * 1000
+
+    if (currentTime - prevTime > oneHour) {
+      const missingTimestamp = formatTimestamp(
+        new Date(prevTime + oneHour)
+      )
+
+      timestamps.splice(i, 0, missingTimestamp)
+
+      result.forEach(metric => {
+        if (!isHourlyMetric(metric)) return
+
+        // 현재(뒤) 데이터 복사
+        const nextItem = metric.forecast[i]
+
+        metric.forecast.splice(i, 0, {
+          ...nextItem,
+          timestamp: missingTimestamp
+        })
+      })
+    }
+  }
 
   if (daily.sunrise && daily.sunset) {
     const dayMap = Object.fromEntries(
@@ -195,4 +256,19 @@ function toLocalTimestamp(timestamp, timeZone) {
   )
 
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`
+}
+
+function timestampToNumber(timestamp) {
+  const [date, time] = timestamp.split('T')
+  const [year, month, day] = date.split('-').map(Number)
+  const [hour, minute, second] = time.split(':').map(Number)
+
+  return Date.UTC(
+    year,
+    month - 1,
+    day,
+    hour,
+    minute,
+    second
+  )
 }
