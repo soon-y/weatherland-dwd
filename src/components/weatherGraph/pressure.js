@@ -8,8 +8,8 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
   const current = hourly[hoverIndex]
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
   const unit = 'hPa'
-  const minVal = Math.min(960, param.min(hourly))
-  const maxVal = Math.max(1060, param.max(hourly))
+  const minVal = Math.min(960, param.min(hourly, 100))
+  const maxVal = Math.max(1060, param.max(hourly, 100))
 
   useEffect(() => {
     const result = getAvgArr(hourly)

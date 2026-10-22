@@ -30,25 +30,27 @@ export const param = {
   weatherDescSub: 'text-sm/5 sm:text-base/6',
   weatherCardheight: 'h-[calc(100dvh-40px)]',
   weatherCardStyles: 'absolute top-12 w-full min-w-[340px] sm:px-[calc((100%-600px)/2)] sm:left-1/2 sm:-translate-x-1/2 overflow-x-hidden',
-  max: (arr) => {
+  max: (arr, step) => {
+    const values = (arr ?? []).filter(value => value != null)
+
+    return values.length
+      ? Math.ceil(Math.max(...values) / step) * step
+      : 0
+  },
+  min: (arr, step) => {
     const values = (arr ?? []).filter(value => value != null)
     return values.length
-      ? Math.ceil(Math.max(...values) / 1000) * 1000 : 0
+      ? Math.floor(Math.min(...values) / step) * step : 0
   },
-  min: (arr) => {
-    const values = (arr ?? []).filter(value => value != null)
-    return values.length
-      ? Math.floor(Math.min(...values) / 1000) * 1000 : 0
-  },
-  maxInTwo: (arr1, arr2) => {
+  maxInTwo: (arr1, arr2, step) => {
     const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
     return values.length
-      ? Math.ceil(Math.max(...values) / 1000) * 1000 : 0
+      ? Math.ceil(Math.max(...values) / step) * step : 0
   },
-  minInTwo: (arr1, arr2) => {
+  minInTwo: (arr1, arr2, step) => {
     const values = [...(arr1 ?? []), ...(arr2 ?? [])].filter(value => value != null)
     return values.length
-      ? Math.floor(Math.min(...values) / 1000) * 1000 : 0
+      ? Math.floor(Math.min(...values) / step) * step : 0
   },
 
   // Scene
