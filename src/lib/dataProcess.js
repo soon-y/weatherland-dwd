@@ -6,8 +6,6 @@ export function processForecast(data, timezone) {
   const temperature = result.find(item => item.metricKey === 'temperature_2m')
   const dewPoint = result.find(item => item.metricKey === 'dewpoint_2m')
 
-console.log(temperature.forecast[0])
-
   const isHourlyMetric = metric =>
     metric.metricKey === 'temperature_2m' ||
     metric.metricKey.includes('1h') ||
