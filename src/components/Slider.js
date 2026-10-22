@@ -12,6 +12,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   const [timeIndex, setTimeIndex] = useState(null)
   const [hover, setHover] = useState(null)
   const [sliderHeight, setSliderHeight] = useState(150)
+  const [sliderNum, setSliderNum] = useState(24 * 7)
   const graphSize = { w: graphWidth, h: sliderHeight * 0.3 }
   const temperature = forecast.metrics.temperature_2m?.forecast
   const weatherCode = forecast.metrics.weather_code?.forecast
@@ -22,17 +23,32 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   const minIndex = tempColorIndex(min)
   const maxIndex = tempColorIndex(max)
   const colorRange = tempColorList.slice(minIndex, maxIndex + 1)
-  const length = forecast.timestamps.length
-  const invalidTime = Number.isNaN(new Date(forecast?.timestamps?.[index]).getTime())
+  const timestamp = forecast?.timestamps
+  const invalidTime = Number.isNaN(new Date(timestamp?.[index]).getTime())
 
   useEffect(() => {
+    const firstDate = new Date(timestamp[0])
+
+    const todayCount = timestamp.filter(item => {
+      const date = new Date(item)
+
+      return (
+        date.getFullYear() === firstDate.getFullYear() &&
+        date.getMonth() === firstDate.getMonth() &&
+        date.getDate() === firstDate.getDate()
+      )
+    }).length
+
+    const sliderLength = todayCount + 24 * 6 + 1
+    setSliderNum(sliderLength)
+
     const handleResize = () => {
       const windowWidth = window.innerWidth - 16
       const divide = windowWidth > 1000 ? 10 : isMobile(windowWidth) ? 4 : 6
       const box = windowWidth / divide
 
       setBoxWidth(box)
-      setGraphWidth(box * length)
+      setGraphWidth(box * sliderNum)
       setSliderHeight(windowWidth >= 640 ? param.sliderHeight : 120)
     }
 
@@ -45,7 +61,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   }, [])
 
   useEffect(() => {
-    if (!ref.current || index > length - 6) return
+    if (!ref.current) return
 
     ref.current.scrollTo({
       left: boxWidth * index,
@@ -57,7 +73,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
 
     const tempArr = []
 
-    for (let i = 0; i < forecast.timestamps.length; i++) {
+    for (let i = 0; i < sliderNum; i++) {
       tempArr.push({
         index: i,
         time: forecast.timestamps[i]?.split('T')[1].slice(0, 2),
@@ -81,7 +97,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
     setTimeIndex(hourIndex)
     setIndex(hourIndex)
     setHourlyData(tempArr)
-  }, [forecast])
+  }, [forecast, sliderNum])
 
   const gradientId = useMemo(
     () => `color-${crypto.randomUUID()}`,
@@ -138,7 +154,23 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
     setHover(Math.round(x / boxWidth))
   }
 
-  const ptsTemp = temperature && points(temperature)
+  const ptsTemp = temperature && points(temperature.slice(0, sliderNum))
+
+  const now = new Date()
+  const pastIndex = timestamp.findIndex(time => new Date(time) > now)
+  let progress = 0
+
+  if (pastIndex === -1) {
+    progress = timestamp.length - 1
+  } else if (pastIndex === 0) {
+    progress = 0
+  } else {
+    const prevTime = new Date(timestamp[pastIndex - 1]).getTime()
+    const nextTime = new Date(timestamp[pastIndex]).getTime()
+    const ratio = (now.getTime() - prevTime) / (nextTime - prevTime)
+    progress = (pastIndex - 1) + ratio
+  }
+  const maskWidth = (progress / sliderNum) * 100
 
   if (!hourlyData) return
   return (
@@ -149,7 +181,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
           {hourlyData.map((el, i) => (
             <div key={i} onClick={() => setIndex(i)}
               className={`flex-shrink-0 snap-start flex flex-col relative cursor-pointer duration-500 hover:bg-white/10 text-white
-              ${i === index && "font-bold"} ${i === hover && "bg-white/10"}`}
+              ${i === index && "font-bold"} ${i === hover && "bg-white/10"} ${i < timeIndex && "opacity-50"}`}
               style={{ width: `${boxWidth}px`, height: sliderHeight + 'px' }}
             >
               <div className="grid grid-rows-[42px_35%_15%_20%] h-full">
@@ -174,7 +206,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
             <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
               top: '44px', left: boxWidth / 2,
               height: sliderHeight * 0.35 + 'px',
-              width: boxWidth * (length - 1),
+              width: boxWidth * (sliderNum - 1),
             }}>
               <svg width='100%' height='100%' className="relative overflow-visible" viewBox={`0 0 ${graphSize.w} ${graphSize.h}`}>
                 <defs>
@@ -187,6 +219,11 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
                       />
                     ))}
                   </linearGradient>
+
+                  <mask id="sliderMask" maskUnits="userSpaceOnUse">
+                    <rect x="0" y="0" width={graphSize.w} height={graphSize.h} fill="white" />
+                    <rect x="0" y="0" width={`${maskWidth}%`} height={graphSize.h + 10} fill="rgba(0,0,0,0.5)" />
+                  </mask>
                 </defs>
 
                 <g mask="url(#sliderMask)">
