@@ -6,11 +6,11 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
-  const maxVal = Math.max(50000, param.max(hourly))
+  const maxVal = Math.max(50000, param.max(hourly, 1000))
   const value = hourly?.[hoverIndex]
-  const isless5k = value / 1000 < 5
-  const current = isless5k ? value : (value / 1000).toFixed(1)
-  const unit = isless5k ? 'm' : 'km'
+  const isless4k = value / 1000 < 4
+  const current = isless4k ? value : (value / 1000).toFixed(1)
+  const unit = isless4k ? 'm' : 'km'
 
   useEffect(() => {
     const result = getAvgArr(hourly)
