@@ -29,7 +29,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
       <div className="pt-4 sm:pt-8">
         <div className="flex gap-2 justify-between">
           {validIndex ? (
-            <span>{hoverIndex - indexW * 24}:00</span>
+            <span>{hoverIndex - indexW * 24}:00 - {(hoverIndex - indexW * 24 + 1) % 24}:00</span>
           ) : (
             <>
               <span>Min</span>
@@ -47,7 +47,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
                   <span className="text-base">{unit}</span>
                 </>
               ) : (
-                <span>N/A</span>
+                <span className="text-lg">N/A</span>
               )}
             </div>
           ) : (
@@ -59,7 +59,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
                     <span className="text-base">{unit}</span>
                   </>
                 ) : (
-                  <span>N/A</span>
+                  <span className="text-lg">N/A</span>
                 )}
               </div>
 
@@ -70,7 +70,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
                     <span className="text-base">{unit}</span>
                   </>
                 ) : (
-                  <span>N/A</span>
+                  <span className="text-lg">N/A</span>
                 )}
               </div>
             </>

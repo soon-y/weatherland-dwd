@@ -36,7 +36,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         {
-          validIndex ? <span>{hoverIndex - indexW * 24}:00</span> : <span>Average</span>
+          validIndex ? <span>{hoverIndex - indexW * 24}:00 - {(hoverIndex - indexW * 24 + 1) % 24}:00</span> : <span>Average</span>
         }
 
         <div className="text-2xl flex gap-2 justify-between">
@@ -73,7 +73,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
                   </span>
                 </>
               ) : (
-                <span>N/A</span>
+                <span className="text-lg mt-1">N/A</span>
               )
             )
           }

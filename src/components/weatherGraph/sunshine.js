@@ -23,7 +23,7 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         {validIndex ? (
-          <span>{hoverIndex - indexW * 24}:00</span>
+          <span>{hoverIndex - indexW * 24}:00 - {(hoverIndex - indexW * 24 + 1) % 24}:00</span>
         ) : (
           <span>Average during daytime</span>
         )}
@@ -32,16 +32,15 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
           {validIndex ? (
             current != null ? (
               <>
-                <span className="font-bold">
-                  {sunshineDuration(current).state}
+                <span className="">
+                  {current / 60} <span className="text-base"> {unit}</span>
                 </span>
-                <span>
-                  {current / 60}
-                  <span className="text-base"> {unit}</span>
+                <span className="text-xl mt-1">
+                  {sunshineDuration(current).state}
                 </span>
               </>
             ) : (
-              <span className="mt-1 text-xl">N/A</span>
+              <span className="mt-1 text-lg">N/A</span>
             )
           ) : (
             avg[indexW] != null ? (
@@ -50,14 +49,14 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
                 <span className="text-lg"> {unit}</span>
               </span>
             ) : (
-              <span className="mt-1 text-xl">N/A</span>
+              <span className="mt-1 text-lg">N/A</span>
             )
           )}
         </div>
       </div>
 
       <WeeklyLineGraphCard
-        display={display} unit={'seconds'} min={0} max={maxVal} step={(maxVal) / 6}
+        display={display} unit={'mins'} min={0} max={maxVal} step={(maxVal) / 6}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>

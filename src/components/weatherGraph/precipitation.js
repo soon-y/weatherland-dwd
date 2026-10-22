@@ -45,7 +45,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
         <div className="flex gap-2 justify-between">
           {validIndex ? (
             <>
-              <span>{hoverIndex - indexW * 24}:00</span>
+              <span>{hoverIndex - indexW * 24}:00 - {(hoverIndex - indexW * 24 + 1) % 24}:00</span>
               {precipitation > 0 && (
                 <span className="capitalize">{type}</span>
               )}

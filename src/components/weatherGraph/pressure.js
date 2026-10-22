@@ -24,7 +24,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
     <div className="w-full pb-4">
       <div className="pt-4 sm:pt-8">
         {validIndex ? (
-          <span>{hoverIndex - indexW * 24}:00</span>
+          <span>{hoverIndex - indexW * 24}:00 - {(hoverIndex - indexW * 24 + 1) % 24}:00</span>
         ) : (
           <span>Average</span>
         )}
@@ -40,7 +40,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
                 <span>{pressure(current)}</span>
               </>
             ) : (
-              <span className="text-xl mt-1">N/A</span>
+              <span className="text-lg mt-1">N/A</span>
             )
           ) : (
             avg[indexW] != null ? (
@@ -52,7 +52,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index }) {
                 <span>{pressure(avg[indexW])}</span>
               </>
             ) : (
-              <span className="text-xl mt-1">N/A</span>
+              <span className="text-lg mt-1">N/A</span>
             )
           )}
         </div>
