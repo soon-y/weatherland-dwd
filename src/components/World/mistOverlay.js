@@ -64,7 +64,7 @@ export default function MistOverlay({ visibility, isDay = 0, weather }) {
     matRef.current.uniforms.uIsDay.value = isDay ? 1 : 0
 
     const mistStrength = THREE.MathUtils.clamp(
-      (3000 - visibilityValue) / 3000,
+      (4000 - visibilityValue) / 4000,
       0,
       1
     )
