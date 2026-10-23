@@ -390,7 +390,7 @@ export function getWindLevel(speed) {
   return "Hurricane force"
 }
 
-export function getWindDirectionArrow(deg, size = 12) {
+export function getWindDirectionArrow(deg, size = 14) {
   if (deg == null) return null
 
   const directions = [ArrowUp, ArrowUpRight, ArrowRight, ArrowDownRight, ArrowDown, ArrowDownLeft, ArrowLeft, ArrowUpLeft]
