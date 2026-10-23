@@ -73,12 +73,14 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
       </div>
 
       <WeeklyLineGraphCard ratio={2} graphRatio={2}
-        display={'probability'} unit={unit} min={0} max={100} step={20}
+        display={'humidity'} unit={unit} min={0} max={100} step={20}
         hourly={humidity} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
+      <div className="w-full h-2"></div>
+
       <WeeklyLineGraphCard ratio={2} graphRatio={2}
-        display={'temperature'} unit={'°C'} min={minVal} max={maxVal} step={5} hourly2={temp}
+        display={'dewpoint'} unit={'°C'} min={minVal} max={maxVal} step={5} hourly2={temp}
         hourly={dewPoint} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>

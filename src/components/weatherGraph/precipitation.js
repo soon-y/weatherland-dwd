@@ -115,6 +115,8 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
         hourly={hourProbability} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
+      <div className="w-full h-2"></div>
+
       <WeeklyBarGraphCard ratio={2}
         display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
         hourly={hourPrecipitation} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}

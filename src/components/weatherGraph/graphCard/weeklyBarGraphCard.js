@@ -5,9 +5,11 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const borderCnt = (max - min) / step
-  const topPos = '57px'
+  const topPos = ratio == 1 ? '54px' : '42px'
   const today = new Date()
   const hour = today.getHours()
+  const graphWidth = 'w-[calc(100%-24px)]'
+  const subtitleStyle = 'text-sm ml-2'
 
   useEffect(() => {
     const temp = []
@@ -57,11 +59,12 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
       <div className="w-full grid grid-cols-[1fr_24px]">
 
         <div className="py-2 -translate-x-2 flex justify-between items-center h-10">
+          {display == 'precipitation' && <p className={subtitleStyle}>Precipitation</p>}
         </div>
-        <p className="ml-2 py-2 text-xs sm:text-sm opacity-70 flex items-center h-14">{unit}</p>
+        <p className={`py-2 text-xs sm:text-sm opacity-70 flex items-center justify-center h-11`}>{unit}</p>
 
         {/* Graph grid */}
-        <div className="w-[calc(100%-24px)] absolute flex" style={{ top: topPos, aspectRatio: ratio }}>
+        <div className={`${graphWidth} absolute flex`} style={{ top: topPos, aspectRatio: ratio }}>
           {indexW === 0 && <div className="absolute h-full bg-black/70" style={{ width: todayProgress(today) + '%' }} />}
 
           {Array.from({ length: 6 }).map((_, i) => (
@@ -69,16 +72,16 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
           ))}
         </div>
 
-        <div className="w-[calc(100%-24px)] absolute flex flex-col" style={{ top: topPos, aspectRatio: ratio }}>
+        <div className={`${graphWidth} absolute flex flex-col`} style={{ top: topPos, aspectRatio: ratio }}>
           {Array.from({ length: borderCnt }).map((_, i) => (
             <div key={i} className={`w-full opacity-20 border-b flex-1 ${i === 0 && 'border-t'}`} />
           ))}
         </div>
 
         {/* Graph */}
-        <div className="w-full flex -translate-x-[calc(100%/48)]" style={{ aspectRatio: ratio }}>
+        <div className="w-full flex" style={{ aspectRatio: ratio }}>
           {hourly && Array.from({ length: 24 }).map((_, i) => (
-            <div key={i} className={`flex-1 h-full flex justify-center items-end  `}>
+            <div key={i} className={`flex-1 h-full flex justify-center items-end pb-[2px] `}>
               <div className={`rounded-t-sm w-[50%] flex justify-center ${(indexW === 0 && i < hour) ? 'opacity-50' : 'opacity-100'}`}
                 style={{ height: hourly?.[i + indexW * 24] / max * 100 + '%', background: barColor(hourly[i + indexW * 24]) }}
               />
@@ -89,23 +92,23 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
 
         {/* tick labels */}
         <div className="flex flex-col justify-between text-xs sm:text-sm pl-2"
-          style={{ height: `calc(${100 + (5 * ratio)}%)`, transform: `translateY(-${2 * ratio}%)` }}
+          style={{ height: `calc(${100 + (4 * ratio)}%)`, transform: `translateY(${8 - 12 * ratio}px)` }}
         >
           {val.map((el, i) => (
             <p key={i}>{el}</p>
           ))}
         </div>
 
-        <div className="flex justify-between mt-2 text-xs sm:text-sm w-[103%] -translate-x-[2%]">
+        <div className="flex justify-between text-xs sm:text-sm w-[103%] -translate-x-[1.5%] mt-1">
           {time.map((el, i) => (
             <p key={i}>{el}</p>
           ))}
         </div>
       </div>
 
-      <div className="w-[calc(100%-24px)] absolute flex" style={{ top: topPos, aspectRatio: ratio }}>
+      <div className={`absolute flex ${graphWidth}`} style={{ top: topPos, aspectRatio: ratio }}>
         {Array.from({ length: 24 }).map((_, i) => (
-          <div key={i} className={`flex-1 h-full ${i === hoverIndex - indexW * 24 && 'border-l'}`}
+          <div key={i} className={`flex-1 h-full ${i === hoverIndex - indexW * 24 && 'bg-white/10'}`}
             onClick={() => { setHover(indexW * 24 + i) }}
             onMouseOver={() => { setHover(indexW * 24 + i) }}
             onTouchMove={() => { setHover(indexW * 24 + i) }}
