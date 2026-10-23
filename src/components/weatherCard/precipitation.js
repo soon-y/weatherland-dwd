@@ -27,15 +27,18 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
             )}
 
             {precipitation?.forecast?.[index] != null && (
-              <p className={param.weatherDescSub}>
-                {precipitation.forecast[index]}
-                <span className="text-sm">
-                  {" "}mm
-                  {totalSum?.forecast?.[indexD] != null && (
-                    <> / {totalSum.forecast[indexD]} mm in total</>
-                  )}
-                </span>
-              </p>
+              <div className={param.weatherDescSub}>
+                <p>
+                  {precipitation.forecast[index]}
+                  <span className="text-sm"> mm</span>
+                </p>
+
+                {totalSum?.forecast?.[indexD] != null && (
+                  <p className="text-sm">
+                    {totalSum.forecast[indexD]} mm in total
+                  </p>
+                )}
+              </div>
             )}
           </>
         )}
