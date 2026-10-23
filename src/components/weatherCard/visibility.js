@@ -20,7 +20,7 @@ export default function Visibility({ hourly, index, setDisplay, setCardClicked }
 
       {visibility && <div>
         <p className={`${param.weatherDesc}`}>
-          {visibilityInfo(current).desc}
+          {visibilityInfo(visibility).desc}
         </p>
       </div>}
     </Card>
