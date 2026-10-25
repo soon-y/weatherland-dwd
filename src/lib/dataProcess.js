@@ -67,11 +67,11 @@ export function processForecast(data, timezone) {
       result.forEach(metric => {
         if (!isHourlyMetric(metric)) return
 
-        // 현재(뒤) 데이터 복사
-        const nextItem = metric.forecast[i]
+        // Fill the missing hour using the preceding value.
+        const prevItem = metric.forecast[i - 1]
 
         metric.forecast.splice(i, 0, {
-          ...nextItem,
+          ...prevItem,
           timestamp: missingTimestamp
         })
       })
