@@ -35,7 +35,7 @@ export default function Umbrella({ probability, weather, isDay = 0 }) {
   }, [probabilityValue])
 
   return (
-    <group dispose={null} scale={2.3} position={[0.33, -4.0, -3.05]} visible={probabilityValue > 0.5}>
+    <group dispose={null} scale={2.3} position={[0.33, -4.0, -3.05]} visible={probabilityValue > 0}>
       <mesh
         castShadow
         receiveShadow
