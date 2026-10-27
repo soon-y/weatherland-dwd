@@ -156,21 +156,38 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
 
   const ptsTemp = temperature && points(temperature.slice(0, sliderNum))
 
-  const now = new Date()
-  const pastIndex = timestamp.findIndex(time => new Date(time) > now)
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: timezone,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date())
+
+  const p = Object.fromEntries(parts.map(({ type, value }) => [type, value]))
+  const localNow = `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`
+  const toDisplayTime = value => Date.parse(`${value}Z`)
+
+  const nowTime = toDisplayTime(localNow)
+  const displayTimes = timestamp.map(toDisplayTime)
+  const pastIndex = displayTimes.findIndex(time => time > nowTime)
+
   let progress = 0
 
   if (pastIndex === -1) {
     progress = timestamp.length - 1
-  } else if (pastIndex === 0) {
-    progress = 0
-  } else {
-    const prevTime = new Date(timestamp[pastIndex - 1]).getTime()
-    const nextTime = new Date(timestamp[pastIndex]).getTime()
-    const ratio = (now.getTime() - prevTime) / (nextTime - prevTime)
-    progress = (pastIndex - 1) + ratio
+  } else if (pastIndex > 0) {
+    const prevTime = displayTimes[pastIndex - 1]
+    const nextTime = displayTimes[pastIndex]
+    const ratio = (nowTime - prevTime) / (nextTime - prevTime)
+
+    progress = pastIndex - 1 + ratio
   }
-  const maskWidth = (progress / sliderNum) * 100
+
+  const maskWidth = Math.max(0, Math.min(100, (progress / Math.max(1, sliderNum - 1)) * 100))
 
   if (!hourlyData) return
   return (
