@@ -16,8 +16,15 @@ function World({ forecast, index }) {
   const levaValuesRef = useRef({})
 
   useEffect(() => {
-    if (!forecast || index == null) return
-    setIndexD(Math.floor(index / 24))
+    const timestamp = forecast?.timestamps?.[index]
+    if (!timestamp) return
+
+    const selectedDate = timestamp.slice(0, 10)
+    const dayIndex = forecast.daily.time.findIndex(
+      date => date === selectedDate
+    )
+
+    setIndexD(dayIndex >= 0 ? dayIndex : null)
   }, [forecast, index])
 
   return (
