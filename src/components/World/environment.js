@@ -112,7 +112,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       probability: forecast.metrics.ww_prob_precip_1h?.forecast[index] ?? 0,
       temperature: forecast.metrics.temperature_2m?.forecast[index]
     }
-  }, [index, indexD])
+  }, [index, indexD, forecast])
 
   useEffect(() => {
     cancelAnimationFrame(rafRef.current)
