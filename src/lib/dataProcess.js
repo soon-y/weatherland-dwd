@@ -58,10 +58,7 @@ export function processForecast(data, timezone) {
     const oneHour = 60 * 60 * 1000
 
     if (currentTime - prevTime > oneHour) {
-      const missingTimestamp = formatTimestamp(
-        new Date(prevTime + oneHour)
-      )
-
+      const missingTimestamp = new Date(prevTime + oneHour).toISOString().slice(0, 19)
       timestamps.splice(i, 0, missingTimestamp)
 
       result.forEach(metric => {
