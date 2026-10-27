@@ -14,7 +14,7 @@ export default function Pond({ progress, windDir, windSpd, rain, temp, weather }
   const freezeRef = useRef(0)
 
   const rainValue = rain ?? weather.current.rain
-  const tempValue = temp ?? weather.current.temperature
+  const tempValue = temp ?? weather?.current.temperature
 
   const uniforms = useMemo(() => ({
     uWindDir: { value: new THREE.Vector2(Math.cos(windDir.current), Math.sin(windDir.current)) },
@@ -58,8 +58,8 @@ export default function Pond({ progress, windDir, windSpd, rain, temp, weather }
 
     let targetFreeze = 0
 
-    if (temp != null) {
-      targetFreeze = THREE.MathUtils.clamp((0 - temp) / 5, 0, 1)
+    if (Number.isFinite(tempValue)) {
+      targetFreeze = THREE.MathUtils.clamp(-tempValue / 5, 0, 1)
     }
 
     freezeRef.current = THREE.MathUtils.lerp(
