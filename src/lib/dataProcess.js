@@ -8,6 +8,8 @@ export function processForecast(data, timezone) {
 
   const isHourlyMetric = metric =>
     metric.metricKey === 'temperature_2m' ||
+    metric.metricKey === 'visibility' ||
+    metric.metricKey === 'weather_code' ||
     metric.metricKey.includes('1h') ||
     metric.metricKey.includes('10m') ||
     metric.metricKey.includes('dewpoint_2m') ||
@@ -118,18 +120,22 @@ export function processForecast(data, timezone) {
       )
     }
 
-    metric.forecast = metric.forecast.map(item => item?.value ?? item)
+    metric.forecast = metric.forecast.map(item =>
+      item !== null && typeof item === 'object'
+        ? item.value ?? null
+        : item
+    )
 
     if (metric.unit === 'Pa') {
       metric.forecast = metric.forecast.map(value =>
-        Math.round(value / 100)
+        value == null ? null : Math.round(value / 100)
       )
       metric.unit = 'hPa'
     }
 
     if (metric.unit === 'm/s') {
       metric.forecast = metric.forecast.map(value =>
-        +(value * 3.6).toFixed(1)
+        value == null ? null : +(value * 3.6).toFixed(1)
       )
       metric.unit = 'km/h'
     }
@@ -139,7 +145,7 @@ export function processForecast(data, timezone) {
       metric.metricKey.includes('dewpoint_2m')
     ) {
       metric.forecast = metric.forecast.map(value =>
-        +(value - 273.15).toFixed(1)
+        value == null ? null : +(value - 273.15).toFixed(1)
       )
       metric.unit = '°C'
     }
@@ -189,6 +195,10 @@ export function processForecast(data, timezone) {
 }
 
 function calcRelativeHumidity(tempC, dewPointC) {
+  if (!Number.isFinite(tempC) || !Number.isFinite(dewPointC)) {
+    return null
+  }
+
   const a = 17.625
   const b = 243.04
 
@@ -198,35 +208,47 @@ function calcRelativeHumidity(tempC, dewPointC) {
   const actualVaporPressure =
     Math.exp((a * dewPointC) / (b + dewPointC))
 
-  return Math.max(
-    0,
-    Math.min(100, (actualVaporPressure / saturationVaporPressure) * 100).toFixed(1)
-  )
+  const humidity =
+    (actualVaporPressure / saturationVaporPressure) * 100
+
+  return +Math.max(0, Math.min(100, humidity)).toFixed(1)
 }
 
 function calcDailyMinMax(values, timestamps) {
   const daily = {}
 
-  values.forEach((value, i) => {
-    const day = timestamps[i].slice(0, 10)
+  timestamps.forEach((timestamp, i) => {
+    const day = timestamp.slice(0, 10)
+    const value = values[i]
 
     if (!daily[day]) {
       daily[day] = {
-        min: value,
-        max: value
+        min: null,
+        max: null,
+        missing: false
       }
-    } else {
-      daily[day].min = Math.min(daily[day].min, value)
-      daily[day].max = Math.max(daily[day].max, value)
     }
+
+    if (!Number.isFinite(value)) {
+      daily[day].missing = true
+      return
+    }
+
+    daily[day].min = daily[day].min == null
+      ? value
+      : Math.min(daily[day].min, value)
+
+    daily[day].max = daily[day].max == null
+      ? value
+      : Math.max(daily[day].max, value)
   })
 
   const min = []
   const max = []
 
-  Object.values(daily).forEach(value => {
-    min.push(value.min)
-    max.push(value.max)
+  Object.values(daily).forEach(day => {
+    min.push(day.missing ? null : day.min)
+    max.push(day.missing ? null : day.max)
   })
 
   return { min, max }
