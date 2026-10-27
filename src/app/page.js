@@ -35,14 +35,18 @@ export default function Home() {
         const res = await fetch(
           `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}`
         )
+
+        if (cancelled) return
+
         if (!res.ok) {
-          setResOk(false)
           throw new Error("Unable to load weather data. Please try again later.")
         }
 
         const data = await res.json()
         if (cancelled) return
-        //console.log(data)
+
+        setResOk(true)
+        // console.log(data)
 
         if (!hasShownData || !data.stale) {
           setIsStale(data.stale)
@@ -60,6 +64,7 @@ export default function Home() {
         }
       } catch (err) {
         if (cancelled) return
+
         setResOk(false)
         console.error(err)
       }
