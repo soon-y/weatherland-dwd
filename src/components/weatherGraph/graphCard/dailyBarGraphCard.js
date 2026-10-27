@@ -10,17 +10,21 @@ export default function DailyBarGraphCard({ min, max, step, unit, barStart, barE
   const borderCnt = (max - min) / step
 
   useEffect(() => {
-    const temp = []
-
-    if (isTime) {
-      for (let i = 24; i >= 0; i -= step) {
-        temp.push(String(i).padStart(2, '0'))
-      }
-    } else {
-      for (let i = max; i >= min; i -= step) temp.push(i)
+    if (
+      !Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(step) || step <= 0 || max <= min
+    ) {
+      setVal([])
+      return
     }
 
-    setVal(temp)
+    const ticks = []
+    const count = Math.floor((max - min) / step)
+
+    for (let i = 0; i <= count; i++) {
+      ticks.push(+(max - i * step).toFixed(6))
+    }
+
+    setVal(ticks)
   }, [min, max, step])
 
   function barLength(barStart, barEnd) {

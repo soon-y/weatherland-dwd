@@ -62,11 +62,21 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
   }, [])
 
   useEffect(() => {
-    const temp = []
-    for (let i = max; i >= min; i -= step) {
-      temp.push(i)
+    if (
+      !Number.isFinite(min) || !Number.isFinite(max) || !Number.isFinite(step) || step <= 0 || max <= min
+    ) {
+      setVal([])
+      return
     }
-    setVal(temp)
+
+    const ticks = []
+    const count = Math.floor((max - min) / step)
+
+    for (let i = 0; i <= count; i++) {
+      ticks.push(+(max - i * step).toFixed(6))
+    }
+
+    setVal(ticks)
   }, [min, max, step])
 
   useEffect(() => {
