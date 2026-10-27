@@ -24,7 +24,7 @@ export default function Windvane({ windDir, windSpd }) {
 
     anemometer.rotation.y -= angularSpeed * delta
     arrow.rotation.y = windDir.current
-  }, [windDir, windSpd])
+  })
 
   return (
     <group scale={param.groundRadius * 1.7} position={param.groundPos}>
@@ -44,6 +44,7 @@ export default function Windvane({ windDir, windSpd }) {
             geometry={nodes.arrow.geometry}
             material={materials.metal}
             position={[0, 0.376, 0]}
+            rotation={[0, -Math.PI / 2, 0]}
             scale={[9.569, 0.527, 0.527]}
           >
           </mesh>

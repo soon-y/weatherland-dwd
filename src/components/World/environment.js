@@ -59,7 +59,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
   }, { store })
 
   const { direction, speed } = useControls('Wind', {
-    direction: { value: 90, min: 0, max: 360, step: 1 },
+    direction: { value: 0, min: 0, max: 360, step: 1 },
     speed: { value: 2, min: 0, max: 50, step: 1 },
   }, { store })
 
@@ -108,7 +108,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
     targetWeather.current = {
       rain: forecast.metrics.precip_liquid_amount_1h?.forecast[index] ?? 0,
       snow: forecast.metrics.precip_snow_amount_1h?.forecast[index] ?? 0,
-      visibility: forecast.metrics.visibility?.forecast[index] ?? 5000,
+      visibility: forecast.metrics.visibility?.forecast[index] ?? 10000,
       probability: forecast.metrics.ww_prob_precip_1h?.forecast[index] ?? 0,
       temperature: forecast.metrics.temperature_2m?.forecast[index]
     }
@@ -160,8 +160,8 @@ export default function Environment({ store, forecast, index, indexD, levaValues
     timeRef.current += delta
 
     const targetDirection = isDebug
-      ? direction * -(Math.PI / 180) - Math.PI * 0.5
-      : windDirH * -(Math.PI / 180) - Math.PI * 0.5
+      ? direction * -(Math.PI / 180)
+      : windDirH * -(Math.PI / 180)
 
     const targetSpeed = isDebug ? speed : windSpdH
     const targetGustSpeed = isDebug ? strength : gustsSpdH
