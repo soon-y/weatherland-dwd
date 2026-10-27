@@ -13,7 +13,6 @@ const height = 17
 export default function Mist({ visibility, isDay = 0, weather }) {
   const pointsRef = useRef()
   const materialRef = useRef()
-  const visibilityValue = visibility ?? weather.current.visibility
 
   const positions = useMemo(() => {
     const arr = new Float32Array(MAX_COUNT * 3)
@@ -68,11 +67,9 @@ export default function Mist({ visibility, isDay = 0, weather }) {
 
   useFrame((_, delta) => {
     delta = Math.min(delta, 0.05)
-    if (
-      !pointsRef.current ||
-      !materialRef.current
-    )
-      return
+    const visibilityValue = visibility ?? weather?.current.visibility ?? 10000
+
+    if (!pointsRef.current || !materialRef.current) return
 
     materialRef.current.uniforms.uTime.value += delta
     materialRef.current.uniforms.uIsDay.value = isDay ? 1 : 0

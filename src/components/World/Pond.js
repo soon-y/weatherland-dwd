@@ -13,9 +13,6 @@ export default function Pond({ progress, windDir, windSpd, rain, temp, weather }
   const MAX_RIPPLES = 20
   const freezeRef = useRef(0)
 
-  const rainValue = rain ?? weather.current.rain
-  const tempValue = temp ?? weather?.current.temperature
-
   const uniforms = useMemo(() => ({
     uWindDir: { value: new THREE.Vector2(Math.cos(windDir.current), Math.sin(windDir.current)) },
     uWindSpeed: { value: windSpd.current },
@@ -30,6 +27,8 @@ export default function Pond({ progress, windDir, windSpd, rain, temp, weather }
 
   useFrame((_, delta) => {
     delta = Math.min(delta, 0.05)
+    const rainValue = rain ?? weather?.current.rain ?? 0
+    const tempValue = temp ?? weather?.current.temperature ?? null
     const mat = materialRef.current
     if (!mat) return
 

@@ -9,7 +9,6 @@ const HEIGHT = 40
 const groundY = param.groundPos[1]
 
 export default function Snow({ windDir, windSpd, precipitation, isDay, weather }) {
-  const snowValue = precipitation ?? weather.current.snow
   const meshRef = useRef()
 
   const dummy = useMemo(
@@ -32,6 +31,8 @@ export default function Snow({ windDir, windSpd, precipitation, isDay, weather }
 
   useFrame((state, delta) => {
     delta = Math.min(delta, 0.05)
+    const snowValue = precipitation ?? weather?.current.snow ?? 0
+    
     if (!meshRef.current) return
 
     if (snowValue <= 0) {

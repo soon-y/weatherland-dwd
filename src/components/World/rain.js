@@ -8,7 +8,6 @@ const AREA = 100
 const HEIGHT = 30
 
 export default function Rain({ windDir, windSpd, precipitation, isDay, weather }) {
-  const rainValue = precipitation ?? weather.current.rain
   const meshRef = useRef()
 
   const dummy = useMemo(
@@ -29,6 +28,7 @@ export default function Rain({ windDir, windSpd, precipitation, isDay, weather }
 
   useFrame((_, delta) => {
     delta = Math.min(delta, 0.05)
+    const rainValue = precipitation ?? weather?.current.rain ?? 0
     if (!meshRef.current) return
 
     if (rainValue <= 0) {
