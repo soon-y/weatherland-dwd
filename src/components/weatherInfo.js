@@ -119,7 +119,7 @@ export default function WeatherInfo({ forecast, index, clicked, timezone }) {
                   ? getWindDirectionArrow(windDirection, 18)
                   : ''
               }
-              condition={windSpeed > 29}
+              condition={windSpeed >= 29}
             />
           ) : (
             <InfoLine title="wind" isDay={isDay} info1="N/A" />
