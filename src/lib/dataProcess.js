@@ -34,6 +34,15 @@ export function processForecast(data, timezone) {
     toLocalTimestamp(item.timestamp, timezone)
   )
 
+  result.forEach(metric => {
+    if (isHourlyMetric(metric) && typeof metric.description === 'string') {
+      metric.description = metric.description.replace(
+        /during the last hour/gi,
+        'during the hour starting at the timestamp'
+      )
+    }
+  })
+
   // DST correction
   for (let i = 1; i < timestamps.length; i++) {
     const prev = timestamps[i - 1]
@@ -131,7 +140,7 @@ export function processForecast(data, timezone) {
       typeof metric.forecast[0] === 'object'
     ) {
       metric.timestamps = metric.forecast.map(item =>
-        toLocalTimestamp(item.timestamp, timezone)
+        toLocalTimestamp(item.timestamp, timezone, 0)
       )
     }
 
@@ -269,8 +278,8 @@ function calcDailyMinMax(values, timestamps) {
   return { min, max }
 }
 
-function toLocalTimestamp(timestamp, timeZone) {
-  const date = new Date(new Date(timestamp).getTime() - 60 * 60 * 1000)
+function toLocalTimestamp(timestamp, timeZone, shiftHours = -1) {
+  const date = new Date(new Date(timestamp).getTime() + shiftHours * 60 * 60 * 1000)
 
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone,
