@@ -93,6 +93,28 @@ export default function InputArea({ setGeolocation, hide }) {
       : absNum
   }
 
+  const handleLocationSubmit = async ({ place, zip, country }) => {
+    const location = await forwardGeo(place, zip, country)
+
+    if (!location) {
+      alert('Unable to find the location.')
+      return false
+    }
+
+    setLatitudeVal(location.lat)
+    setLongitudeVal(location.lon)
+    setGeolocation({
+      lat: location.lat,
+      lon: location.lon,
+      timezone: location.timezone,
+    })
+    setSuburbArea(location.suburb)
+    setPostcodeVal(location.postcode)
+    setCountryVal(location.country)
+
+    return true
+  }
+
   return (
     <div>
       {latitudeVal != null && longitudeVal != null && suburbArea && postcodeVal &&
@@ -115,6 +137,7 @@ export default function InputArea({ setGeolocation, hide }) {
                 updateSuburb={setSuburbArea}
                 updatePostcode={setPostcodeVal}
                 updateCountry={setCountryVal}
+                onLocationSubmit={handleLocationSubmit}
               />
               <Input
                 label={"Postcode"}
@@ -126,6 +149,7 @@ export default function InputArea({ setGeolocation, hide }) {
                 updateSuburb={setSuburbArea}
                 updatePostcode={setPostcodeVal}
                 updateCountry={setCountryVal}
+                onLocationSubmit={handleLocationSubmit}
               />
               <Input
                 label={"Country"}
@@ -137,6 +161,7 @@ export default function InputArea({ setGeolocation, hide }) {
                 updateSuburb={setSuburbArea}
                 updatePostcode={setPostcodeVal}
                 updateCountry={setCountryVal}
+                onLocationSubmit={handleLocationSubmit}
               />
               <Input
                 label={"Latitude"}

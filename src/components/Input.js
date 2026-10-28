@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 export default function Input({
   hide, label, unit, value, flag,
   updateLat, updateLon, lat, long,
-  updateSuburb, updatePostcode, updateCountry, suburb, postcode, country,
+  suburb, postcode, country, onLocationSubmit,
 }) {
   const [open, setOpen] = useState(false)
   const [tempLat, setTempLat] = useState(lat)
@@ -32,13 +32,16 @@ export default function Input({
     flag(label)
   }
 
-  const handleSave = e => {
+  const handleSave = async e => {
     e.preventDefault()
-    setOpen(!open)
-    updateSuburb(tempSub)
-    updatePostcode(tempPost)
-    updateCountry(tempCo)
-    flag(label)
+
+    const saved = await onLocationSubmit({
+      place: tempSub,
+      zip: tempPost,
+      country: tempCo,
+    })
+
+    if (saved) setOpen(false)
   }
 
   return (
