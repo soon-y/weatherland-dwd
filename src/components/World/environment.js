@@ -91,7 +91,21 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       const daylight = daylightDuration(sunrise, sunset)
       const sunriseInSec = timeToSec(sunrise)
       const sunsetInSec = timeToSec(sunset)
-      const nowInSec = (timeToSec(forecast.timestamps[index]) + 30 * 60) % oneDayInSec
+      const startInSec = timeToSec(forecast.timestamps[index])
+      const endInSec = Math.min(startInSec + 3600, oneDayInSec)
+
+      let nowInSec = (startInSec + endInSec) / 2
+
+      if (
+        sunriseInSec >= startInSec && sunriseInSec < endInSec
+      ) {
+        nowInSec = (sunriseInSec + endInSec) / 2
+      } else if (
+        sunsetInSec > startInSec &&
+        sunsetInSec <= endInSec
+      ) {
+        nowInSec = (startInSec + sunsetInSec) / 2
+      }
 
       if (nowInSec < sunriseInSec) {
         progressInDay = (nowInSec / sunriseInSec) * 0.25
@@ -101,7 +115,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
         progressInDay = 0.75 + ((nowInSec - sunsetInSec) / (oneDayInSec - sunsetInSec)) * 0.25
       }
 
-      setSunProgress(Number(progressInDay.toFixed(2)))
+      setSunProgress(progressInDay)
     }
 
     setWindDirH(forecast.metrics.wind_direction_10m?.forecast[index] ?? 0)

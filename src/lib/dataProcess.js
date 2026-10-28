@@ -111,17 +111,21 @@ export function processForecast(data, timezone) {
       const day = dayMap[timestamp.slice(0, 10)]
       if (!day?.sunrise || !day?.sunset) return false
 
-      const current = timeToSec(timestamp)
-      const sunrise = timeToSec(day.sunrise)
-      const sunset = timeToSec(day.sunset)
+      const startInSec = timeToSec(timestamp)
+      const sunriseInSec = timeToSec(day.sunrise)
+      const sunsetInSec = timeToSec(day.sunset)
 
-      if (current == null || sunrise == null || sunset == null) {
+      if (
+        startInSec == null ||
+        sunriseInSec == null ||
+        sunsetInSec == null
+      ) {
         return false
       }
 
-      const midpoint = current + 30 * 60
+      const endInSec = Math.min(startInSec + 3600, 24 * 60 * 60)
 
-      return midpoint >= sunrise && midpoint < sunset
+      return endInSec > sunriseInSec && startInSec < sunsetInSec
     }
 
     result.push({
