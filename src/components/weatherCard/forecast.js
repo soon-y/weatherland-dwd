@@ -5,7 +5,6 @@ import WeatherIcon from "../weatherIcon"
 import CardTitle from "./cardTitle"
 
 export default function Forecast({ hourly }) {
-  const today = new Date()
   const [weekly, setWeedkly] = useState([])
   const tempMin = hourly.metrics.daily_min_temperature?.forecast
   const tempMax = hourly.metrics.daily_max_temperature?.forecast
@@ -14,17 +13,26 @@ export default function Forecast({ hourly }) {
   const isValid = tempMin && tempMax && weatherCode
 
   useEffect(() => {
-    const weeklyArr = []
-    for (let i = 0; i < 7; i++) {
-      weeklyArr.push({
-        day: param.days[(today.getDay() + i + 1) % 7],
+    const dates = hourly.daily.time.slice(1, 8)
+
+    const temperatureDates = [
+      ...new Set(hourly.timestamps.map(timestamp => timestamp.slice(0, 10)))
+    ]
+
+    const weeklyArr = dates.map((date, i) => {
+      const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay()
+      const temperatureIndex = temperatureDates.indexOf(date)
+
+      return {
+        day: param.days[dayIndex],
         code: weatherCode?.forecast[i * 2 + 1],
-        min: tempMin?.[i + 1],
-        max: tempMax?.[i + 1],
+        min: tempMin?.[temperatureIndex],
+        max: tempMax?.[temperatureIndex],
         probability: probability?.[i * 2 + 1],
-      })
-      setWeedkly(weeklyArr)
-    }
+      }
+    })
+
+    setWeedkly(weeklyArr)
   }, [hourly])
 
   const barRange = (min, max) => {
