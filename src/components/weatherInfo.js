@@ -13,6 +13,8 @@ export default function WeatherInfo({ forecast, index, clicked, timezone }) {
   const [index12, setIndex12] = useState(0)
   const daily = forecast.daily
   const temperature = forecast.metrics.temperature_2m
+  const temperatureValue = temperature?.forecast?.[index]
+  const hasTemperature = Number.isFinite(temperatureValue)
   const windSpeed = forecast.metrics.wind_speed_10m?.forecast[index]
   const windDirection = forecast.metrics.wind_direction_10m?.forecast[index]
   const prob = forecast.metrics.ww_prob_precip_1h
@@ -85,12 +87,12 @@ export default function WeatherInfo({ forecast, index, clicked, timezone }) {
           ${open && 'hidden'} 
           ${isDay ? 'text-black' : 'text-white'}`}
         >
-          {temperature ?
-            <InfoLine title={'temperature'} isDay={isDay}
-              info1={temperature.forecast[index]} unit1={temperature.unit}
-            /> :
-            <InfoLine title={'temperature'} isDay={isDay} info1={'N/A'} />
-          }
+          <InfoLine
+            title="temperature"
+            isDay={isDay}
+            info1={hasTemperature ? temperatureValue : 'N/A'}
+            unit1={hasTemperature ? temperature.unit : ''}
+          />
 
           {(prob != null || precip != null) ? (
             <InfoLine
