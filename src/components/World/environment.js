@@ -54,7 +54,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
   }, { store })
 
   const { rain, snow, probability } = useControls('Precipitation', {
-    rain: { value: 0, min: 0, max: 100, step: 0.1 },
+    rain: { value: 0, min: 0, max: 50, step: 0.1 },
     snow: { value: 0, min: 0, max: 10, step: 0.1 },
     probability: { value: 0, min: 0, max: 100, step: 5 },
   }, { store })
