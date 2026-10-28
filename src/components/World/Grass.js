@@ -35,7 +35,7 @@ export default function Grass({ progress, windDir, windSpd }) {
       fragmentShader,
       uniforms: {
         uTime: { value: 0 },
-        uWindDir: { value: new THREE.Vector2(Math.cos(windDir.current), -Math.sin(windDir.current)) },
+        uWindDir: { value: new THREE.Vector2(Math.sin(windDir.current), Math.cos(windDir.current))},
         uWindSpeed: { value: windSpd.current },
         uProgress: { value: 0 },
         uSnowDepth: { value: 0 }
@@ -95,7 +95,7 @@ export default function Grass({ progress, windDir, windSpd }) {
   useFrame((state) => {
     grassRef.current.material.uniforms.uTime.value = state.clock.elapsedTime
     grassRef.current.material.uniforms.uProgress.value = progress
-    grassRef.current.material.uniforms.uWindDir.value.set(Math.cos(windDir.current), -Math.sin(windDir.current))
+    grassRef.current.material.uniforms.uWindDir.value.set(Math.sin(windDir.current), Math.cos(windDir.current))
     grassRef.current.material.uniforms.uWindSpeed.value = windSpd.current
   })
 

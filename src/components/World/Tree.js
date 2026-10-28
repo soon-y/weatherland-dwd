@@ -29,18 +29,19 @@ export default function Tree({ progress, windDir, windSpd }) {
 
   useFrame((state) => {
     const time = state.clock.elapsedTime
+    const localWindDir = windDir.current - 0.2
 
     if (trunkShaderRef.current) {
       trunkShaderRef.current.uniforms.uTime.value = time
       trunkShaderRef.current.uniforms.uWindSpeed.value = windSpd.current
-      trunkShaderRef.current.uniforms.uWindDir.value = windDir.current
+      trunkShaderRef.current.uniforms.uWindDir.value = localWindDir
     }
 
     if (leafMaterialRef.current) {
       leafMaterialRef.current.uniforms.uTime.value = time
       leafMaterialRef.current.uniforms.uProgress.value = progress
       leafMaterialRef.current.uniforms.uWindSpeed.value = windSpd.current
-      leafMaterialRef.current.uniforms.uWindDir.value = windDir.current
+      leafMaterialRef.current.uniforms.uWindDir.value = localWindDir
     }
   })
 

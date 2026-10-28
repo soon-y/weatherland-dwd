@@ -1,4 +1,4 @@
-vec2 windDirection = vec2(cos(uWindDir), -sin(uWindDir));
+vec2 windDirection = vec2(sin(uWindDir), cos(uWindDir));
 float windStrength = smoothstep(0.0, 50.0, uWindSpeed);
 float sway = sin(uTime * 1.2) * 0.35 * windStrength;
 float secondarySway = sin(uTime * 0.65) * 0.15 * windStrength;

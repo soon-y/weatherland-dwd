@@ -32,7 +32,7 @@ export default function Snow({ windDir, windSpd, precipitation, isDay, weather }
   useFrame((state, delta) => {
     delta = Math.min(delta, 0.05)
     const snowValue = precipitation ?? weather?.current.snow ?? 0
-    
+
     if (!meshRef.current) return
 
     if (snowValue <= 0) {
@@ -52,11 +52,11 @@ export default function Snow({ windDir, windSpd, precipitation, isDay, weather }
     )
 
     const windEffect = Math.min(wind, 15)
-    const windX = Math.cos(dir) * windEffect * 0.08
-    const windZ = Math.sin(dir) * windEffect * 0.08
+    const windX = Math.sin(dir) * windEffect * 0.08
+    const windZ = Math.cos(dir) * windEffect * 0.08
 
-    const spawnOffsetX = -Math.cos(dir) * dynamicArea * 0.5
-    const spawnOffsetZ = -Math.sin(dir) * dynamicArea * 0.5
+    const spawnOffsetX = -Math.sin(dir) * dynamicArea * 0.5
+    const spawnOffsetZ = -Math.cos(dir) * dynamicArea * 0.5
 
     for (let i = 0; i < visibleCount; i++) {
       const snow = flakes[i]

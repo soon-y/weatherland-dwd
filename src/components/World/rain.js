@@ -45,8 +45,8 @@ export default function Rain({ windDir, windSpd, precipitation, isDay, weather }
       )
     )
 
-    const windX = Math.cos(dir) * wind * 0.25
-    const windZ = Math.sin(dir) * wind * 0.25
+    const windX = Math.sin(dir) * wind * 0.25
+    const windZ = Math.cos(dir) * wind * 0.25
     const tilt = Math.min(wind * 0.015, 0.6)
 
     for (let i = 0; i < visibleCount; i++) {
@@ -63,7 +63,7 @@ export default function Rain({ windDir, windSpd, precipitation, isDay, weather }
       }
 
       dummy.position.set(drop.x, drop.y, drop.z)
-      dummy.rotation.set(-tilt * Math.sin(dir), 0, tilt * Math.cos(dir))
+      dummy.rotation.set(-tilt * Math.cos(dir), 0, tilt * Math.sin(dir))
 
       dummy.updateMatrix()
 

@@ -39,12 +39,10 @@ void main() {
   float windStrength = clamp(uWindSpeed / 25.0, 0.0, 2.0);
   float sway = combined * heightFactor * windStrength * 0.2 * snowDamping;
 
-  pos.x += uWindDir.x * sway;
-  pos.z += uWindDir.y * sway;
+  // Apply wind after the instance and model transformations.
+  worldPos.x += uWindDir.x * sway;
+  worldPos.z += uWindDir.y * sway;
 
-  instancePos = instanceMatrix * vec4(pos, 1.0);
-
-  worldPos = modelMatrix * instancePos;
   vWorldPos = worldPos.xyz;
 
   vec4 viewPos = viewMatrix * worldPos;
