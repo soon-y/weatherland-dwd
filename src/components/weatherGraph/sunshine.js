@@ -10,9 +10,6 @@ export default function WeeklySunshine({ display, hourly, indexW, index, timezon
   const maxVal = 60 * 60
   const unit = 'mins'
 
-  console.log(isDay)
-    console.log(hourly)
-
   useEffect(() => {
     const result = getAvgArrDaytime(hourly, isDay)
     setDailyAvg(result)
