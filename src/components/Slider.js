@@ -208,7 +208,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
                 <div />
 
                 {<div className={`leading-none opacity-80 flex items-center justify-center text-[11px] text-xs sm:text-sm`}>
-                  {el.temp ? el.temp + '°' : 'N/A'}
+                  {el.temp != null ? el.temp + '°' : 'N/A'}
                 </div>}
 
                 <div className="flex items-start justify-center text-xs sm:text-base">

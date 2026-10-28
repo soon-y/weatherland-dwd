@@ -15,11 +15,17 @@ export function processForecast(data, timezone) {
     metric.metricKey.includes('dewpoint_2m') ||
     metric.metricKey.includes('surface_pressure')
 
-  const timestampSource =
-    temperature ??
-    result.find(metric =>
-      isHourlyMetric(metric) &&
-      metric.forecast?.some(item => item?.timestamp != null)
+  const hasTimestamps = metric =>
+    metric?.forecast?.length > 0 &&
+    metric.forecast.every(item =>
+      typeof item?.timestamp === 'string' &&
+      Number.isFinite(Date.parse(item.timestamp))
+    )
+
+  const timestampSource = hasTimestamps(temperature)
+    ? temperature
+    : result.find(metric =>
+      isHourlyMetric(metric) && hasTimestamps(metric)
     )
 
   const timestamps = (timestampSource?.forecast ?? []).map(item =>

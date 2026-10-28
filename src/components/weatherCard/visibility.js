@@ -12,13 +12,13 @@ export default function Visibility({ hourly, index, setDisplay, setCardClicked }
     <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={visibility === undefined ? false : true}>
       <div>
         <CardTitle title={title} />
-        {visibility ?
+        {visibility != null ?
           <p className={param.weatherDescMain}>{current} {!isless4k && 'k'}{hourly?.metrics.visibility.unit}</p> :
           <p className={param.weatherDescMain}>N/A</p>
         }
       </div>
 
-      {visibility && <div>
+      {visibility != null && <div>
         <p className={`${param.weatherDesc}`}>
           {visibilityInfo(visibility).desc}
         </p>

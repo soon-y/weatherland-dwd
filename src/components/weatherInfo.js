@@ -123,7 +123,7 @@ export default function WeatherInfo({ forecast, index, clicked, timezone }) {
             <InfoLine title="wind" isDay={isDay} info1="N/A" />
           )}
 
-          {visibility ?
+          {visibility != null ?
             <InfoLine title={'visibility'} isDay={isDay}
               info1={visibilityInfo(visibility).state}
               info2={visibility} unit2={'m'}

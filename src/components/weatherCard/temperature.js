@@ -17,14 +17,14 @@ export default function Temperature({ hourly, index, setDisplay, setCardClicked 
       <div className="flex flex-col justify-between h-full">
         <div>
           <CardTitle title={title} />
-          {temp ?
+          {temp != null ?
             <p className={param.weatherDescMain}>{temp} {unit}</p> :
             <p className={param.weatherDescMain}>N/A</p>}
         </div>
         <div>
           {(min || max) && <p className={param.weatherDesc}>within the last 12 hours</p>}
-          {min && <p className={param.weatherDescSub}>L: {min} {unit}</p>}
-          {max && <p className={param.weatherDescSub}>H: {max} {unit}</p>}
+          {min != null && <p className={param.weatherDescSub}>L: {min} {unit}</p>}
+          {max != null && <p className={param.weatherDescSub}>H: {max} {unit}</p>}
         </div>
       </div>
     </Card>
