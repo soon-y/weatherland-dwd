@@ -266,18 +266,6 @@ export function todayProgress(date, timezone) {
   return ((hours * 60 + minutes) / (24 * 60) * 100).toFixed(4)
 }
 
-export function timeToSec(timestamp) {
-  if (
-    typeof timestamp !== 'string' ||
-    !timestamp.includes('T') ||
-    Number.isNaN(new Date(timestamp).getTime())
-  ) {
-    return null
-  }
-  const time = timestamp.split('T')[1]
-  return Number(time.split(':')[0]) * 3600 + Number(time.split(':')[1]) * 60
-}
-
 export function daylightDuration(sunriseTimestamp, sunsetTimestamp, inSec = true) {
   if (
     typeof sunriseTimestamp !== 'string' || typeof sunsetTimestamp !== 'string' ||
@@ -535,25 +523,49 @@ export function getAvgArr(arr, divide = 1) {
   return result
 }
 
-export function getAvgArrDaytime(arr, divide = 1) {
-  const result = []
+export function getAvgArrDaytime(arr = [], isDay = [], divide = 1) {
+  const averages = []
+  const isNight = value => value === false || value === 0
 
   for (let i = 0; i < arr.length; i += 24) {
-    const chunk = arr.slice(i, i + 24)
+    const values = arr.slice(i, i + 24)
+    const flags = isDay.slice(i, i + 24)
 
-    if (chunk.some(value => value == null)) {
-      result.push(null)
-    } else {
-      const validValues = chunk.filter(value => value !== 0)
+    // Include daytime zeros and positive sunshine values.
+    const included = flags.map((flag, j) =>
+      flag === true ||
+      flag === 1 ||
+      (Number.isFinite(values[j]) && values[j] > 0)
+    )
 
-      if (validValues.length === 0) {
-        result.push(0)
-      } else {
-        const sum = validValues.reduce((a, b) => a + b, 0)
-        result.push(Math.round((sum / validValues.length) / divide))
-      }
+    const firstDay = included.indexOf(true)
+    const lastDay = included.lastIndexOf(true)
+
+    // Require nighttime before and after the included interval.
+    if (
+      firstDay < 0 ||
+      !isNight(flags[firstDay - 1]) ||
+      !isNight(flags[lastDay + 1])
+    ) {
+      averages.push(null)
+      continue
     }
+
+    const daylightFlags = included.slice(firstDay, lastDay + 1)
+    const daylightValues = values.slice(firstDay, lastDay + 1)
+
+    if (
+      !daylightFlags.every(Boolean) ||
+      daylightValues.length !== daylightFlags.length ||
+      !daylightValues.every(Number.isFinite)
+    ) {
+      averages.push(null)
+      continue
+    }
+
+    const sum = daylightValues.reduce((total, value) => total + value, 0)
+    averages.push(Math.round(sum / daylightValues.length / divide))
   }
 
-  return result
+  return averages
 }
