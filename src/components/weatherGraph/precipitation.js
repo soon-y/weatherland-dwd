@@ -110,7 +110,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
         </div>
       </div>
       <WeeklyLineGraphCard ratio={2} graphRatio={2}
-        display={'probability'} unit={'%'} min={0} max={100} step={20}
+        display={'probability'} unit={'%'} min={0} max={100} step={20} timezone={timezone}
         hourly={hourProbability} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
