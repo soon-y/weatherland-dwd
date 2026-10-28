@@ -55,7 +55,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
   }, [daily.time])
 
   useEffect(() => {
-    setIndexW(indexD)
+    setIndexW(Math.max(0, indexD))
   }, [display, indexD])
 
   return (
