@@ -60,7 +60,7 @@ export const param = {
   groundRadius: 5,
   pondRadius: 4.2,
   pondPos: [-0.5, 0.01, -1.1],
-  sunRadius: 15,
+  sunRadius: 12,
   streetlightPos: [0.3, 0.8, -0.1],
   streetlightTargetPos: [0.3, -1, 0.2],
 }
