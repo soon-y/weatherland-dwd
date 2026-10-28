@@ -16,28 +16,27 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
 
   useEffect(() => {
     const resultTotal = hourPrecipitation && getTotalSumArr(hourPrecipitation)
-    const resultMean = probability && getAvgArr(hourProbability)
+    const resultMean = hourProbability ? getAvgArr(hourProbability) : []
 
     setDailyTotal(resultTotal)
     setDailyMean(resultMean)
-  }, [])
+  }, [hourPrecipitation, hourProbability])
 
   useEffect(() => {
     setHover(index)
   }, [indexW])
 
   useEffect(() => {
-    setHover(index)
+    const weatherType = weatherInfo(code?.[hoverIndex]).type
 
-    let weatherType = weatherInfo(code[indexW]).type
-    let type =
+    const type =
       weatherType.includes('snow') ? 'snow' :
         weatherType.includes('shower') ? 'shower' :
           weatherType.includes('drizzle') ? 'drizzle' :
             'rain'
 
     setType(type)
-  }, [indexW])
+  }, [hoverIndex, code])
 
   return (
     <div className="w-full pb-4">
