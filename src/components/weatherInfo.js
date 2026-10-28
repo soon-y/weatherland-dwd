@@ -34,8 +34,8 @@ export default function WeatherInfo({ forecast, index, clicked, timezone }) {
     const tempIndex = daily.time.findIndex(el => el === forecast?.timestamps[index]?.split("T")[0])
     setIndexD(tempIndex)
 
-    const index24 = getTimeIndex(forecast.timestamps[index], weatherCode12h?.timestamps)
-    setIndex12(index24)
+    const codeIndex = getTimeIndex(forecast.timestamps[index], weatherCode12h?.timestamps)
+    setIndex12(codeIndex)
   }, [index, forecast])
 
   return (

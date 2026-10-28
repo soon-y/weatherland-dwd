@@ -134,11 +134,14 @@ export function processForecast(data, timezone) {
 
   result.forEach(metric => {
     if (
-      (metric.metricKey.includes('24h') ||
-        metric.metricKey.includes('12h')) &&
+      (metric.metricKey.includes('24h') || metric.metricKey.includes('12h')) &&
       metric.forecast.length &&
       typeof metric.forecast[0] === 'object'
     ) {
+      metric.timestampsUTC = metric.forecast.map(item =>
+        new Date(item.timestamp).toISOString()
+      )
+
       metric.timestamps = metric.forecast.map(item =>
         toLocalTimestamp(item.timestamp, timezone, 0)
       )
@@ -235,7 +238,7 @@ function calcRelativeHumidity(tempC, dewPointC) {
   const humidity =
     (actualVaporPressure / saturationVaporPressure) * 100
 
-  return +Math.max(0, Math.min(100, humidity)).toFixed(1)
+  return Math.max(0, Math.min(100, humidity)).toFixed(1)
 }
 
 function calcDailyMinMax(values, timestamps) {

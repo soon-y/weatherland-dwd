@@ -1,6 +1,7 @@
 import Card from "./card"
 import { param, weatherInfo } from "@/lib/param"
 import CardTitle from "./cardTitle"
+import { getNextDayEndUTC } from '@/lib/time'
 
 export default function Precipitation({ hourly, index, indexD, setDisplay, setCardClicked }) {
   const title = 'precipitation'
@@ -28,13 +29,30 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
     return +sum.toFixed(1)
   })
 
-  // Keep the existing 24-hour fallback for the first forecast day.
-  const uses24hTotal = dailyTotal[0] == null
+  const firstDate = hourly.daily.time?.[0]
 
-  if (dailyTotal.length > 0) {
-    dailyTotal[0] ??= totalSum?.forecast?.[0] ?? null
+  // For this date, use the period from 06:00 UTC
+  // to 06:00 UTC the following day.
+  const fallbackEndUTC = firstDate
+    ? getNextDayEndUTC(firstDate, 6)
+    : null
+
+  const fallbackIndex = fallbackEndUTC
+    ? totalSum?.timestampsUTC?.indexOf(fallbackEndUTC) ?? -1
+    : -1
+
+  const fallbackValue = fallbackIndex >= 0
+    ? totalSum?.forecast?.[fallbackIndex] ?? null
+    : null
+
+  const uses24hTotal =
+    dailyTotal.length > 0 &&
+    dailyTotal[0] == null &&
+    Number.isFinite(fallbackValue)
+
+  if (uses24hTotal) {
+    dailyTotal[0] = fallbackValue
   }
-
 
   return (
     <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
