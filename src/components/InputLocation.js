@@ -41,7 +41,10 @@ export default function InputArea({ setGeolocation, hide }) {
     if (flag == 'Latitude' || flag == 'Longitude') {
       const fetchInfo = async () => {
         try {
-          const { suburb, postcode, country, timezone } = await reverseGeo(latitudeVal, longitudeVal)
+          const location = await reverseGeo(latitudeVal, longitudeVal)
+          if (!location) return
+
+          const { suburb, postcode, country, timezone } = location
           setSuburbArea(suburb)
           setPostcodeVal(postcode)
           setCountryVal(country)
