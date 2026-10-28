@@ -80,18 +80,24 @@ If deploying with Vercel, connect a Neon database to the project through the Ver
 After connecting the database, create a table using the following SQL:
 
 ```sql
-CREATE TABLE YOUR_TABLE (
+CREATE TABLE forecast_cache (
   id SERIAL PRIMARY KEY,
   lat DOUBLE PRECISION NOT NULL,
   lon DOUBLE PRECISION NOT NULL,
-  timezone TEXT NOT NULL,
+  date DATE NOT NULL,
   data JSONB NOT NULL,
-  updated_at TIMESTAMP DEFAULT NOW(),
   UNIQUE (lat, lon)
 );
 ```
 
-The `lat` and `lon` columns are unique because the application stores one cached forecast per location. This constraint is also required for the `UNIQUE (lat, lon)` operation used when updating the cache.
+The database stores one cached forecast per coordinate pair.
+The `date` column identifies the forecast request date in the
+selected location's timezone. Requests reuse cached data only
+when the coordinates and date match.
+
+The unique constraint on `(lat, lon)` allows a new forecast
+to replace the existing cache entry for the same location
+using `ON CONFLICT (lat, lon)`.
 
 `DATABASE_URL` is optional. If it is not provided, the application runs without database caching and fetches weather data directly from the weather API.
 
