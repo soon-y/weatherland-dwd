@@ -1,7 +1,7 @@
 import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, sunshineColorList, sunshineOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
 import { useEffect, useMemo, useState } from "react"
 
-export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay, timezone=null }) {
+export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay, timezone = null }) {
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const [codes, setCodes] = useState([])
@@ -19,6 +19,10 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
     minIndex = tempColorIndex(min)
     maxIndex = tempColorIndex(max)
     colorRange = tempColorList.slice(minIndex, maxIndex + 1)
+
+    if (colorRange.length === 1) {
+      colorRange = [colorRange[0], colorRange[0]]
+    }
   }
   else if (display === 'sunshine') {
     colorRange = sunshineColorList
@@ -81,8 +85,13 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
 
   useEffect(() => {
     setHover(index)
+  }, [indexW, index, setHover])
 
-    if (!code) return
+  useEffect(() => {
+    if (!code) {
+      setCodes([])
+      return
+    }
 
     const start = indexW * 24
     const temp = []
@@ -96,8 +105,9 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
         temp.push({ code: code[i] })
       }
     }
+
     setCodes(temp)
-  }, [indexW])
+  }, [indexW, code, isDay])
 
   const points = () => {
     let x, y

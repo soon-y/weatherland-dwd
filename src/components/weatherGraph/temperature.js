@@ -18,7 +18,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
 
     setDailyMin(resultMin)
     setDailyMax(resultMax)
-  }, [])
+  }, [hourly])
 
   useEffect(() => {
     setHover(index)

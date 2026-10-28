@@ -19,7 +19,7 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code, 
 
     setDailyWindAvg(resultWind)
     setDailyGustAvg(resultGust)
-  }, [])
+  }, [wind, gusts])
 
   useEffect(() => {
     setHover(index)

@@ -13,20 +13,8 @@ export default function WeeklyVisibility({ display, hourly, indexW, index, timez
   const unit = isless4k ? 'm' : 'km'
 
   useEffect(() => {
-    const result = getAvgArr(hourly)
-
-    for (let i = 0; i < hourly.length; i += 24) {
-      const chunk = hourly.slice(i, i + 24)
-
-      if (chunk.some(value => value == null)) {
-        result.push(null)
-      } else {
-        const sum = chunk.reduce((a, b) => a + b, 0)
-        result.push(Math.round((sum / chunk.length)))
-      }
-    }
-    setDailyAvg(result)
-  }, [])
+    setDailyAvg(getAvgArr(hourly))
+  }, [hourly])
 
   useEffect(() => {
     setHover(index)

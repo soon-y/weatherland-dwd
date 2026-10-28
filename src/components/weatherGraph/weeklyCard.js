@@ -112,6 +112,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
               <WeeklySunshine
                 display={display} indexW={indexW} index={firstIndex} timezone={timezone}
                 hourly={alignHourly(hourly.metrics.sunshine_duration_1h.forecast, firstTimestamp)}
+                isDay={alignHourly(hourly.metrics.is_day?.forecast)}
               />
             }
             {display === 'wind' &&

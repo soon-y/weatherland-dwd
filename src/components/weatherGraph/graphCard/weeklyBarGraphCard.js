@@ -38,7 +38,7 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
 
   useEffect(() => {
     setHover(index)
-  }, [indexW])
+  }, [indexW, index, setHover])
 
 
   const barColor = (max) => {

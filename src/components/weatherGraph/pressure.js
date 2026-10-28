@@ -14,7 +14,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index, timezon
   useEffect(() => {
     const result = getAvgArr(hourly)
     setDailyAvg(result)
-  }, [])
+  }, [hourly])
 
   useEffect(() => {
     setHover(index)

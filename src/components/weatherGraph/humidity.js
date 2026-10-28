@@ -15,7 +15,7 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
   useEffect(() => {
     const result = getAvgArr(humidity)
     setDailyAvg(result)
-  }, [])
+  }, [humidity])
 
   useEffect(() => {
     setHover(index)
