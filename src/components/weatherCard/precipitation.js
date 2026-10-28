@@ -1,5 +1,5 @@
 import Card from "./card"
-import { getTotalSumArr, param, weatherInfo } from "@/lib/param"
+import { param, weatherInfo } from "@/lib/param"
 import CardTitle from "./cardTitle"
 
 export default function Precipitation({ hourly, index, indexD, setDisplay, setCardClicked }) {
@@ -8,15 +8,32 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
   const probability = hourly.metrics.ww_prob_precip_1h
   const precipitation = hourly.metrics.precip_amount_1h
   const totalSum = hourly.metrics.precip_amount_24h
-  const firstTimestamp = hourly.timestamps?.[0]
-  const startHour = firstTimestamp ? Number(firstTimestamp.slice(11, 13)) : 0
-  const alignedPrecipitation = [
-    ...Array(startHour).fill(null),
-    ...(precipitation?.forecast ?? [])
-  ]
-  const dailyTotal = getTotalSumArr(alignedPrecipitation).slice(0, 7)
+  const timestamps = hourly.timestamps ?? []
+  const values = precipitation?.forecast ?? []
+
+  const dailyTotal = (hourly.daily.time ?? []).slice(0, 7).map(date => {
+    const dayValues = Array(24).fill(null)
+
+    timestamps.forEach((timestamp, i) => {
+      if (timestamp.slice(0, 10) !== date) return
+
+      const hour = Number(timestamp.slice(11, 13))
+      dayValues[hour] = values[i] ?? null
+    })
+
+    // Only calculate a daily total when all 24 hours are available.
+    if (!dayValues.every(Number.isFinite)) return null
+
+    const sum = dayValues.reduce((total, value) => total + value, 0)
+    return +sum.toFixed(1)
+  })
+
+  // Keep the existing 24-hour fallback for the first forecast day.
   const uses24hTotal = dailyTotal[0] == null
-  dailyTotal[0] ??= totalSum?.forecast?.[0] ?? null
+
+  if (dailyTotal.length > 0) {
+    dailyTotal[0] ??= totalSum?.forecast?.[0] ?? null
+  }
 
 
   return (
@@ -55,11 +72,11 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
         )}
       </div>
 
-      {code &&
-        <div className={`${param.weatherDesc}`}>
+      {code != null && (
+        <div className={param.weatherDesc}>
           {weatherInfo(code).label}
         </div>
-      }
+      )}
     </Card>
   )
 }
