@@ -31,15 +31,6 @@ export async function reverseGeo(lat, lon) {
 }
 
 export async function forwardGeo(place, zip, country) {
-  const fallback = {
-    timezone: "Europe/Berlin",
-    suburb: "HafenCity",
-    postcode: "20457",
-    country: "Germany",
-    lat: 53.542,
-    lon: 9.993,
-  }
-
   const params = new URLSearchParams({
     format: "json",
     apiKey: API,
@@ -91,7 +82,6 @@ export async function forwardGeo(place, zip, country) {
       lon: Number(props.lon.toFixed(3)),
     }
   } catch {
-    alert('Unable to find the location. Showing HafenCity instead.')
-    return fallback
+    return null
   }
 }
