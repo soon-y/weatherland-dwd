@@ -3,21 +3,22 @@ import { sunshineDuration, param } from "@/lib/param"
 import CardTitle from "./cardTitle"
 
 export default function Sunshine({ hourly, index, setDisplay, setCardClicked }) {
-  const current = hourly?.forecast[index]
+  const current = hourly?.forecast?.[index]
+  const hasValue = Number.isFinite(current)
   const title = 'sunshine'
 
   return (
     <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked} clickable={hourly === undefined ? false : true}>
       <div>
         <CardTitle title={title} />
-        {hourly ?
+        {hasValue ? (
           <>
-            <p className={param.weatherDescMain}>{current/60} mins</p>
+            <p className={param.weatherDescMain}>{current / 60} mins</p>
             <p className={param.weatherDescSub}>{sunshineDuration(current).state}</p>
           </>
-          :
+        ) : (
           <p className={param.weatherDescMain}>N/A</p>
-        }
+        )}
       </div>
       {hourly &&
         <div className={`${param.weatherBarContainer}`}>
