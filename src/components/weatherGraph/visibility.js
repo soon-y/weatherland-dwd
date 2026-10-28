@@ -5,7 +5,7 @@ import { getAvgArr, param, visibilityInfo } from "@/lib/param";
 export default function WeeklyVisibility({ display, hourly, indexW, index, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const maxVal = Math.max(50000, param.max(hourly, 1000))
   const value = hourly?.[hoverIndex]
   const isless4k = value / 1000 < 4

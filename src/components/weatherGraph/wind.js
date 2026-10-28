@@ -7,7 +7,7 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code, 
   const [dailyWind, setDailyWindAvg] = useState([])
   const [dailyGust, setDailyGustAvg] = useState([])
   const current = wind?.[hoverIndex]
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const maxVal = Math.max(10, param.maxInTwo(wind, gusts, 10)
   )
 

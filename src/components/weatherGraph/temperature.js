@@ -7,7 +7,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
   const [dailyMin, setDailyMin] = useState([])
   const [dailyMax, setDailyMax] = useState([])
   const current = hourly[hoverIndex]
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const maxVal = param.max(hourly, 10)
   const minVal = param.min(hourly, 10)
   let unit = '°C'

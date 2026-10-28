@@ -6,7 +6,7 @@ export default function WeeklyPressure({ display, hourly, indexW, index, timezon
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const current = hourly[hoverIndex]
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const unit = 'hPa'
   const minVal = Math.min(960, param.min(hourly, 100))
   const maxVal = Math.max(1060, param.max(hourly, 100))

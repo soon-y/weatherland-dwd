@@ -6,7 +6,7 @@ export default function WeeklySunshine({ display, hourly, indexW, index, timezon
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const current = hourly[hoverIndex]
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const maxVal = 60 * 60
   const unit = 'mins'
 

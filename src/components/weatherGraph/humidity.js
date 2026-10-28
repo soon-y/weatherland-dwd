@@ -6,7 +6,7 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const current = humidity[hoverIndex]
-  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
+  const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 24
   const minVal = Math.min(param.minInTwo(dewPoint, temp, 10))
   const maxVal = Math.max(param.maxInTwo(dewPoint, temp, 10))
   const isNull = current == null
