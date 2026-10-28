@@ -12,7 +12,6 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   const [timeIndex, setTimeIndex] = useState(null)
   const [hover, setHover] = useState(null)
   const [sliderHeight, setSliderHeight] = useState(150)
-  const [sliderNum, setSliderNum] = useState(24 * 7)
   const graphSize = { w: graphWidth, h: sliderHeight * 0.3 }
   const temperature = forecast.metrics.temperature_2m?.forecast
   const weatherCode = forecast.metrics.weather_code?.forecast
@@ -25,40 +24,37 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   const colorRange = tempColorList.slice(minIndex, maxIndex + 1)
   const timestamp = forecast?.timestamps
   const invalidTime = Number.isNaN(new Date(timestamp?.[index]).getTime())
+  const firstDate = timestamp?.[0]?.slice(0, 10)
+  const todayCount = (timestamp ?? []).filter(value => value.slice(0, 10) === firstDate).length
+
+  const sliderNum = Math.min(
+    timestamp?.length ?? 0,
+    todayCount + 24 * 6 + 1
+  )
 
   useEffect(() => {
-    const firstDate = new Date(timestamp[0])
-
-    const todayCount = timestamp.filter(item => {
-      const date = new Date(item)
-
-      return (
-        date.getFullYear() === firstDate.getFullYear() &&
-        date.getMonth() === firstDate.getMonth() &&
-        date.getDate() === firstDate.getDate()
-      )
-    }).length
-
-    const sliderLength = todayCount + 24 * 6 + 1
-    setSliderNum(sliderLength)
-
     const handleResize = () => {
       const windowWidth = window.innerWidth - 16
-      const divide = windowWidth > 1000 ? 10 : isMobile(windowWidth) ? 4 : 6
+      const divide = windowWidth > 1000
+        ? 10
+        : isMobile(windowWidth) ? 4 : 6
+
       const box = windowWidth / divide
 
       setBoxWidth(box)
-      setGraphWidth(box * sliderNum)
-      setSliderHeight(windowWidth >= 640 ? param.sliderHeight : 120)
+      setGraphWidth(box * Math.max(0, sliderNum - 1))
+      setSliderHeight(
+        windowWidth >= 640 ? param.sliderHeight : 120
+      )
     }
 
     handleResize()
-    window.addEventListener("resize", handleResize)
+    window.addEventListener('resize', handleResize)
 
     return () => {
-      window.removeEventListener("resize", handleResize)
+      window.removeEventListener('resize', handleResize)
     }
-  }, [])
+  }, [sliderNum])
 
   useEffect(() => {
     if (!ref.current) return
@@ -66,7 +62,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
     ref.current.scrollTo({
       left: boxWidth * index,
     })
-  }, [index])
+  }, [index, boxWidth])
 
   useEffect(() => {
     if (!forecast || !timezone) return
