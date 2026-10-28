@@ -17,8 +17,10 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
   const weatherCode = forecast.metrics.weather_code?.forecast
   const probability = forecast.metrics.ww_prob_precip_1h?.forecast
   const isDay = forecast.metrics.is_day?.forecast
-  const max = temperature && Math.max(...temperature) + 5
-  const min = temperature && Math.min(...temperature) - 5
+  const validTemperatures = (temperature ?? []).filter(Number.isFinite)
+  const hasTemperature = validTemperatures.length > 0
+  const max = hasTemperature ? Math.max(...validTemperatures) + 5 : 5
+  const min = hasTemperature ? Math.min(...validTemperatures) - 5 : -5
   const minIndex = tempColorIndex(min)
   const maxIndex = tempColorIndex(max)
   const colorRange = tempColorList.slice(minIndex, maxIndex + 1)
@@ -100,34 +102,39 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
     [colorRange]
   )
 
-  const points = (data) => {
-    let x, y
-    let result = []
+  const points = data => data.map((value, i) => {
+    if (!Number.isFinite(value)) return null
 
-    for (let i = 0; i < data.length; i++) {
-      x = i / (data.length - 1) * graphSize.w
-      y = graphSize.h - ((data[i] - min) / (max - min)) * graphSize.h
+    let x = i / Math.max(1, data.length - 1) * graphSize.w
+    const y =
+      graphSize.h - ((value - min) / (max - min)) * graphSize.h
 
-      if (i == 0) x = x + 5
-      if (i == data.length - 1) x = x - 5
-      result.push({ x, y })
+    if (i === 0) x += 5
+    if (i === data.length - 1) x -= 5
+
+    return { x, y }
+  })
+
+  const getSmoothPath = points => {
+    let d = ''
+    let previous = null
+
+    for (const point of points ?? []) {
+      if (!point) {
+        previous = null
+        continue
+      }
+
+      if (previous) {
+        d += ` Q ${previous.x} ${previous.y}, ${point.x} ${point.y}`
+      } else {
+        d += ` M ${point.x} ${point.y}`
+      }
+
+      previous = point
     }
-    return result
-  }
 
-  const getSmoothPath = (points) => {
-    if (!points || points.length < 2) return { d: '', stroke: 'white' }
-
-    let d = `M ${points[0].x} ${points[0].y}`
-    let stroke = 'white'
-
-    for (let i = 0; i < points.length - 1; i++) {
-      const p0 = points[i]
-      const p1 = points[i + 1]
-      d += ` Q ${p0.x} ${p0.y}, ${p1.x} ${p1.y}`
-      stroke = p0.color
-    }
-    return { d, stroke }
+    return { d, stroke: 'white' }
   }
 
   const handleScroll = () => {
@@ -215,7 +222,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
           ))}
 
           {/* graph */}
-          {temperature &&
+          {hasTemperature &&
             <div className="absolute cursor-pointer" onClick={handleClick} onMouseMove={handleHover} onMouseLeave={() => setHover(null)} style={{
               top: '44px', left: boxWidth / 2,
               height: sliderHeight * 0.35 + 'px',
@@ -248,7 +255,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
                     className="opacity-50"
                   />
 
-                  {ptsTemp.map((p, i) => (
+                  {ptsTemp.map((p, i) => p && (
                     <circle key={i} cx={p.x} cy={p.y} r="4" fill={`url(#${gradientId})`} />
                   ))}
                 </g>
