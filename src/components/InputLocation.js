@@ -18,8 +18,10 @@ export default function InputArea({ setGeolocation, hide }) {
 
     const fetchInfo = async () => {
       try {
-        const { suburb, postcode, country, timezone } =
-          await reverseGeo(latitude, longitude)
+        const location = await reverseGeo(latitude, longitude)
+        if (!location) return
+
+        const { suburb, postcode, country, timezone } = location
 
         setLatitudeVal(latitude)
         setLongitudeVal(longitude)

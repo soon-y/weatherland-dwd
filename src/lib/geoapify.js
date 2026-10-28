@@ -3,23 +3,20 @@ const API = process.env.NEXT_PUBLIC_GEOAPIFY_API
 export async function reverseGeo(lat, lon) {
   if (lat == null || lon == null) return null
 
-  const fallback = {
-    timezone: "Europe/Berlin",
-    suburb: "Unknown",
-    postcode: "Zip code",
-    country: "Country",
-  }
-
   try {
     const url = `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=${API}`
     const res = await fetch(url)
 
-    if (!res.ok) return fallback
+    if (!res.ok) {
+      throw new Error('Reverse geocoding request failed')
+    }
 
     const result = await res.json()
     const props = result.features?.[0]?.properties
 
-    if (!props) return fallback
+    if (!props?.timezone?.name) {
+      throw new Error('Location timezone unavailable')
+    }
 
     return {
       timezone: props.timezone?.name || "",
@@ -28,7 +25,8 @@ export async function reverseGeo(lat, lon) {
       country: props.country || "Country",
     }
   } catch {
-    return fallback
+    alert('Unable to retrieve location details. Please try another location.')
+    return null
   }
 }
 
@@ -66,16 +64,17 @@ export async function forwardGeo(place, zip, country) {
       `https://api.geoapify.com/v1/geocode/search?${params}`
     )
 
-    if (!res.ok) return fallback
+    if (!res.ok) {
+      throw new Error('Geocoding request failed')
+    }
 
     const result = await res.json()
     const props = result.results?.[0]
 
     if (
-      !Number.isFinite(props?.lat) ||
-      !Number.isFinite(props?.lon)
+      !Number.isFinite(props?.lat) || !Number.isFinite(props?.lon)
     ) {
-      return fallback
+      throw new Error('No matching location found')
     }
 
     return {
@@ -92,6 +91,7 @@ export async function forwardGeo(place, zip, country) {
       lon: Number(props.lon.toFixed(3)),
     }
   } catch {
+    alert('Unable to find the location. Showing HafenCity instead.')
     return fallback
   }
 }
