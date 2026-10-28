@@ -1,5 +1,5 @@
 import Card from "./card"
-import { param, weatherInfo } from "@/lib/param"
+import { getTotalSumArr, param, weatherInfo } from "@/lib/param"
 import CardTitle from "./cardTitle"
 
 export default function Precipitation({ hourly, index, indexD, setDisplay, setCardClicked }) {
@@ -8,6 +8,16 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
   const probability = hourly.metrics.ww_prob_precip_1h
   const precipitation = hourly.metrics.precip_amount_1h
   const totalSum = hourly.metrics.precip_amount_24h
+  const firstTimestamp = hourly.timestamps?.[0]
+  const startHour = firstTimestamp ? Number(firstTimestamp.slice(11, 13)) : 0
+  const alignedPrecipitation = [
+    ...Array(startHour).fill(null),
+    ...(precipitation?.forecast ?? [])
+  ]
+  const dailyTotal = getTotalSumArr(alignedPrecipitation).slice(0, 7)
+  const uses24hTotal = dailyTotal[0] == null
+  dailyTotal[0] ??= totalSum?.forecast?.[0] ?? null
+
 
   return (
     <Card style={'square'} setDisplay={setDisplay} title={title} setCardClicked={setCardClicked}
@@ -33,9 +43,10 @@ export default function Precipitation({ hourly, index, indexD, setDisplay, setCa
                   <span className="text-sm"> mm</span>
                 </p>
 
-                {totalSum?.forecast?.[indexD] != null && (
+                {dailyTotal[indexD] != null && (
                   <p className="text-sm">
-                    {totalSum.forecast[indexD]} mm in total
+                    {dailyTotal[indexD]} mm (
+                    {indexD === 0 && uses24hTotal ? '24-hour total' : 'daily total'})
                   </p>
                 )}
               </div>
