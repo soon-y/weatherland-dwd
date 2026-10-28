@@ -234,7 +234,7 @@ export default function Slider({ forecast, setIndex, index, timezone, isStale })
                     {colorRange.map((color, i) => (
                       <stop
                         key={i}
-                        offset={`${(i / (colorRange.length - 1)) * 100}%`}
+                        offset={`${colorRange.length > 1 ? i / (colorRange.length - 1) * 100 : 0}%`}
                         stopColor={color}
                       />
                     ))}
