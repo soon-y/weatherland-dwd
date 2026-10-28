@@ -65,7 +65,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
           setCardClicked(false)
           setTimeout(() => {
             setDisplay(null)
-            setIndexW(indexD)
+            setIndexW(Math.max(0, indexD))
           }, 300)
         }}></div>
         }
@@ -150,7 +150,7 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
         setCardClicked(false)
         setTimeout(() => {
           setDisplay(null)
-          setIndexW(indexD)
+          setIndexW(Math.max(0, indexD))
         }, 300)
       }}
         className='z-10000 fixed right-3 bottom-3 text-white p-2 bg-black/50 outline outline-black rounded-full cursor-pointer'><X />
