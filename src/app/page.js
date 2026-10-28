@@ -10,14 +10,25 @@ import Image from 'next/image'
 
 export default function Home() {
   const [forecastData, setForecastData] = useState(null)
-  const [{ lat, lon, timezone }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null})
+  const [{ lat, lon, timezone }, setGeolocation] = useState({ lat: 53, lon: 10, timezone: null })
   const [index, setIndex] = useState(null)
   const [infoClicked, setInfoClicked] = useState(false)
   const [resOk, setResOk] = useState(true)
   const [isStale, setIsStale] = useState(true)
 
   useEffect(() => {
-    if (!(lat && lon && timezone)) return
+    if (
+      lat == null || lon == null || String(lat).trim() === '' || String(lon).trim() === '' || !timezone
+    ) return
+
+    const latitude = Number(lat)
+    const longitude = Number(lon)
+
+    if (
+      !Number.isFinite(latitude) || !Number.isFinite(longitude) ||
+      latitude < -90 || latitude > 90 ||
+      longitude < -180 || longitude > 180
+    ) return
 
     const date = new Intl.DateTimeFormat('sv-SE', { timeZone: timezone }).format(new Date())
     let cancelled = false
@@ -33,7 +44,7 @@ export default function Home() {
     const fetchInfo = async () => {
       try {
         const res = await fetch(
-          `/api/forecast?lat=${lat}&lon=${lon}&date=${date}&timezone=${encodeURIComponent(timezone)}`
+          `/api/forecast?lat=${latitude}&lon=${longitude}&date=${date}&timezone=${encodeURIComponent(timezone)}`
         )
 
         if (cancelled) return
@@ -46,7 +57,7 @@ export default function Home() {
         if (cancelled) return
 
         setResOk(true)
-        // console.log(data)
+        //console.log(data)
 
         if (!hasShownData || !data.stale) {
           setIsStale(data.stale)
@@ -84,7 +95,7 @@ export default function Home() {
 
       <div className='fixed bottom-0 w-full p-2'>
         {forecastData ?
-          <Slider forecast={forecastData} setIndex={setIndex} index={index} timezone={timezone} isStale={isStale}/>
+          <Slider forecast={forecastData} setIndex={setIndex} index={index} timezone={timezone} isStale={isStale} />
           :
           <div className={`${param.sliderStyles} bg-white/10 animate-pulse opacity-40`} style={{ height: param.sliderHeight + 'px' }}>
           </div>
