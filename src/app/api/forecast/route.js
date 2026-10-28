@@ -49,13 +49,19 @@ export async function GET(req) {
     const processed = processForecast(raw, timezone)
 
     if (sql) {
-      await sql`
-        INSERT INTO forecast_cache (lat, lon, date, data)
-        VALUES (${lat}, ${lon}, ${date}, ${JSON.stringify(processed)})
-        ON CONFLICT (lat, lon)
-        DO UPDATE SET date = EXCLUDED.date, data = EXCLUDED.data
-      `
+      try {
+        await sql`
+      INSERT INTO forecast_cache (lat, lon, date, data)
+      VALUES (${lat}, ${lon}, ${date}, ${JSON.stringify(processed)})
+      ON CONFLICT (lat, lon)
+      DO UPDATE SET date = EXCLUDED.date, data = EXCLUDED.data
+    `
+      } catch (err) {
+        console.error('Failed to cache forecast data:', err)
+      }
     }
+
+    return Response.json({ ...processed, stale: false })
 
     return Response.json({ ...processed, stale: false })
   } catch (err) {
