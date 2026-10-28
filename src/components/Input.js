@@ -63,13 +63,21 @@ export default function Input({
                 <label className="text-white font-bold">Longitude</label>
                 <input
                   type='number'
+                  step="any"
+                  min={-90}
+                  max={90}
+                  required
                   value={tempLat}
                   onChange={(e) => setTempLat(e.target.value)}
                   placeholder={'Latitude'}
                   className={`${inputStyles}`}
                 />
                 <input
-                  type='number'
+                  type="number"
+                  step="any"
+                  min={-180}
+                  max={180}
+                  required
                   value={tempLong}
                   onChange={(e) => setTempLong(e.target.value)}
                   placeholder={'Longitude'}
