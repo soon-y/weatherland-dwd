@@ -62,8 +62,6 @@ export async function GET(req) {
     }
 
     return Response.json({ ...processed, stale: false })
-
-    return Response.json({ ...processed, stale: false })
   } catch (err) {
     console.error(err)
     return Response.json({ error: err.message }, { status: 500 })
