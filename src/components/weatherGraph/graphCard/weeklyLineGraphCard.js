@@ -1,5 +1,5 @@
 import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, sunshineColorList, sunshineOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useId } from "react"
 
 export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay, timezone = null }) {
   const [val, setVal] = useState([])
@@ -13,6 +13,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
   const graphWidth = 'w-[calc(100%-24px)]'
   const subtitleStyle = 'text-sm'
   const padding = 6 / ratio
+  const maskId = useId()
   let minIndex, maxIndex, colorRange, offset
 
   if (display === 'dewpoint' || display === 'temperature') {
@@ -225,7 +226,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
                   ))}
                 </linearGradient>
 
-                <mask id="graphMask" maskUnits="userSpaceOnUse">
+                <mask id={maskId} maskUnits="userSpaceOnUse">
                   <rect
                     x={-padding}
                     y={-padding}
@@ -248,7 +249,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
             }
 
             {hourly2 &&
-              <g mask="url(#graphMask)">
+              <g mask={`url(#${maskId})`}>
                 <path
                   d={getSmoothPath(pointsHourly2()).d}
                   stroke={display === 'wind' ? `url(#${gradientId})` : 'gray'}
@@ -264,7 +265,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
             }
 
             {hourly &&
-              <g mask="url(#graphMask)">
+              <g mask={`url(#${maskId})`}>
                 <path
                   d={getSmoothPath(points()).d}
                   fill="none"
