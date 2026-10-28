@@ -72,7 +72,7 @@ export default function Pressure({ hourly, index, setDisplay, setCardClicked }) 
             {hourly ?
               <div>
                 <p className={`${param.weatherDescMain} capitalize font-bold`}>{pressure(current)}</p>
-                <p className={`${param.weatherDescSub}`}>{Math.round(current)}  h{hourly.unit}</p>
+                <p className={`${param.weatherDescSub}`}>{Math.round(current)} {hourly.unit}</p>
               </div> :
               <div>N/A</div>}
           </div>
@@ -93,7 +93,7 @@ export default function Pressure({ hourly, index, setDisplay, setCardClicked }) 
 
                 <div className="text-center absolute left-1/2 top-1/2 -translate-1/2">
                   <p className={`font-semibold text-base/4 sm:text-lg/5`}>{Math.round(current)}</p>
-                  <p className="text-xs sm:text-sm"> h{hourly.unit}</p>
+                  <p className="text-xs sm:text-sm"> {hourly.unit}</p>
                 </div>
                 <div className={`text-xs absolute bottom-1 flex justify-between w-full`}>
                   <span className="ml-[10%]">Low</span>
