@@ -10,6 +10,7 @@ import { useFrame } from '@react-three/fiber'
 export default function Umbrella({ probability, weather, isDay = 0 }) {
   const { nodes, materials } = useGLTF('/models/umbrella.glb')
   const umbrellaRef = useRef()
+  const poleMaterialRef = useRef()
   const groupRef = useRef()
 
   useFrame(() => {
@@ -19,6 +20,12 @@ export default function Umbrella({ probability, weather, isDay = 0 }) {
     const opacity = THREE.MathUtils.clamp(value / 100, 0, 1)
 
     umbrellaRef.current.material.opacity = opacity
+
+    if (poleMaterialRef.current) {
+      poleMaterialRef.current.opacity =
+        1 - THREE.MathUtils.clamp(value / 100, 0, 1) * 0.6
+    }
+
     groupRef.current.visible = opacity > 0.001
   })
 
@@ -28,28 +35,24 @@ export default function Umbrella({ probability, weather, isDay = 0 }) {
         castShadow
         receiveShadow
         geometry={nodes.Cylinder.geometry}
-        material={isDay ? materials.benchMetal : undefined}
         position={[1.051, 1.248, -0.015]}
         rotation={[0.062, 0.695, -0.675]}
         scale={[0.013, 0.622, 0.013]}
       >
-        {!isDay && (
+        <meshStandardMaterial
+          color={materials.benchMetal.color}
+          metalness={materials.benchMetal.metalness}
+          roughness={materials.benchMetal.roughness}
+          transparent
+        />
+        {!isDay &&
           <meshBasicMaterial
+            ref={poleMaterialRef}
             color="#a0a0a0"
             transparent
           />
-        )}
+        }
       </mesh>
-
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Cylinder.geometry}
-        material={materials.benchMetal}
-        position={[1.051, 1.248, -0.015]}
-        rotation={[0.062, 0.695, -0.675]}
-        scale={[0.013, 0.622, 0.013]}
-      />
 
       <mesh
         castShadow
