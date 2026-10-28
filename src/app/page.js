@@ -93,7 +93,7 @@ export default function Home() {
 
       <div className='fixed top-0'>
         {(index != null && isFinite(index) && forecastData) ?
-          <WeatherInfo forecast={forecastData} index={index} clicked={setInfoClicked} />
+          <WeatherInfo forecast={forecastData} index={index} timezone={timezone} clicked={setInfoClicked} />
           :
           <div className={`m-2 animate-pulse w-36 h-36 rounded-xl bg-white/10`}></div>
         }
