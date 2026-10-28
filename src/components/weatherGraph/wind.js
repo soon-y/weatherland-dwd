@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getMaxArr, getWindLevel, param } from "@/lib/param";
 
-export default function WeeklyWind({ display, indexW, index, wind, gusts, code }) {
+export default function WeeklyWind({ display, indexW, index, wind, gusts, code, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [dailyWind, setDailyWindAvg] = useState([])
   const [dailyGust, setDailyGustAvg] = useState([])
@@ -99,7 +99,7 @@ export default function WeeklyWind({ display, indexW, index, wind, gusts, code }
         </div>
       </div>
       <WeeklyLineGraphCard
-        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.1} hourly2={gusts}
+        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.1} hourly2={gusts} timezone={timezone}
         hourly={wind} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover} code={code}
       />
     </div>

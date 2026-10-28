@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param, visibilityInfo } from "@/lib/param";
 
-export default function WeeklyVisibility({ display, hourly, indexW, index }) {
+export default function WeeklyVisibility({ display, hourly, indexW, index, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const validIndex = hoverIndex - indexW * 24 >= 0 && hoverIndex - indexW * 24 < 25
@@ -81,7 +81,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index }) {
       </div>
 
       <WeeklyLineGraphCard
-        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
+        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2} timezone={timezone}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>

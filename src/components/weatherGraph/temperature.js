@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard"
 import { getMaxArr, getMinArr, param } from "@/lib/param"
 
-export default function WeeklyTemperature({ display, hourly, indexW, index, code, isDay }) {
+export default function WeeklyTemperature({ display, hourly, indexW, index, code, isDay, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [dailyMin, setDailyMin] = useState([])
   const [dailyMax, setDailyMax] = useState([])
@@ -79,7 +79,7 @@ export default function WeeklyTemperature({ display, hourly, indexW, index, code
       </div>
 
       <WeeklyLineGraphCard
-        display={display} unit={unit} min={minVal} max={maxVal} step={(maxVal - minVal) * 0.2}
+        display={display} unit={unit} min={minVal} max={maxVal} step={(maxVal - minVal) * 0.2} timezone={timezone}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover} code={code} isDay={isDay}
       />
     </div>

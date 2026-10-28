@@ -1,13 +1,19 @@
 import { rainColorList, todayProgress } from "@/lib/param"
 import { useEffect, useState } from "react"
 
-export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, step, unit, index, hoverIndex, setHover, ratio = 1 }) {
+export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, step, unit, index, hoverIndex, setHover, ratio = 1, timezone = null }) {
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const borderCnt = (max - min) / step
   const topPos = ratio == 1 ? '54px' : '42px'
   const today = new Date()
-  const hour = today.getHours()
+  const hour = Number(
+    new Intl.DateTimeFormat('en-GB', {
+      timeZone: timezone,
+      hour: '2-digit',
+      hourCycle: 'h23',
+    }).format(today)
+  )
   const graphWidth = 'w-[calc(100%-24px)]'
   const subtitleStyle = 'text-sm ml-2'
 
@@ -65,7 +71,7 @@ export default function WeeklyBarGraphCard({ display, hourly, indexW, min, max, 
 
         {/* Graph grid */}
         <div className={`${graphWidth} absolute flex`} style={{ top: topPos, aspectRatio: ratio }}>
-          {indexW === 0 && <div className="absolute h-full bg-black/70" style={{ width: todayProgress(today) + '%' }} />}
+          {indexW === 0 && <div className="absolute h-full bg-black/70" style={{ width: todayProgress(today, timezone) + '%' }} />}
 
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className={`w-full h-full opacity-20 border-r ${i === 0 && 'border-l'}`} />

@@ -1,7 +1,7 @@
 import { daylightDuration } from "@/lib/param"
 import DailyGraphCard from "./graphCard/dailyBarGraphCard"
 
-export default function DailySun({ indexW, setIndexW, sunrise, sunset }) {
+export default function DailySun({ indexW, setIndexW, sunrise, sunset, timezone, weekly }) {
   const sunriseValue = sunrise?.[indexW]
   const sunsetValue = sunset?.[indexW]
 
@@ -50,8 +50,8 @@ export default function DailySun({ indexW, setIndexW, sunrise, sunset }) {
       </div>
 
       <DailyGraphCard
-        indexW={indexW} setIndexW={setIndexW} min={0} max={24} step={2} unit={'time'}
-        barStart={sunrise} barEnd={sunset} barLength={daylight} total={24 * 60 * 60 * 1000}
+        indexW={indexW} setIndexW={setIndexW} min={0} max={24} step={2} unit={'time'} timezone={timezone}
+        barStart={sunrise} barEnd={sunset} barLength={daylight} total={24 * 60 * 60 * 1000} weekly={weekly}
       />
     </div>
   )

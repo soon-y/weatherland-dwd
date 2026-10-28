@@ -1,7 +1,7 @@
 import { getWindDirectionArrow, pressureColorList, pressureOffsets, rainColorList, tempColorIndex, tempColorList, todayProgress, sunshineColorList, sunshineOffsets, visibilityColorList, visibilityOffsets, weatherInfo, windColorList, windOffsets } from "@/lib/param"
 import { useEffect, useMemo, useState } from "react"
 
-export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay }) {
+export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max, step, unit, index, code, hourly2, hoverIndex, setHover, ratio = 1, isDay, timezone=null }) {
   const [val, setVal] = useState([])
   const [time, setTime] = useState([])
   const [codes, setCodes] = useState([])
@@ -186,7 +186,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
 
         {/* Graph grid */}
         <div className={`${graphWidth} absolute flex`} style={{ top: topPos, aspectRatio: ratio }}>
-          {indexW === 0 && <div className="absolute h-full bg-black/70" style={{ width: todayProgress(today) + '%' }} />}
+          {indexW === 0 && <div className="absolute h-full bg-black/70" style={{ width: todayProgress(today, timezone) + '%' }} />}
 
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className={`w-full h-full opacity-20 border-r ${i === 0 && 'border-l'}`} />
@@ -228,7 +228,7 @@ export default function WeeklyLineGraphCard({ display, hourly, indexW, min, max,
                     <rect
                       x={-padding}
                       y={-padding}
-                      width={(todayProgress(today) / 100) * (graphSize.w + padding * 2)}
+                      width={(todayProgress(today, timezone) / 100) * (graphSize.w + padding * 2)}
                       height={graphSize.h + padding * 2}
                       fill="rgba(0,0,0,0.5)"
                     />

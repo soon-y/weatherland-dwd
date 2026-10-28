@@ -7,7 +7,7 @@ import WeatherIcon from './weatherIcon'
 import InfoLine from './weatherInfoLine'
 import { motion } from 'framer-motion'
 
-export default function WeatherInfo({ forecast, index, clicked }) {
+export default function WeatherInfo({ forecast, index, clicked, timezone }) {
   const [open, setOpen] = useState(false)
   const [indexD, setIndexD] = useState(0)
   const [index12, setIndex12] = useState(0)
@@ -43,7 +43,7 @@ export default function WeatherInfo({ forecast, index, clicked }) {
         ${open ? "w-[100vw] h-[100vh]" : "w-0 h-0"}
       `}>
         <WeatherDetails
-          open={open} forecast={forecast} daily={daily}
+          open={open} forecast={forecast} daily={daily} timezone={timezone}
           index={index} indexD={indexD} setOpen={setOpen} clicked={clicked}
         />
       </div>

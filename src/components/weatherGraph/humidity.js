@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArr, param } from "@/lib/param";
 
-export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp }) {
+export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const current = humidity[hoverIndex]
@@ -72,14 +72,14 @@ export default function WeeklyHumidity({ humidity, indexW, index, dewPoint, temp
         </div>
       </div>
 
-      <WeeklyLineGraphCard ratio={2} graphRatio={2}
+      <WeeklyLineGraphCard ratio={2} graphRatio={2} timezone={timezone}
         display={'humidity'} unit={unit} min={0} max={100} step={20}
         hourly={humidity} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
 
       <div className="w-full h-2"></div>
 
-      <WeeklyLineGraphCard ratio={2} graphRatio={2}
+      <WeeklyLineGraphCard ratio={2} graphRatio={2} timezone={timezone}
         display={'dewpoint'} unit={'°C'} min={minVal} max={maxVal} step={5} hourly2={temp}
         hourly={dewPoint} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />

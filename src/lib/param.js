@@ -240,14 +240,30 @@ export function titleIcon(title) {
   return map[title] || { src: '/icon/uvIndex.svg' }
 }
 
-export function todayProgress(date) {
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
+export function todayProgress(date, timezone) {
+  let hours
+  let minutes
 
-  const currentMinutes = hours * 60 + minutes
-  const totalMinutes = 24 * 60
+  if (timezone) {
+    const parts = new Intl.DateTimeFormat('en-GB', {
+      timeZone: timezone,
+      hour: '2-digit',
+      minute: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(date)
 
-  return (currentMinutes / totalMinutes * 100).toFixed(4)
+    const p = Object.fromEntries(
+      parts.map(({ type, value }) => [type, value])
+    )
+
+    hours = Number(p.hour)
+    minutes = Number(p.minute)
+  } else {
+    hours = date.getHours()
+    minutes = date.getMinutes()
+  }
+
+  return ((hours * 60 + minutes) / (24 * 60) * 100).toFixed(4)
 }
 
 export function timeToSec(timestamp) {

@@ -3,7 +3,7 @@ import { getAvgArr, getTotalSumArr, param, precipIntensity, weatherInfo } from "
 import WeeklyBarGraphCard from "./graphCard/weeklyBarGraphCard"
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard"
 
-export default function WeeklyPrecipitation({ display, indexW, index, hourProbability, hourPrecipitation, code }) {
+export default function WeeklyPrecipitation({ display, indexW, index, hourProbability, hourPrecipitation, code, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [dailyTotal, setDailyTotal] = useState([])
   const [dailyMean, setDailyMean] = useState([])
@@ -118,7 +118,7 @@ export default function WeeklyPrecipitation({ display, indexW, index, hourProbab
       <div className="w-full h-2"></div>
 
       <WeeklyBarGraphCard ratio={2}
-        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2}
+        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2} timezone={timezone}
         hourly={hourPrecipitation} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>

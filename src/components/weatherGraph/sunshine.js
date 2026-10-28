@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import WeeklyLineGraphCard from "./graphCard/weeklyLineGraphCard";
 import { getAvgArrDaytime, sunshineDuration } from "@/lib/param";
 
-export default function WeeklySunshine({ display, hourly, indexW, index, }) {
+export default function WeeklySunshine({ display, hourly, indexW, index, timezone }) {
   const [hoverIndex, setHover] = useState(index)
   const [avg, setDailyAvg] = useState([])
   const current = hourly[hoverIndex]
@@ -56,7 +56,7 @@ export default function WeeklySunshine({ display, hourly, indexW, index, }) {
       </div>
 
       <WeeklyLineGraphCard
-        display={display} unit={'mins'} min={0} max={maxVal} step={(maxVal) / 6}
+        display={display} unit={'mins'} min={0} max={maxVal} step={(maxVal) / 6} timezone={timezone}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>

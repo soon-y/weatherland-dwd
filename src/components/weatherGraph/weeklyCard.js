@@ -11,32 +11,52 @@ import WeeklyPrecipitation from "./precipitation"
 import DailySun from "./dailySun"
 import CardTitle from "../weatherCard/cardTitle"
 
-export default function WeeklyCard({ cardClicked, setCardClicked, display, setDisplay, daily, hourly, indexD, index }) {
+export default function WeeklyCard({ cardClicked, setCardClicked, display, setDisplay, daily, hourly, indexD, index, timezone }) {
   const [weekly, setWeekly] = useState([])
-  const [indexW, setIndexW] = useState(indexD)
-  const today = new Date()
-  const firstTimestamp = hourly.timestamps[0]
-  const firstIndex = new Date(hourly.timestamps[index]).getHours() + indexD * 24
+  const [indexW, setIndexW] = useState(Math.max(0, indexD))
+  const firstDay = daily.time[0]
+
+  const startIndex = hourly.timestamps.findIndex(
+    timestamp => timestamp.slice(0, 10) >= firstDay
+  )
+
+  const firstTimestamp = startIndex >= 0
+    ? hourly.timestamps[startIndex]
+    : `${firstDay}T00:00:00`
+
+  const selectedTimestamp = hourly.timestamps[index]
+  const selectedDayIndex = daily.time.indexOf(
+    selectedTimestamp?.slice(0, 10)
+  )
+
+  const firstIndex = selectedDayIndex >= 0
+    ? selectedDayIndex * 24 +
+    Number(selectedTimestamp.slice(11, 13))
+    : -1
+
+  const alignHourly = values =>
+    weeklyArr(
+      startIndex >= 0 ? values?.slice(startIndex) : [],
+      firstTimestamp
+    )
 
   useEffect(() => {
-    const weeklyArr = []
+    const days = (daily.time ?? []).slice(0, 7).map(date => {
+      const dayIndex = new Date(`${date}T00:00:00Z`).getUTCDay()
 
-    for (let i = 0; i < 7; i++) {
-      const date = new Date()
-      date.setDate(today.getDate() + i)
+      return {
+        day: param.daysShort[dayIndex],
+        day3: param.days[dayIndex],
+        date: Number(date.slice(8, 10))
+      }
+    })
 
-      weeklyArr.push({
-        day: param.daysShort[date.getDay()],
-        date: date.getDate()
-      })
-    }
-
-    setWeekly(weeklyArr)
-  }, [])
+    setWeekly(days)
+  }, [daily.time])
 
   useEffect(() => {
     setIndexW(indexD)
-  }, [display])
+  }, [display, indexD])
 
   return (
     <>
@@ -70,56 +90,56 @@ export default function WeeklyCard({ cardClicked, setCardClicked, display, setDi
 
             {display === 'visibility' &&
               <WeeklyVisibility
-                display={display} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.visibility.forecast, firstTimestamp)}
+                display={display} indexW={indexW} index={firstIndex} timezone={timezone}
+                hourly={alignHourly(hourly.metrics.visibility.forecast, firstTimestamp)}
               />
             }
             {display === 'humidity' &&
               <WeeklyHumidity
-                indexW={indexW} index={firstIndex}
-                humidity={weeklyArr(hourly.metrics.relative_humidity.forecast, firstTimestamp)}
-                dewPoint={weeklyArr(hourly.metrics.dewpoint_2m.forecast, firstTimestamp)}
-                temp={weeklyArr(hourly.metrics.temperature_2m.forecast, firstTimestamp)}
+                indexW={indexW} index={firstIndex} timezone={timezone}
+                humidity={alignHourly(hourly.metrics.relative_humidity.forecast, firstTimestamp)}
+                dewPoint={alignHourly(hourly.metrics.dewpoint_2m.forecast, firstTimestamp)}
+                temp={alignHourly(hourly.metrics.temperature_2m.forecast, firstTimestamp)}
               />
             }
             {display === 'pressure' &&
               <WeeklyPressure
-                display={display} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.surface_pressure.forecast, firstTimestamp)}
+                display={display} indexW={indexW} index={firstIndex} timezone={timezone}
+                hourly={alignHourly(hourly.metrics.surface_pressure.forecast, firstTimestamp)}
               />
             }
             {display === 'sunshine' &&
               <WeeklySunshine
-                display={display} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.sunshine_duration_1h.forecast, firstTimestamp)}
+                display={display} indexW={indexW} index={firstIndex} timezone={timezone}
+                hourly={alignHourly(hourly.metrics.sunshine_duration_1h.forecast, firstTimestamp)}
               />
             }
             {display === 'wind' &&
               <WeeklyWind
-                display={display} indexW={indexW} index={firstIndex}
-                wind={weeklyArr(hourly.metrics.wind_speed_10m?.forecast, firstTimestamp)}
-                gusts={weeklyArr(hourly.metrics.wind_gust_max_1h?.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.wind_direction_10m?.forecast, firstTimestamp)} />
+                display={display} indexW={indexW} index={firstIndex} timezone={timezone}
+                wind={alignHourly(hourly.metrics.wind_speed_10m?.forecast, firstTimestamp)}
+                gusts={alignHourly(hourly.metrics.wind_gust_max_1h?.forecast, firstTimestamp)}
+                code={alignHourly(hourly.metrics.wind_direction_10m?.forecast, firstTimestamp)} />
             }
             {display === 'temperature' &&
               <WeeklyTemperature
-                display={'temperature'} indexW={indexW} index={firstIndex}
-                hourly={weeklyArr(hourly.metrics.temperature_2m?.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.weather_code?.forecast, firstTimestamp)}
-                isDay={weeklyArr(hourly.metrics.is_day?.forecast, firstTimestamp)} />
+                display={'temperature'} indexW={indexW} index={firstIndex} timezone={timezone}
+                hourly={alignHourly(hourly.metrics.temperature_2m?.forecast, firstTimestamp)}
+                code={alignHourly(hourly.metrics.weather_code?.forecast, firstTimestamp)}
+                isDay={alignHourly(hourly.metrics.is_day?.forecast, firstTimestamp)} />
             }
             {display === 'precipitation' &&
               <WeeklyPrecipitation display={'precipitation'}
-                hourProbability={weeklyArr(hourly.metrics.ww_prob_precip_1h?.forecast, firstTimestamp)}
-                hourPrecipitation={weeklyArr(hourly.metrics.precip_amount_1h?.forecast, firstTimestamp)}
-                code={weeklyArr(hourly.metrics.weather_code?.forecast, firstTimestamp)}
-                indexW={indexW} index={firstIndex}
+                hourProbability={alignHourly(hourly.metrics.ww_prob_precip_1h?.forecast, firstTimestamp)}
+                hourPrecipitation={alignHourly(hourly.metrics.precip_amount_1h?.forecast, firstTimestamp)}
+                code={alignHourly(hourly.metrics.weather_code?.forecast, firstTimestamp)}
+                indexW={indexW} index={firstIndex} timezone={timezone}
               />
             }
             {display === 'daily sun' &&
               <DailySun
-                display={display} indexW={indexW} setIndexW={setIndexW}
-                sunrise={daily.sunrise} sunset={daily.sunset} />
+                display={display} indexW={indexW} setIndexW={setIndexW} timezone={timezone}
+                sunrise={daily.sunrise} sunset={daily.sunset} weekly={weekly}/>
             }
           </div>
         </div>

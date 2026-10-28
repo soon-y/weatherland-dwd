@@ -14,7 +14,7 @@ import WeeklyCard from './weatherGraph/weeklyCard'
 import Temperature from './weatherCard/temperature'
 import Sunshine from './weatherCard/sunshine'
 
-export default function WeatherDetails({ open, forecast, daily, index, indexD, setOpen, clicked }) {
+export default function WeatherDetails({ open, forecast, daily, index, indexD, setOpen, clicked, timezone }) {
   const [display, setDisplay] = useState(null)
   const [cardClicked, setCardClicked] = useState(false)
 
@@ -50,7 +50,7 @@ export default function WeatherDetails({ open, forecast, daily, index, indexD, s
       <WeeklyCard
         cardClicked={cardClicked} setCardClicked={setCardClicked}
         display={display} setDisplay={setDisplay} index={index} indexD={indexD}
-        daily={daily} hourly={forecast}
+        daily={daily} hourly={forecast} timezone={timezone}
       />
     </div>
   )

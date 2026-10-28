@@ -1,9 +1,8 @@
 import { param, todayProgress } from "@/lib/param"
 import { useEffect, useState } from "react"
 
-export default function DailyBarGraphCard({ min, max, step, unit, barStart, barEnd, barLength, total, setIndexW, ratio = 1 }) {
+export default function DailyBarGraphCard({ min, max, step, unit, barStart, barEnd, barLength, total, setIndexW, ratio = 1, timezone = null, weekly }) {
   const today = new Date()
-  const todayDay = today.getDay()
   const [val, setVal] = useState([])
   const topPos = '48px'
   const isTime = barStart[0].includes('T')
@@ -66,7 +65,7 @@ export default function DailyBarGraphCard({ min, max, step, unit, barStart, barE
                   </div>
 
                   {i === 0 && <div className="absolute w-[10px] aspect-square rounded-full outline-3 outline-white/80 "
-                    style={{ top: (100 - todayProgress(today)) * 0.97 + '%' }} />}
+                    style={{ top: (100 - todayProgress(new Date(), timezone)) * 0.97 + '%' }} />}
                 </>
                 :
                 <>
@@ -84,8 +83,8 @@ export default function DailyBarGraphCard({ min, max, step, unit, barStart, barE
         </div>
 
         <div className="flex justify-between text-center mt-2 text-sm">
-          {Array.from({ length: 7 }).map((_, i) => (
-            <p key={i} className="flex-1">{param.days[(todayDay + i) % 7]}</p>
+          {weekly.map((el, i) => (
+            <p key={i} className="flex-1">{el.day3}</p>
           ))}
         </div>
       </div>
