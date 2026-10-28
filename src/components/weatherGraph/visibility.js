@@ -66,9 +66,11 @@ export default function WeeklyVisibility({ display, hourly, indexW, index, timez
                     {visibilityInfo(avg[indexW]).state}
                   </span>
                   <span>
-                    {(avg[indexW] / 1000).toFixed(1)}
+                    {avg[indexW] < 4000
+                      ? Math.round(avg[indexW])
+                      : (avg[indexW] / 1000).toFixed(1)}
                     <span className="ml-1 text-lg">
-                      {avg[indexW] > 1000 ? 'km' : 'm'}
+                      {avg[indexW] < 4000 ? 'm' : 'km'}
                     </span>
                   </span>
                 </>
@@ -81,7 +83,7 @@ export default function WeeklyVisibility({ display, hourly, indexW, index, timez
       </div>
 
       <WeeklyLineGraphCard
-        display={display} unit={unit} min={0} max={maxVal} step={maxVal * 0.2} timezone={timezone}
+        display={display} unit={'km'} min={0} max={maxVal} step={maxVal * 0.2} timezone={timezone}
         hourly={hourly} indexW={indexW} index={index} hoverIndex={hoverIndex} setHover={setHover}
       />
     </div>
