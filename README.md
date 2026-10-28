@@ -4,6 +4,8 @@
 </a> 
 
 ## Introduction
+This project was developed as part of a bachelor's thesis exploring weather visualization through an interactive 3D diorama and a complementary 2D interface.
+
 Weather Land is a demonstration of a 3D weather application that visualizes real-world weather conditions in an interactive natural environment.
 
 The application transforms weather data into a living 3D world featuring dynamic landscapes, sunlight, wind effects, rain, snow, and atmospheric mist, creating an immersive weather experience beyond traditional weather dashboards.
@@ -39,7 +41,7 @@ The application transforms weather data into a living 3D world featuring dynamic
 | 3D Utilities     | [Drei](https://github.com/pmndrs/drei) |
 | Shaders          | GLSL |
 | Debug Controls   | [Leva](https://github.com/pmndrs/leva) |
-| Weather Data     | [Open-Meteo API](https://open-meteo.com/) |
+| Weather Data | [Open-Meteo API](https://open-meteo.com/) and a [backend API providing DWD forecast data](https://github.com/yasuaki-kumazaki/weather_forecast_app) |
 | Deployment       | [Vercel](https://vercel.com/) |
 
 ## Project Goal
