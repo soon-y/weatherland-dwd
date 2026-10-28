@@ -445,9 +445,7 @@ export const getTimeIndex = (currentTime, timestamps) => {
 
   const current = new Date(currentTime)
 
-  return timestamps.findIndex(
-    time => new Date(time) > current
-  )
+  return timestamps.findIndex(time => new Date(time) > current) + 1
 }
 
 export const weeklyArr = (arr, current) => {
