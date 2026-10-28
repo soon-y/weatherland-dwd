@@ -66,7 +66,7 @@ export default function Forecast({ hourly }) {
               <div key={i} className='grid grid-cols-7 sm:grid-cols-8 items-center justify-center h-9'>
                 <p className={`col-span-1 text-sm sm:text-base`}>{el.day}</p>
                 <div className='flex justify-center items-center'>
-                  {el.code && <WeatherIcon code={el.code} probability={el.probability} />}
+                  {el.code != null  && <WeatherIcon code={el.code} probability={el.probability} />}
                 </div>
                 {el.min != null && el.max != null && (<>
                   <p className={`col-span-1 text-sm sm:text-base text-center`}>{el.min}°</p>
