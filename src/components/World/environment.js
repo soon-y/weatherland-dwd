@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { useControls } from "leva"
 import { useEffect, useRef, useState } from "react"
-import { daylightDuration, timeToSec, useIsDebug } from "@/lib/param"
+import { daylightDuration, useIsDebug } from "@/lib/param"
 import { useFrame } from "@react-three/fiber"
 import WorldSky from "./Sky"
 import Grass from "./Grass"
@@ -14,6 +14,7 @@ import Mist from './mist'
 import MistOverlay from './mistOverlay'
 import Umbrella from './umbrella'
 import Thermometer from './thermometer'
+import { timeToSec } from '@/lib/time'
 
 export default function Environment({ store, forecast, index, indexD, levaValuesRef }) {
   const [sunProgress, setSunProgress] = useState(0)
@@ -90,14 +91,16 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       const daylight = daylightDuration(sunrise, sunset)
       const sunriseInSec = timeToSec(sunrise)
       const sunsetInSec = timeToSec(sunset)
-      const nowInSec = timeToSec(forecast.timestamps[index])
+      const nowInSec = (timeToSec(forecast.timestamps[index]) + 30 * 60) % oneDayInSec
+
       if (nowInSec < sunriseInSec) {
         progressInDay = (nowInSec / sunriseInSec) * 0.25
       } else if (nowInSec <= sunsetInSec) {
         progressInDay = 0.25 + ((nowInSec - sunriseInSec) / daylight) * 0.5
       } else {
-        progressInDay = 0.75 + ((nowInSec - sunsetInSec) / (oneDayInSec - daylight - sunriseInSec)) * 0.25
+        progressInDay = 0.75 + ((nowInSec - sunsetInSec) / (oneDayInSec - sunsetInSec)) * 0.25
       }
+
       setSunProgress(Number(progressInDay.toFixed(2)))
     }
 
@@ -257,7 +260,7 @@ export default function Environment({ store, forecast, index, indexD, levaValues
       <Snow windDir={finalWindDir} windSpd={finalWindSpd} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} precipitation={isDebug ? snow : undefined} weather={isDebug ? undefined : weather} />
       <Mist visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} weather={isDebug ? undefined : weather} />
       <MistOverlay visibility={isDebug ? visibility : undefined} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} weather={isDebug ? undefined : weather} />
-      <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]}/>
+      <Umbrella probability={isDebug ? probability : undefined} weather={isDebug ? undefined : weather} isDay={isDebug ? progress >= 0.25 && progress <= 0.75 : forecast?.metrics.is_day?.forecast[index]} />
       <Thermometer temp={isDebug ? temperature : undefined} weather={isDebug ? undefined : weather} />
     </>
   )

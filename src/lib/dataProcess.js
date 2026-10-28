@@ -1,3 +1,5 @@
+import { timeToSec } from "./time"
+
 export function processForecast(data, timezone) {
 
   const result = structuredClone(data.forecast.data)
@@ -95,15 +97,22 @@ export function processForecast(data, timezone) {
     )
 
     function isDay(timestamp) {
+      if (typeof timestamp !== 'string') return false
+
       const day = dayMap[timestamp.slice(0, 10)]
-      if (!day) return false
+      if (!day?.sunrise || !day?.sunset) return false
 
-      const current = new Date(timestamp)
+      const current = timeToSec(timestamp)
+      const sunrise = timeToSec(day.sunrise)
+      const sunset = timeToSec(day.sunset)
 
-      return (
-        current >= new Date(day.sunrise) &&
-        current < new Date(day.sunset)
-      )
+      if (current == null || sunrise == null || sunset == null) {
+        return false
+      }
+
+      const midpoint = current + 30 * 60
+
+      return midpoint >= sunrise && midpoint < sunset
     }
 
     result.push({
